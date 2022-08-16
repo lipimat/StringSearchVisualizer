@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
@@ -44,7 +44,11 @@ else()
     endif()
 endif()
 
-target_link_libraries(MainWindow PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# our dependencies
+include_directories(${CMAKE_SOURCE_DIR}/../AlgorithmsModule)
+find_library(ALGORITHMS_MODULE AlgorithmsModule "${CMAKE_SOURCE_DIR}/../out/libs")
+
+target_link_libraries(MainWindow PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ALGORITHMS_MODULE})
 
 set_target_properties(MainWindow PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
