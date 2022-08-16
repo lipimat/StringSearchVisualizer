@@ -19,6 +19,9 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        ListElements/IAlgorithmsListWidgetItem.h
+        ListElements/CAlgorithmsListWidgetItem.h
+        ListElements/CAlgorithmsListWidgetItem.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

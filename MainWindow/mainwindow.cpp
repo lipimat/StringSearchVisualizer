@@ -1,24 +1,39 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "../AlgorithmsModule/algorithmsmodule.h"
+#include "ListElements/CAlgorithmsListWidgetItem.h"
 #include <QMessageBox>
 #include <QString>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+namespace Window
 {
-    ui->setupUi(this);
-}
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+    MainWindow::MainWindow(QWidget *parent)
+        : QMainWindow(parent)
+        , ui(new Ui::MainWindow)
+    {
+        ui->setupUi(this);
+        initializeListView();
+    }
 
-void MainWindow::on_RunAlgorithmButton_clicked()
-{
-    AlgorithmsModule module;
-    QMessageBox::about(this, "RunClicked", QString::fromStdString(std::string(module.getName())));
-}
+    MainWindow::~MainWindow()
+    {
+        delete ui;
+    }
+
+    void MainWindow::on_RunAlgorithmButton_clicked()
+    {
+        AlgorithmsModule module;
+        const auto itemPtr = ui->AlgorithmsListWidget->currentItem();
+        if(itemPtr != nullptr)
+            QMessageBox::about(this, "RunClicked", itemPtr->text());
+    }
+
+    void MainWindow::initializeListView() const
+    {
+        AlgorithmsModule module;
+        ui->AlgorithmsListWidget->addItem(new AlgorithmsListItem::CAlgorithmsListWidgetItem(std::string(module.getName())));
+    }
+
+}//Window
 
