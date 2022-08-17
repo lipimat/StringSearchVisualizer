@@ -65,14 +65,17 @@
    <widget class="QPlainTextEdit" name="InputTextEdit">
     <property name="geometry">
      <rect>
-      <x>952</x>
-      <y>-3</y>
-      <width>350</width>
+      <x>950</x>
+      <y>0</y>
+      <width>330</width>
       <height>771</height>
      </rect>
     </property>
     <property name="plainText">
      <string>Insert text here</string>
+    </property>
+    <property name="tabStopDistance">
+     <double>80.000000000000000</double>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
