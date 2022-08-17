@@ -6,8 +6,16 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class QListWidgetItem;
+
 namespace Window
 {
+
+    namespace WindowConstants
+    {
+        static constexpr std::string_view WINDOW_ICON_PATH = ":/ApplicationIcon/ApplicationIcon.png";
+    }
+
     class MainWindow : public QMainWindow
     {
         Q_OBJECT
@@ -18,6 +26,7 @@ namespace Window
 
     private slots:
         void on_RunAlgorithmButton_clicked();
+        void on_AlgorithmsListWidget_currentItemChanged(QListWidgetItem*, QListWidgetItem*);
 
     private:
 

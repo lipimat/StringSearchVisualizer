@@ -1,13 +1,23 @@
 #pragma once
 
-#include "IAlgorithmsListWidgetItem.h"
+#include <QListWidgetItem>
 
 namespace Window
 {
-namespace AlgorithmsListItem
+namespace ListElements
 {
 
-    class CAlgorithmsListWidgetItem : public IAlgorithmsListWidgetItem
+    namespace ItemConstants
+    {
+        static constexpr int ITEM_WIDTH = 300;
+        static constexpr int ITEM_HEIGHT = 100;
+        static constexpr std::string_view ALGORITHM_TOOLTIP = "Selectable algorithm";
+        static constexpr std::string_view ITEM_ICON_PATH = ":/ItemIcon/ItemIcon.png";
+        static constexpr QColor NOT_CHOSEN_ITEM_BACKGROUND_COLOR = QColor(255,204,203);
+        static constexpr QColor CHOSEN_ITEM_BACKGROUND_COLOR = QColor(114,238,144);
+    }
+
+    class CAlgorithmsListWidgetItem : public QListWidgetItem
     {
     public:
 

@@ -47,8 +47,19 @@
       <height>768</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>11</pointsize>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="mouseTracking">
      <bool>true</bool>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="InputTextEdit">
