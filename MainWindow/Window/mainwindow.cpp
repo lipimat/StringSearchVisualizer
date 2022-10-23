@@ -4,7 +4,6 @@
 #include <QMessageBox>
 #include <QString>
 
-#include "../AlgorithmsModule/algorithmsmodule.h"
 #include "ListElements/CAlgorithmsListWidgetItem.h"
 
 namespace Window
@@ -25,16 +24,14 @@ namespace Window
 
     void MainWindow::on_RunAlgorithmButton_clicked()
     {
-        AlgorithmsModule module;
         const auto itemPtr = ui->AlgorithmsListWidget->currentItem();
         if(itemPtr != nullptr)
-            QMessageBox::about(this, "RunClicked", itemPtr->text());
+            QMessageBox::about(this, "RunClickedChange", itemPtr->text());
     }
 
     void MainWindow::initializeListView() const
     {
-        AlgorithmsModule module;
-        ui->AlgorithmsListWidget->addItem(new ListElements::CAlgorithmsListWidgetItem(std::string(module.getName())));
+        ui->AlgorithmsListWidget->addItem(new ListElements::CAlgorithmsListWidgetItem(std::string("Brute Force")));
         ui->AlgorithmsListWidget->addItem(new ListElements::CAlgorithmsListWidgetItem(std::string("alg2")));
     }
 

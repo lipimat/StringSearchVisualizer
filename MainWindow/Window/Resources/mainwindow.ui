@@ -55,6 +55,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="mouseTracking">
      <bool>true</bool>
     </property>
@@ -62,29 +65,13 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="InputTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>950</x>
-      <y>0</y>
-      <width>330</width>
-      <height>771</height>
-     </rect>
-    </property>
-    <property name="plainText">
-     <string>Insert text here</string>
-    </property>
-    <property name="tabStopDistance">
-     <double>80.000000000000000</double>
-    </property>
-   </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>0</y>
-      <width>650</width>
-      <height>681</height>
+      <y>170</y>
+      <width>981</width>
+      <height>511</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -97,7 +84,7 @@
    <widget class="QPushButton" name="RunAlgorithmButton">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>760</x>
       <y>710</y>
       <width>75</width>
       <height>24</height>
@@ -105,6 +92,40 @@
     </property>
     <property name="text">
      <string>Run</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="InputTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>0</y>
+      <width>981</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>IBeamCursor</cursorShape>
+    </property>
+    <property name="plainText">
+     <string>Source text here</string>
+    </property>
+    <property name="tabStopDistance">
+     <double>80.000000000000000</double>
+    </property>
+    <property name="centerOnScroll">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
