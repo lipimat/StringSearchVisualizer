@@ -1,10 +1,11 @@
 # services
 function SetEnvironment($QtPath) {
     if($QtPath) {
-        Write-Host("---Setting environment for build---")
+        echo "---Setting environment for build---"
         $Env:QtPath = $QtPath
         $Env:SourcesDir = $PSScriptRoot + "/.."
         $Env:OutputDir = $Env:SourcesDir + "/out"
+        echo "OutputDir=$Env:SourcesDir + /out" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         $Env:ALGORITHMS_MODULE= $Env:OutputDir + "/libs/libAlgorithmsModule.a"
         $Env:CMAKE_BUILD_TYPE = "Release"
         $Env:Path = $Env:Path + ";" + $QtPath + "/Tools/mingw1120_64/bin"
