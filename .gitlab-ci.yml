@@ -5,7 +5,7 @@ stages:
 environment-job:
     stage: Set Environment
     script:
-        - "$CI_PROJECT_DIR\\script\\windows_minions.ps1 SetEnvironment $WINDOWS_QT_PATH"
+        - "echo $CI_PROJECT_DIR" #\\script\\windows_minions.ps1 SetEnvironment $WINDOWS_QT_PATH"
     tags:
         - win64
 
