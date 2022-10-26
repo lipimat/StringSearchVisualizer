@@ -5,7 +5,7 @@ set-environment-job:
     stage: Windows Build
     script:
         - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 $WINDOWS_QT_PATH"
-        - "echo $env:SourcesDir"
+        - "echo $SourcesDir"
         - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 CleanBuild"
     tags:
         - win64
