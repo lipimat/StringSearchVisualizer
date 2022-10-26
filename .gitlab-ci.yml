@@ -7,11 +7,11 @@ environment-job:
     script:
         - "${CI_PROJECT_DIR}\\script\\windows_minions.ps1 SetEnvironment ${WINDOWS_QT_PATH}"
     tags:
-        - windows64
+        - win64
 
 build-job:      
     stage: Clean Build
     script:
         - "${CI_PROJECT_DIR}\\scripts\\windows_minions.ps1 CleanBuild"
     tags:
-        - windows64
+        - win64
