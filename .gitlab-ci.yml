@@ -1,17 +1,16 @@
 stages:
-    - Windows Build
+    - Set Environmen
+    - Build
 
 set-environment-job:
-    stage: Windows Build
+    stage: Set Environment
     script:
         - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 $WINDOWS_QT_PATH"
-        - "echo $SourcesDir"
-        - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 CleanBuild"
     tags:
         - win64
 
 clean-build-job:      
-    stage: Windows Build
+    stage: Build
     script:
         - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 CleanBuild"
     tags:
