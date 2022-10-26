@@ -1,5 +1,5 @@
 stages:
-    - Set Environmen
+    - Set Environment
     - Build
 
 set-environment-job:
