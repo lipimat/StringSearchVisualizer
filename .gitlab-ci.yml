@@ -5,7 +5,7 @@ stages:
 environment-job:
     stage: Set Environment
     script:
-        - "echo $CI_PROJECT_DIR/scripts/"
+        - "powershell -File $CI_PROJECT_DIR/scripts/windows_minions.ps1"
     tags:
         - win64
 
