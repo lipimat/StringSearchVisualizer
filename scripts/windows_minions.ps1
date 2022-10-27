@@ -3,9 +3,9 @@ function SetEnvironment($QtPath) {
     if($QtPath) {
         echo "---Setting environment for build---"
         $Env:QtPath = $QtPath
+        echo "$Env:CI_PROJECT_DIR"
         $Env:SourcesDir = $PSScriptRoot + "/.."
         $Env:OutputDir = $Env:SourcesDir + "/out"
-        echo "OutputDir=$Env:SourcesDir + /out" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         $Env:ALGORITHMS_MODULE= $Env:OutputDir + "/libs/libAlgorithmsModule.a"
         $Env:CMAKE_BUILD_TYPE = "Release"
         $Env:Path = $Env:Path + ";" + $QtPath + "/Tools/mingw1120_64/bin"
