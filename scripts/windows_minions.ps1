@@ -74,6 +74,7 @@ function CleanBuild() {
     }
 
     Write-Output("---Clean build---")
+    exit $LASTEXITCODE
 }
 
 function RunApplication() {
@@ -87,6 +88,7 @@ function RunApplication() {
         exit 1
     }
 
+    exit $LASTEXITCODE
 }
 
 # params
