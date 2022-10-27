@@ -11,10 +11,15 @@ namespace Window
 
     MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
-        , ui(std::make_unique<Ui::MainWindow>())
+        , ui(std::make_unique<Ui::MainWindow>().release())
     {
         ui->setupUi(this);
         initializeListView();
+    }
+
+    MainWindow::~MainWindow()
+    {
+        delete ui;
     }
 
     void MainWindow::on_RunAlgorithmButton_clicked()

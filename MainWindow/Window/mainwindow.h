@@ -17,7 +17,7 @@ namespace Window
 
     public:
         MainWindow(QWidget *parent = nullptr);
-        ~MainWindow() = default;
+        ~MainWindow();
 
     private slots:
         void on_RunAlgorithmButton_clicked();
@@ -27,7 +27,7 @@ namespace Window
 
         void initializeListView() const;
 
-        std::unique_ptr<Ui::MainWindow> ui;
+        Ui::MainWindow* ui;
     };
 
 }//Window
