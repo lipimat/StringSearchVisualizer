@@ -14,20 +14,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-set(PROJECT_SOURCES
-        main.cpp
-        Window/mainwindow.cpp
-        Window/mainwindow.h
-        Window/Resources/mainwindow.ui
-        ListElements/CAlgorithmsListWidgetItem.h
-        ListElements/CAlgorithmsListWidgetItem.cpp
-        ListElements/Resources/listResources.qrc
-)
+set(DIRECTORIES
+        .
+        Window
+        ListElements)
+
+foreach(DIRECTORY ${DIRECTORIES})
+        file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)
+        file(GLOB_RECURSE PROJECT_HEADERS ${DIRECTORY} *.h)
+endforeach()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MainWindow
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${PROJECT_HEADERS}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET MainWindow APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -37,12 +38,14 @@ else()
     if(ANDROID)
         add_library(MainWindow SHARED
             ${PROJECT_SOURCES}
+            ${PROJECT_HEADERS}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(MainWindow
             ${PROJECT_SOURCES}
+            ${PROJECT_HEADERS}
         )
     endif()
 endif()
