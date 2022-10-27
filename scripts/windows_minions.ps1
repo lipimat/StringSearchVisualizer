@@ -44,7 +44,6 @@ function CleanBuild() {
         $MainWindowModuleSource = $Env:SOURCES_DIR + "/MainWindow"; $MainWindowModuleOut = $Env:OUTPUT_DIR + "/exe"
         $Env:Path = $Env:Path + ";" + $Env:CMAKE_PREFIX_PATH + "/../../Tools/mingw1120_64/bin"
         $CmakeExe = $Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe"
-        $Result = $true
 
         # Create directories for new build
         New-Item -Force -Path ($Env:OUTPUT_DIR) -ItemType Directory
@@ -54,20 +53,20 @@ function CleanBuild() {
         # Make and build AlgorithmsModule
         $MakeAlgorithmsModuleCommand = [scriptblock]::Create($CmakeExe + " -S " + $AlgorithmsModuleSource + " -B "  + $AlgorithmsModuleOut)
         Write-Output ($MakeAlgorithmsModuleCommand)
-        $Result = ($Result) -and (Invoke-Command -script $MakeAlgorithmsModuleCommand)
+        Invoke-Command -script $MakeAlgorithmsModuleCommand
 
         $BuildAlgorithmsModuleCommand = [scriptblock]::Create($CmakeExe + " --build " + $AlgorithmsModuleOut + " --target all")
         Write-Output ($BuildAlgorithmsModuleCommand)
-        $Result = ($Result) -and (Invoke-Command -script $BuildAlgorithmsModuleCommand)
+        Invoke-Command -script $BuildAlgorithmsModuleCommand
 
         # Make and build MainWindow module
         $MakeMainWindowModuleCommand = [scriptblock]::Create($CmakeExe + " -S " + $MainWindowModuleSource + " -B " + $MainWindowModuleOut)
         Write-Output ($MakeMainWindowModuleCommand)
-        $Result = ($Result) -and (Invoke-Command -script $MakeMainWindowModuleCommand)
+        Invoke-Command -script $MakeMainWindowModuleCommand
 
         $BuildMainWindowModuleCommand = [scriptblock]::Create($CmakeExe + " --build " + $MainWindowModuleOut + " --target all")
         Write-Output ($BuildMainWindowModuleCommand)
-        $Result = ($Result) -and (Invoke-Command -script $BuildMainWindowModuleCommand)
+        Invoke-Command -script $BuildMainWindowModuleCommand
     }
     catch {
         Write-Output $_Exception.Message
@@ -75,21 +74,19 @@ function CleanBuild() {
     }
 
     Write-Output("---Clean build---")
-    exit $Result
 }
 
 function RunApplication() {
 
     try {
         $Env:PATH = $Env:PATH + ";" + $Env:CMAKE_PREFIX_PATH + "/bin"
-        $Result = Invoke-Item ($Env:SOURCES_DIR + "/out/exe/MainWindow.exe")
+        Invoke-Item ($Env:SOURCES_DIR + "/out/exe/MainWindow.exe")
     }
     catch {
         Write-Output $_Exception.Message
         exit 1
     }
 
-    exit $Result
 }
 
 # params
