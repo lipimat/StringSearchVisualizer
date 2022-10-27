@@ -1,68 +1,95 @@
 # services
 function SetEnvironment($QtPath) {
     if($QtPath) {
-        echo "---Setting environment for build---"
-        $Env:QtPath = $QtPath
-        echo "$Env:CI_PROJECT_DIR"
-        $Env:SourcesDir = $PSScriptRoot + "/.."
-        $Env:OutputDir = $Env:SourcesDir + "/out"
-        $Env:ALGORITHMS_MODULE= $Env:OutputDir + "/libs/libAlgorithmsModule.a"
+        Write-Output "+++Setting environment for build+++"
+        $Env:SOURCES_DIR = $PSScriptRoot + "/.."
+        $Env:OUTPUT_DIR = $Env:SOURCES_DIR + "/out"
+        $Env:ALGORITHMS_MODULE= $Env:OUTPUT_DIR + "/libs/libAlgorithmsModule.a"
         $Env:CMAKE_BUILD_TYPE = "Release"
-        $Env:Path = $Env:Path + ";" + $QtPath + "/Tools/mingw1120_64/bin"
         $Env:CMAKE_GENERATOR = "Ninja"
         $Env:CMAKE_GNUtoMS = "OFF"
-        $Env:INSTALL_PREFIX = $Env:SourcesDir + "Install"
-        $Env:CMAKE_PREFIX_PATH = $QtPath + "/6.3.1/mingw_64"
-        $Env:CMAKE_PROJECT_INCLUDE_BEFORE = $QtPath + "/Tools/QtCreator/share/qtcreator/package-manager/auto-setup.cmake"
+        $Env:INSTALL_PREFIX = $Env:SOURCES_DIR + "Install"
+        $Env:CMAKE_PREFIX_PATH = $QtPath + "/mingw_64"
+        $Env:CMAKE_PROJECT_INCLUDE_BEFORE = $QtPath + "/../Tools/QtCreator/share/qtcreator/package-manager/auto-setup.cmake"
         $Env:QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP = "OFF"
-        $Env:QT_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6"
-        $Env:QT_QMAKE_EXECUTABLE = $QtPath + "/6.3.1/mingw_64/bin/qmake.exe"
-        $Env:Qt6CoreTools_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6CoreTools"
-        $Env:Qt6Core_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6Core"
-        $Env:Qt6EntryPointPrivate_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6EntryPointPrivate"
-        $Env:Qt6GuiTools_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6GuiTools"
-        $Env:Qt6Gui_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6Gui"
-        $Env:Qt6WidgetsTools_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6WidgetsTools"
-        $Env:Qt6Widgets_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6Widgets"
-        $Env:Qt6ZlibPrivate_DIR = $QtPath + "/6.3.1/mingw_64/lib/cmake/Qt6ZlibPrivate"
-        $Env:WINDEPLOYQT_EXECUTABLE = $QtPath + "/6.3.1/mingw_64/bin/windeployqt.exe"
+        $Env:QT_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6"
+        $Env:QT_QMAKE_EXECUTABLE = $QtPath + "/mingw_64/bin/qmake.exe"
+        $Env:Qt6CoreTools_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6CoreTools"
+        $Env:Qt6Core_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6Core"
+        $Env:Qt6EntryPointPrivate_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6EntryPointPrivate"
+        $Env:Qt6GuiTools_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6GuiTools"
+        $Env:Qt6Gui_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6Gui"
+        $Env:Qt6WidgetsTools_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6WidgetsTools"
+        $Env:Qt6Widgets_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6Widgets"
+        $Env:Qt6ZlibPrivate_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6ZlibPrivate"
+        $Env:WINDEPLOYQT_EXECUTABLE = $QtPath + "/mingw_64/bin/windeployqt.exe"
+        Write-Output "---Setting environment for build---"
     }
     else {
-        Write-host("Please provide path to your qt installation folder as second parameter")
+        Write-Output("Please provide path to your qt installation folder as second parameter")
+        exit 1
     }
 }
 
 function CleanBuild() {
-    Write-Host("---Clean build---")
-    if(Test-Path $Env:OutputDir) {
-        Remove-Item $Env:OutputDir -Recurse
+    Write-Output("+++Clean build+++")
+
+    try {
+
+        if(Test-Path $Env:OUTPUT_DIR) {
+            Remove-Item $Env:OUTPUT_DIR -Recurse
+        }
+
+        $AlgorithmsModuleSource = $Env:SOURCES_DIR + "/AlgorithmsModule"; $AlgorithmsModuleOut = $Env:OUTPUT_DIR + "/libs"
+        $MainWindowModuleSource = $Env:SOURCES_DIR + "/MainWindow"; $MainWindowModuleOut = $Env:OUTPUT_DIR + "/exe"
+        $Env:Path = $Env:Path + ";" + $Env:CMAKE_PREFIX_PATH + "/../../Tools/mingw1120_64/bin"
+        $CmakeExe = $Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe"
+        $Result = $true
+
+        # Create directories for new build
+        New-Item -Force -Path ($Env:OUTPUT_DIR) -ItemType Directory
+        New-Item -Force -Path ($AlgorithmsModuleSource) -ItemType Directory
+        New-Item -Force -Path ($AlgorithmsModuleOut) -ItemType Directory
+        
+        # Make and build AlgorithmsModule
+        $MakeAlgorithmsModuleCommand = [scriptblock]::Create($CmakeExe + " -S " + $AlgorithmsModuleSource + " -B "  + $AlgorithmsModuleOut)
+        Write-Output ($MakeAlgorithmsModuleCommand)
+        $Result = ($Result) -and (Invoke-Command -script $MakeAlgorithmsModuleCommand)
+
+        $BuildAlgorithmsModuleCommand = [scriptblock]::Create($CmakeExe + " --build " + $AlgorithmsModuleOut + " --target all")
+        Write-Output ($BuildAlgorithmsModuleCommand)
+        $Result = ($Result) -and (Invoke-Command -script $BuildAlgorithmsModuleCommand)
+
+        # Make and build MainWindow module
+        $MakeMainWindowModuleCommand = [scriptblock]::Create($CmakeExe + " -S " + $MainWindowModuleSource + " -B " + $MainWindowModuleOut)
+        Write-Output ($MakeMainWindowModuleCommand)
+        $Result = ($Result) -and (Invoke-Command -script $MakeMainWindowModuleCommand)
+
+        $BuildMainWindowModuleCommand = [scriptblock]::Create($CmakeExe + " --build " + $MainWindowModuleOut + " --target all")
+        Write-Output ($BuildMainWindowModuleCommand)
+        $Result = ($Result) -and (Invoke-Command -script $BuildMainWindowModuleCommand)
     }
-    New-Item -Force -Path ($Env:OutputDir) -ItemType Directory
-    New-Item -Force -Path ($Env:OutputDir + "/libs") -ItemType Directory
-    New-Item -Force -Path ($Env:OutputDir + "/exe") -ItemType Directory
+    catch {
+        Write-Output $_Exception.Message
+        exit 1
+    }
 
-    $AlgorithmsSource = $Env:SourcesDir + "/AlgorithmsModule"; $AlgorithmsOut = $Env:OutputDir + "/libs"
-    $MakeAlgorithmsModule = [scriptblock]::Create($Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe -S $AlgorithmsSource -B $AlgorithmsOut")
-    Write-Host ($MakeAlgorithmsModule)
-    Invoke-Command -script $MakeAlgorithmsModule
-    $BuildAlgorithmsModule = [scriptblock]::Create($Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe --build $AlgorithmsOut --target all")
-    Write-Host ($BuildAlgorithmsModule)
-    Invoke-Command -script $BuildAlgorithmsModule
-
-    $MainWindowSource = $Env:SourcesDir + "/MainWindow"; $MainWindowOut = $Env:OutputDir + "/exe"
-    $MakeMainWindow = [scriptblock]::Create($Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe -S $MainWindowSource -B $MainWindowOut")
-    Write-Host ($MakeMainWindow)
-    Invoke-Command -script $MakeMainWindow
-    $BuildMainWindow = [scriptblock]::Create($Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe --build $MainWindowOut --target all")
-    Write-Host ($BuildMainWindow)
-    Invoke-Command -script $BuildMainWindow
-
-    Write-Host("---Clean build---")
+    Write-Output("---Clean build---")
+    exit $Result
 }
 
 function RunApplication() {
-    $Env:PATH = $Env:PATH + ";" + $QtPath + "/6.3.1/mingw_64/bin"
-    Invoke-Item ($Env:SourcesDir + "/out/exe/MainWindow.exe")
+
+    try {
+        $Env:PATH = $Env:PATH + ";" + $Env:CMAKE_PREFIX_PATH + "/bin"
+        $Result = Invoke-Item ($Env:SOURCES_DIR + "/out/exe/MainWindow.exe")
+    }
+    catch {
+        Write-Output $_Exception.Message
+        exit 1
+    }
+
+    exit $Result
 }
 
 # params
@@ -70,4 +97,8 @@ Switch($Args[0]) {
     "SetEnvironment" { SetEnvironment($Args[1]) }
     "CleanBuild" { CleanBuild }
     "Run" { RunApplication }
+    Default {
+        Write-Output("Please provide any option, available options are: SetEnvironment, CleanBuild, Run")
+        exit 1
+    }
 }
