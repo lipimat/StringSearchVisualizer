@@ -20,6 +20,7 @@ namespace Window
         ~MainWindow();
 
     private slots:
+
         void on_RunAlgorithmButton_clicked();
         void on_AlgorithmsListWidget_currentItemChanged(QListWidgetItem*, QListWidgetItem*);
 

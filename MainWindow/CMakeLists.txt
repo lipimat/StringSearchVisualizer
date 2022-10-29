@@ -22,6 +22,7 @@ set(DIRECTORIES
 foreach(DIRECTORY ${DIRECTORIES})
         file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)
         file(GLOB_RECURSE PROJECT_HEADERS ${DIRECTORY} *.h)
+        file(GLOB_RECURSE PROJECT_RESOURCES ${DIRECTORY}/Resources *.ui *.qrc)
 endforeach()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -29,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${PROJECT_HEADERS}
+        ${PROJECT_RESOURCES}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET MainWindow APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -39,6 +41,7 @@ else()
         add_library(MainWindow SHARED
             ${PROJECT_SOURCES}
             ${PROJECT_HEADERS}
+            ${PROJECT_RESOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
@@ -46,6 +49,7 @@ else()
         add_executable(MainWindow
             ${PROJECT_SOURCES}
             ${PROJECT_HEADERS}
+            ${PROJECT_RESOURCES
         )
     endif()
 endif()

@@ -12,9 +12,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
+set(DIRECTORIES
+        .)
+
+foreach(DIRECTORY ${DIRECTORIES})
+        file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)
+        file(GLOB_RECURSE PROJECT_HEADERS ${DIRECTORY} *.h)
+endforeach()
+
 add_library(AlgorithmsModule STATIC
-  algorithmsmodule.cpp
-  algorithmsmodule.h
+  ${PROJECT_SOURCES}
+  ${PROJECT_HEADERS}
 )
 
 target_link_libraries(AlgorithmsModule PRIVATE Qt${QT_VERSION_MAJOR}::Core)

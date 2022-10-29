@@ -34,6 +34,9 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="AlgorithmsListWidget">
     <property name="enabled">
@@ -50,7 +53,7 @@
     <property name="font">
      <font>
       <family>Source Code Pro</family>
-      <pointsize>11</pointsize>
+      <pointsize>15</pointsize>
       <italic>true</italic>
       <bold>true</bold>
      </font>
@@ -64,21 +67,17 @@
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
-   </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>170</y>
-      <width>981</width>
-      <height>511</height>
-     </rect>
-    </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
     </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
+    <property name="midLineWidth">
+     <number>0</number>
+    </property>
+    <property name="showDropIndicator" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="RunAlgorithmButton">
@@ -94,38 +93,215 @@
      <string>Run</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="InputTextEdit">
+   <widget class="QLabel" name="PatternLabel">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>0</y>
-      <width>981</width>
-      <height>41</height>
+      <x>350</x>
+      <y>50</y>
+      <width>301</width>
+      <height>40</height>
      </rect>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Pattern to look for</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="SourceLabel">
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>50</y>
+      <width>291</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Source text</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="PatternLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>90</y>
+      <width>300</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="acceptDrops">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+QLineEdit {
+  position: relative;
+  top: -4px;
+  width: 320px;
+  background: #fdfdfd;
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+  
+  -webkit-border-top-right-radius: 6px;
+  -webkit-border-bottom-left-radius: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-bottomleft: 6px;
+  -moz-border-radius-bottomright: 6px;
+   border-top-right-radius: 6px;
+   border-bottom-left-radius: 6px;
+   border-bottom-right-radius: 6px;
+  
+  -webkit-box-shadow: 15px 30px 30px rgba(0,0,0,0.32);
+     -moz-box-shadow: 15px 30px 30px rgba(0,0,0,0.32);
+          box-shadow: 15px 30px 30px rgba(0,0,0,0.32);
+}</string>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="maxLength">
+     <number>15</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="InfoButton">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>90</y>
+      <width>181</width>
+      <height>40</height>
+     </rect>
     </property>
     <property name="font">
      <font>
       <family>Source Code Pro</family>
       <pointsize>12</pointsize>
+      <bold>true</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
      </font>
     </property>
-    <property name="cursor" stdset="0">
-     <cursorShape>IBeamCursor</cursorShape>
+    <property name="styleSheet">
+     <string notr="true">QPushButton  {
+  background-color: #EA4C89;
+  border-radius: 20px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  height: 40px;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+QPushButton:hover {
+  background-color: #F082AC;
+}</string>
     </property>
-    <property name="plainText">
-     <string>Source text here</string>
+    <property name="text">
+     <string>Algorithm Info</string>
     </property>
-    <property name="tabStopDistance">
-     <double>80.000000000000000</double>
+   </widget>
+   <widget class="QLineEdit" name="SourceLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>90</y>
+      <width>300</width>
+      <height>40</height>
+     </rect>
     </property>
-    <property name="centerOnScroll">
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="acceptDrops">
      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+QLineEdit {
+  position: relative;
+  top: -4px;
+  width: 320px;
+  background: #fdfdfd;
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+  
+  -webkit-border-top-right-radius: 6px;
+  -webkit-border-bottom-left-radius: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-bottomleft: 6px;
+  -moz-border-radius-bottomright: 6px;
+   border-top-right-radius: 6px;
+   border-bottom-left-radius: 6px;
+   border-bottom-right-radius: 6px;
+  
+  -webkit-box-shadow: 15px 30px 30px rgba(0,0,0,0.32);
+     -moz-box-shadow: 15px 30px 30px rgba(0,0,0,0.32);
+          box-shadow: 15px 30px 30px rgba(0,0,0,0.32);
+}</string>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="maxLength">
+     <number>15</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

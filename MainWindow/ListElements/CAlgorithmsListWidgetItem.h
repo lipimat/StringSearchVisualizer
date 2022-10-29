@@ -14,7 +14,7 @@ namespace ListElements
         static constexpr std::string_view ALGORITHM_TOOLTIP = "Selectable algorithm";
         static constexpr std::string_view ITEM_ICON_PATH = ":/ItemIcon/ItemIcon.png";
         static constexpr QColor NOT_CHOSEN_ITEM_BACKGROUND_COLOR = QColor(255,204,203);
-        static constexpr QColor CHOSEN_ITEM_BACKGROUND_COLOR = QColor(114,238,144);
+        static constexpr QColor CHOSEN_ITEM_BACKGROUND_COLOR = QColor(114,210,144);
     }
 
     class CAlgorithmsListWidgetItem : public QListWidgetItem
