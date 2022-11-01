@@ -1,11 +1,11 @@
-#include "CAlgorithmsListWidgetItem.h"
+#include "CItem.h"
 
 namespace Window
 {
 namespace ListElements
 {
 
-    CAlgorithmsListWidgetItem::CAlgorithmsListWidgetItem(const std::string& itemName)
+    CItem::CItem(const std::string& itemName)
         : QListWidgetItem(QString::fromStdString(itemName), nullptr , ItemType::UserType)
     {
         //create unique style for our items
@@ -17,5 +17,5 @@ namespace ListElements
         this->setBackground(QBrush(ItemConstants::NOT_CHOSEN_ITEM_BACKGROUND_COLOR));
     }
 
-}//AlgorithmsListItem
+}//ListElements
 }//Window

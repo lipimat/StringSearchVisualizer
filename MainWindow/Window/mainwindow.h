@@ -16,7 +16,7 @@ namespace Window
         Q_OBJECT
 
     public:
-        MainWindow(QWidget *parent = nullptr);
+        explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
 
     private slots:
@@ -28,7 +28,7 @@ namespace Window
 
         void initializeListView() const;
 
-        Ui::MainWindow* ui;
+        Ui::MainWindow* m_ui;
     };
 
 }//Window

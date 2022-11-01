@@ -4,35 +4,35 @@
 #include <QMessageBox>
 #include <QString>
 
-#include "ListElements/CAlgorithmsListWidgetItem.h"
+#include "ListElements/CItem.h"
 
 namespace Window
 {
 
     MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
-        , ui(std::make_unique<Ui::MainWindow>().release())
+        , m_ui(std::make_unique<Ui::MainWindow>().release())
     {
-        ui->setupUi(this);
+        m_ui->setupUi(this);
         initializeListView();
     }
 
     MainWindow::~MainWindow()
     {
-        delete ui;
+        delete m_ui;
     }
 
     void MainWindow::on_RunAlgorithmButton_clicked()
     {
-        const auto itemPtr = ui->AlgorithmsListWidget->currentItem();
+        const auto itemPtr = m_ui->AlgorithmsListWidget->currentItem();
         if(itemPtr != nullptr)
             QMessageBox::about(this, "RunClickedChange", itemPtr->text());
     }
 
     void MainWindow::initializeListView() const
     {
-        ui->AlgorithmsListWidget->addItem(new ListElements::CAlgorithmsListWidgetItem(std::string("Brute Force")));
-        ui->AlgorithmsListWidget->addItem(new ListElements::CAlgorithmsListWidgetItem(std::string("alg2")));
+        m_ui->AlgorithmsListWidget->addItem(new ListElements::CItem(std::string("Brute Force")));
+        m_ui->AlgorithmsListWidget->addItem(new ListElements::CItem(std::string("alg2")));
     }
 
     void MainWindow::on_AlgorithmsListWidget_currentItemChanged(QListWidgetItem* current, QListWidgetItem* previous)

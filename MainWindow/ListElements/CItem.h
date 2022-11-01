@@ -17,14 +17,14 @@ namespace ListElements
         static constexpr QColor CHOSEN_ITEM_BACKGROUND_COLOR = QColor(114,210,144);
     }
 
-    class CAlgorithmsListWidgetItem : public QListWidgetItem
+    class CItem : public QListWidgetItem
     {
     public:
 
-        CAlgorithmsListWidgetItem(const std::string&);
+        explicit CItem(const std::string&);
 
-        virtual ~CAlgorithmsListWidgetItem() = default;
+        virtual ~CItem() = default;
     };
 
-}//AlgorithmsListItem
+}//ListElements
 }//Window
