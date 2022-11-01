@@ -1,5 +1,6 @@
 stages:
     - Windows Build
+    - Windows Testing
 
 clean-build-job:      
     stage: Windows Build
@@ -7,5 +8,14 @@ clean-build-job:
         QT_PATH: $WIN_QT_PATH
     script:
         - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 CleanBuild"
+    tags:
+        - win64
+
+run-tests-job:
+    stage: Windows Testing
+    variables:
+        QT_PATH: $WIN_QT_PATH
+    script:
+        - "& $CI_PROJECT_DIR/scripts/windows_minions.ps1 RunTests"
     tags:
         - win64

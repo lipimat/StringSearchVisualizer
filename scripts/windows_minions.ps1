@@ -1,3 +1,25 @@
+#########################################################################################
+# helper functions
+
+function MakeModule($ModuleSource, $ModuleOut) {
+    $MakeModuleCommand = [scriptblock]::Create($Env:CmakeExe + " -S " + $ModuleSource + " -B "  + $ModuleOut)
+    Write-Output $MakeModuleCommand
+    Invoke-Command -script $MakeModuleCommand
+}
+
+function BuildModule($ModuleOut) {
+    $BuildModuleCommand = [scriptblock]::Create($Env:CmakeExe + " --build " + $ModuleOut + " --target all")
+    Write-Output $BuildModuleCommand
+    Invoke-Command -script $BuildModuleCommand
+}
+
+function CleanBuildModule($ModuleName, $OutputDirName) {
+    $ModuleSource = $Env:SOURCES_DIR + $ModuleName; $ModuleOut = $Env:OUTPUT_DIR + $OutputDirName
+    MakeModule $ModuleSource $ModuleOut
+    BuildModule $ModuleOut
+}
+
+#########################################################################################
 # services
 function SetEnvironment($QtPath) {
     if($QtPath) {
@@ -8,7 +30,7 @@ function SetEnvironment($QtPath) {
         $Env:CMAKE_BUILD_TYPE = "Release"
         $Env:CMAKE_GENERATOR = "Ninja"
         $Env:CMAKE_GNUtoMS = "OFF"
-        $Env:INSTALL_PREFIX = $Env:SOURCES_DIR + "Install"
+        $Env:INSTALL_PREFIX = $Env:SOURCES_DIR + "/Install"
         $Env:CMAKE_PREFIX_PATH = $QtPath + "/mingw_64"
         $Env:CMAKE_PROJECT_INCLUDE_BEFORE = $QtPath + "/../Tools/QtCreator/share/qtcreator/package-manager/auto-setup.cmake"
         $Env:QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP = "OFF"
@@ -22,17 +44,18 @@ function SetEnvironment($QtPath) {
         $Env:Qt6WidgetsTools_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6WidgetsTools"
         $Env:Qt6Widgets_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6Widgets"
         $Env:Qt6ZlibPrivate_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6ZlibPrivate"
+        $Env:Qt6Test_DIR = $QtPath + "/mingw_64/lib/cmake/Qt6Test"
         $Env:WINDEPLOYQT_EXECUTABLE = $QtPath + "/mingw_64/bin/windeployqt.exe"
         Write-Output "---Setting environment for build---"
     }
     else {
-        Write-Output("Please provide path to your qt installation folder as second parameter")
+        Write-Output "Please provide path to your qt installation folder as second parameter"
         exit 1
     }
 }
 
 function CleanBuild() {
-    Write-Output("+++Clean build+++")
+    Write-Output "+++Clean build+++"
 
     try {
 
@@ -40,48 +63,27 @@ function CleanBuild() {
             Remove-Item $Env:OUTPUT_DIR -Recurse
         }
 
-        $AlgorithmsModuleSource = $Env:SOURCES_DIR + "/AlgorithmsModule"; $AlgorithmsModuleOut = $Env:OUTPUT_DIR + "/libs"
-        $MainWindowModuleSource = $Env:SOURCES_DIR + "/MainWindow"; $MainWindowModuleOut = $Env:OUTPUT_DIR + "/exe"
         $Env:Path = $Env:Path + ";" + $Env:CMAKE_PREFIX_PATH + "/../../Tools/mingw1120_64/bin"
-        $CmakeExe = $Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe"
-
-        # Create directories for new build
-        New-Item -Force -Path ($Env:OUTPUT_DIR) -ItemType Directory
-        New-Item -Force -Path ($AlgorithmsModuleSource) -ItemType Directory
-        New-Item -Force -Path ($AlgorithmsModuleOut) -ItemType Directory
+        $Env:CmakeExe = $Env:CMAKE_PREFIX_PATH + "/../../Tools/Cmake_64/bin/cmake.exe"
         
-        # Make and build AlgorithmsModule
-        $MakeAlgorithmsModuleCommand = [scriptblock]::Create($CmakeExe + " -S " + $AlgorithmsModuleSource + " -B "  + $AlgorithmsModuleOut)
-        Write-Output ($MakeAlgorithmsModuleCommand)
-        Invoke-Command -script $MakeAlgorithmsModuleCommand
-
-        $BuildAlgorithmsModuleCommand = [scriptblock]::Create($CmakeExe + " --build " + $AlgorithmsModuleOut + " --target all")
-        Write-Output ($BuildAlgorithmsModuleCommand)
-        Invoke-Command -script $BuildAlgorithmsModuleCommand
-
-        # Make and build MainWindow module
-        $MakeMainWindowModuleCommand = [scriptblock]::Create($CmakeExe + " -S " + $MainWindowModuleSource + " -B " + $MainWindowModuleOut)
-        Write-Output ($MakeMainWindowModuleCommand)
-        Invoke-Command -script $MakeMainWindowModuleCommand
-
-        $BuildMainWindowModuleCommand = [scriptblock]::Create($CmakeExe + " --build " + $MainWindowModuleOut + " --target all")
-        Write-Output ($BuildMainWindowModuleCommand)
-        Invoke-Command -script $BuildMainWindowModuleCommand
+        CleanBuildModule "/AlgorithmsModule" "/libs"
+        CleanBuildModule "/MainWindow" "/exe"
+        CleanBuildModule "/TestsModule" "/tests"
     }
     catch {
         Write-Output $_Exception.Message
         exit 1
     }
 
-    Write-Output("---Clean build---")
+    Write-Output "---Clean build---"
     exit $LASTEXITCODE
 }
 
-function RunApplication() {
-
+function Run($OutputExePath) {
     try {
         $Env:PATH = $Env:PATH + ";" + $Env:CMAKE_PREFIX_PATH + "/bin"
-        Invoke-Item ($Env:SOURCES_DIR + "/out/exe/MainWindow.exe")
+        $RunExe = [scriptblock]::Create($Env:OUTPUT_DIR + $OutputExePath)
+        Invoke-Command -script $RunExe
     }
     catch {
         Write-Output $_Exception.Message
@@ -90,14 +92,21 @@ function RunApplication() {
 
     exit $LASTEXITCODE
 }
+
+#########################################################################################
 
 # params
 Switch($Args[0]) {
-    "SetEnvironment" { SetEnvironment($Args[1]) }
+    "SetEnvironment" { SetEnvironment $Args[1] }
     "CleanBuild" { CleanBuild }
-    "Run" { RunApplication }
+    "RunApp" { Run "/exe/MainWindow.exe" }
+    "RunTests" { Run "/tests/TestsModule.exe" }
     Default {
-        Write-Output("Please provide any option, available options are: SetEnvironment, CleanBuild, Run")
+        Write-Output("Please provide any option, available options are:
+            SetEnvironment
+            CleanBuild 
+            RunApp
+            RunTests")
         exit 1
     }
 }
