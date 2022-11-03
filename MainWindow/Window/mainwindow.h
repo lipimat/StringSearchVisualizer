@@ -21,8 +21,9 @@ namespace Window
 
     private slots:
 
-        void on_RunAlgorithmButton_clicked();
         void on_AlgorithmsListWidget_currentItemChanged(QListWidgetItem*, QListWidgetItem*);
+
+        void on_InfoButton_clicked();
 
     private:
 

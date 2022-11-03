@@ -2,6 +2,8 @@
 
 #include <QListWidgetItem>
 
+#include "../AlgorithmsModule/IController.h"
+
 namespace Window
 {
 namespace ListElements
@@ -21,9 +23,13 @@ namespace ListElements
     {
     public:
 
-        explicit CItem(const std::string&);
-
+        explicit CItem(const std::string&, Algorithms::IController*);
+        Algorithms::IController* getController() const;
         virtual ~CItem() = default;
+
+    private:
+
+         Algorithms::IController* m_controller;
     };
 
 }//ListElements

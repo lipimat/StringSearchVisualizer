@@ -5,8 +5,8 @@ namespace Window
 namespace ListElements
 {
 
-    CItem::CItem(const std::string& itemName)
-        : QListWidgetItem(QString::fromStdString(itemName), nullptr , ItemType::UserType)
+    CItem::CItem(const std::string& itemName, Algorithms::IController* controller)
+        : QListWidgetItem(QString::fromStdString(itemName), nullptr , ItemType::UserType), m_controller(controller)
     {
         //create unique style for our items
         this->setHidden(false);
@@ -15,6 +15,11 @@ namespace ListElements
         this->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         this->setToolTip(QString(ItemConstants::ALGORITHM_TOOLTIP.data()));
         this->setBackground(QBrush(ItemConstants::NOT_CHOSEN_ITEM_BACKGROUND_COLOR));
+    }
+
+    Algorithms::IController* CItem::getController() const
+    {
+        return m_controller;
     }
 
 }//ListElements

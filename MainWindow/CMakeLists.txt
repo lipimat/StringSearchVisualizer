@@ -49,7 +49,7 @@ else()
         add_executable(MainWindow
             ${PROJECT_SOURCES}
             ${PROJECT_HEADERS}
-            ${PROJECT_RESOURCES
+            ${PROJECT_RESOURCES}
         )
     endif()
 endif()

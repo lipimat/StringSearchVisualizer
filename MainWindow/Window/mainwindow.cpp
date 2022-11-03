@@ -1,10 +1,14 @@
-#include "mainwindow.h"
-#include "Resources/ui_mainwindow.h"
-
 #include <QMessageBox>
 #include <QString>
 
+// MainWindow includes
+#include "mainwindow.h"
+#include "Resources/ui_mainwindow.h"
 #include "ListElements/CItem.h"
+
+// AlgorithmsModule includes
+#include "../AlgorithmsModule/SupportedAlgorithmsToolsets.h"
+#include "../AlgorithmsModule/CController.h"
 
 namespace Window
 {
@@ -22,17 +26,15 @@ namespace Window
         delete m_ui;
     }
 
-    void MainWindow::on_RunAlgorithmButton_clicked()
-    {
-        const auto itemPtr = m_ui->AlgorithmsListWidget->currentItem();
-        if(itemPtr != nullptr)
-            QMessageBox::about(this, "RunClickedChange", itemPtr->text());
-    }
-
     void MainWindow::initializeListView() const
     {
-        m_ui->AlgorithmsListWidget->addItem(new ListElements::CItem(std::string("Brute Force")));
-        m_ui->AlgorithmsListWidget->addItem(new ListElements::CItem(std::string("alg2")));
+        for(const auto& factory : Algorithms::toolsetFactories)
+        {
+            auto controllerPtr = std::make_unique<Algorithms::CController>(factory.get());
+            const auto algorithmName = controllerPtr->getAlgorithmName();
+            m_ui->AlgorithmsListWidget->addItem(
+                        std::make_unique<ListElements::CItem>(algorithmName, controllerPtr.release()).release());
+        }
     }
 
     void MainWindow::on_AlgorithmsListWidget_currentItemChanged(QListWidgetItem* current, QListWidgetItem* previous)
@@ -43,5 +45,15 @@ namespace Window
               current->setBackground(QBrush(ListElements::ItemConstants::CHOSEN_ITEM_BACKGROUND_COLOR));
     }
 
-}//Window
+
+    void MainWindow::on_InfoButton_clicked()
+    {
+        auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
+        QMessageBox::about(
+                    this,
+                    QString::fromStdString(controllerPtr->getAlgorithmName()),
+                    QString::fromStdString(controllerPtr->getAlgorithmInfo()));
+    }
+
+} //Window
 

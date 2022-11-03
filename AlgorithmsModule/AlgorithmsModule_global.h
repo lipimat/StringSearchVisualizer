@@ -1,5 +1,4 @@
-#ifndef ALGORITHMSMODULE_GLOBAL_H
-#define ALGORITHMSMODULE_GLOBAL_H
+#pragma once
 
 #include <QtCore/qglobal.h>
 
@@ -8,5 +7,3 @@
 #else
 #  define ALGORITHMSMODULE_EXPORT Q_DECL_IMPORT
 #endif
-
-#endif // ALGORITHMSMODULE_GLOBAL_H

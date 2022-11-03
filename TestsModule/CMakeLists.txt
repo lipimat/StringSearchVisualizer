@@ -17,13 +17,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(DIRECTORIES
-        .)
+        .
+        BruteForce)
 
 foreach(DIRECTORY ${DIRECTORIES})
         file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)
+        file(GLOB_RECURSE PROJECT_HEADERS ${DIRECTORY} *.h)
 endforeach()
 
-add_executable(TestsModule ${PROJECT_SOURCES})
+add_executable(TestsModule ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 # our dependencies
 include_directories(${CMAKE_SOURCE_DIR}/../AlgorithmsModule)
