@@ -48,7 +48,7 @@ namespace Window
     {
         for(const auto& factory : Algorithms::toolsetFactories)
         {
-            auto controllerPtr = std::make_unique<Algorithms::CController>(factory.get(), m_ui->VisualizationWidget);
+            auto controllerPtr = std::make_unique<Algorithms::CController>(factory.get());
             const auto algorithmName = controllerPtr->getAlgorithmName();
             m_ui->AlgorithmsListWidget->addItem(
                         std::make_unique<ListElements::CItem>(algorithmName, controllerPtr.release()).release());

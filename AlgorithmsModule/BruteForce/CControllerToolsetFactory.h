@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../IControllerToolsetFactory.h"
-#include "AVisualizationPainter.h"
 
 namespace Algorithms
 {
@@ -41,7 +40,6 @@ namespace BruteForce
     {
         std::string_view createName() const override;
         std::string_view createInfo() const override;
-        AVisualizationPainter* createPainter(Window::IVisualizationWidget*) const override;
     };
 
 } //BruteForce
