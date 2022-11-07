@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QString>
+#include <QPainter>
 
 // MainWindow includes
 #include "mainwindow.h"
@@ -18,6 +19,7 @@ namespace Window
         , m_ui(std::make_unique<Ui::MainWindow>().release())
     {
         m_ui->setupUi(this);
+        initializeLayoutNoSimulation();
         initializeListView();
     }
 
@@ -26,11 +28,27 @@ namespace Window
         delete m_ui;
     }
 
+    void MainWindow::initializeLayoutNoSimulation() const
+    {
+        m_ui->SourceLineEdit->setReadOnly(false);
+        m_ui->PatternLineEdit->setReadOnly(false);
+        m_ui->StartButton->show();
+        m_ui->StopButton->hide();
+    }
+
+    void MainWindow::initializeLayoutSimulation() const
+    {
+        m_ui->SourceLineEdit->setReadOnly(true);
+        m_ui->PatternLineEdit->setReadOnly(true);
+        m_ui->StartButton->hide();
+        m_ui->StopButton->show();
+    }
+
     void MainWindow::initializeListView() const
     {
         for(const auto& factory : Algorithms::toolsetFactories)
         {
-            auto controllerPtr = std::make_unique<Algorithms::CController>(factory.get());
+            auto controllerPtr = std::make_unique<Algorithms::CController>(factory.get(), m_ui->VisualizationWidget);
             const auto algorithmName = controllerPtr->getAlgorithmName();
             m_ui->AlgorithmsListWidget->addItem(
                         std::make_unique<ListElements::CItem>(algorithmName, controllerPtr.release()).release());
@@ -53,6 +71,27 @@ namespace Window
                     this,
                     QString::fromStdString(controllerPtr->getAlgorithmName()),
                     QString::fromStdString(controllerPtr->getAlgorithmInfo()));
+    }
+
+    void MainWindow::on_StartButton_clicked()
+    {
+        const auto sourceText = m_ui->SourceLineEdit->text().toStdString();
+        const auto patternText = m_ui->PatternLineEdit->text().toStdString();
+        if(sourceText.empty() || patternText.empty())
+        {
+            QMessageBox::critical(this, "Error", "Fill both forms to start simulation!");
+            return;
+        }
+
+        initializeLayoutSimulation();
+        const auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
+        controllerPtr->initializeVisualization();
+    }
+
+
+    void MainWindow::on_StopButton_clicked()
+    {
+        initializeLayoutNoSimulation();
     }
 
 } //Window

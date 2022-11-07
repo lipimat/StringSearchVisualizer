@@ -11,6 +11,7 @@ namespace Algorithms
 
         virtual const std::string& getAlgorithmName() const = 0;
         virtual const std::string& getAlgorithmInfo() const = 0;
+        virtual void initializeVisualization() const = 0;
         virtual ~IController() = default;
 
     };
