@@ -28,9 +28,14 @@ namespace ListElements
         return QString::fromStdString(m_controller->getAlgorithmInfo());
     }
 
-    void CItem::initializeVisualization() const
+    void CItem::initializeVisualization(const Algorithms::TextsPair& userText) const
     {
-        m_controller->initializeScene();
+        m_controller->initializeScene(userText);
+    }
+
+    void CItem::clearVisualization() const
+    {
+        m_controller->cleanScene();
     }
 
 }//ListElements

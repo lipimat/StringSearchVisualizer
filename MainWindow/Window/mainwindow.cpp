@@ -1,12 +1,10 @@
 #include <QMessageBox>
-#include <QString>
-#include <QGraphicsView>
-#include <QGraphicsRectItem>
 
 // MainWindow includes
 #include "mainwindow.h"
 #include "Resources/ui_mainwindow.h"
 #include "ListElements/CItem.h"
+#include "Visualization/CVisualizationPainter.h"
 
 // AlgorithmsModule includes
 #include "../AlgorithmsModule/SupportedAlgorithmsToolsets.h"
@@ -15,11 +13,23 @@
 namespace Window
 {
 
+    namespace
+    {
+        const auto castItem = [](QListWidgetItem* const item)
+        {
+            ListElements::CItem* ret = nullptr;
+            if(item != nullptr && (ret = dynamic_cast<ListElements::CItem*>(item)))
+                assert(ret);
+            return ret;
+        };
+    } //anonymous
+
     MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent)
-        , m_ui(std::make_unique<Ui::MainWindow>().release())
+        : QMainWindow(parent),
+          m_ui(std::make_unique<Ui::MainWindow>().release())
     {
         m_ui->setupUi(this);
+        m_painter = std::make_shared<Visualization::CVisualizationPainter>(m_ui->GraphicsView);
         initializeLayoutNoSimulation();
         initializeListView();
     }
@@ -49,11 +59,11 @@ namespace Window
 
     void MainWindow::initializeListView() const
     {
-        for(auto&& factoryPtr : Algorithms::SUPPORTED_TOOLSETS)
+        for(const auto& factoryPtr : Algorithms::SUPPORTED_TOOLSETS)
         {
             m_ui->AlgorithmsListWidget->addItem(
                         std::make_unique<ListElements::CItem>(
-                            std::make_unique<Algorithms::CController>(factoryPtr))
+                            std::make_unique<Algorithms::CController>(factoryPtr, m_painter))
                         .release());
         }
     }
@@ -69,7 +79,7 @@ namespace Window
 
     void MainWindow::on_InfoButton_clicked()
     {
-        const auto itemPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem());
+        const auto itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
         QMessageBox::about(
                     this,
                     itemPtr->getName(),
@@ -87,34 +97,16 @@ namespace Window
         }
 
         initializeLayoutSimulation();
-        const auto itemPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem());
-        itemPtr->initializeVisualization();
-        QGraphicsScene* scene = new QGraphicsScene();
-        QGraphicsRectItem* item1 = new QGraphicsRectItem(0,0,100,100);
-        QGraphicsTextItem* tItem1 = new QGraphicsTextItem("cos");
-        QGraphicsRectItem* item2 = new QGraphicsRectItem(0,100,100,100);
-        QGraphicsRectItem* item3 = new QGraphicsRectItem(100,0,100,100);
-        QGraphicsRectItem* item4 = new QGraphicsRectItem(100,100,100,100);
-
-
-        item1->setBrush(QBrush(Qt::red));
-        item2->setBrush(QBrush(Qt::green));
-        item3->setBrush(QBrush(Qt::blue));
-        item4->setBrush(QBrush(Qt::yellow));
-
-        scene->addItem(item1);
-        scene->addItem(tItem1);
-        scene->addItem(item2);
-        scene->addItem(item3);
-        scene->addItem(item4);
-        m_ui->GraphicsView->setScene(scene);
+        const auto itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
+        itemPtr->initializeVisualization({sourceText, patternText});
     }
 
 
     void MainWindow::on_StopButton_clicked()
     {
         initializeLayoutNoSimulation();
-        m_ui->GraphicsView->scene()->clear();
+        const auto itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
+        itemPtr->clearVisualization();
     }
 
 } //Window

@@ -15,10 +15,11 @@ namespace Algorithms
     {
     public:
 
-        CController(const ControllerToolsetFactoryPtr&/*, VisualizationPainterPtr*/);
+        CController(const ControllerToolsetFactoryPtr&, const VisualizationPainterPtr&);
         const std::string& getAlgorithmName() const override;
         const std::string& getAlgorithmInfo() const override;
-        void initializeScene() const override;
+        void initializeScene(const TextsPair&) const override;
+        void cleanScene() const override;
 
     private:
 

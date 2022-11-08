@@ -29,7 +29,8 @@ namespace ListElements
 
         QString getName() const;
         QString getInfo() const;
-        void initializeVisualization() const;
+        void initializeVisualization(const Algorithms::TextsPair&) const;
+        void clearVisualization() const;
 
         virtual ~CItem() = default;
 

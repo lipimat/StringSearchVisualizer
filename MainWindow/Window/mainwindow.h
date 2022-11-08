@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include "IVisualizationPainter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -10,6 +11,8 @@ class QListWidgetItem;
 
 namespace Window
 {
+
+    using VisualizationPainterPtr = Visualization::VisualizationPainterPtr;
 
     class MainWindow : public QMainWindow
     {
@@ -39,6 +42,8 @@ namespace Window
         void initializeListView() const;
 
         Ui::MainWindow* m_ui;
+
+        VisualizationPainterPtr m_painter;
     };
 
 }//Window
