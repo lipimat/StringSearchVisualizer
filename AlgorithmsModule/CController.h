@@ -15,7 +15,7 @@ namespace Algorithms
         CController(const IControllerToolsetFactory* const);
         const std::string& getAlgorithmName() const override;
         const std::string& getAlgorithmInfo() const override;
-        void initializeVisualization() const override;
+        void initializeScene() const override;
 
     private:
 

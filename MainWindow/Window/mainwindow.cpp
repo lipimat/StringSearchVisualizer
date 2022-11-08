@@ -1,6 +1,7 @@
 #include <QMessageBox>
 #include <QString>
-#include <QPainter>
+#include <QGraphicsView>
+#include <QGraphicsRectItem>
 
 // MainWindow includes
 #include "mainwindow.h"
@@ -34,6 +35,7 @@ namespace Window
         m_ui->PatternLineEdit->setReadOnly(false);
         m_ui->StartButton->show();
         m_ui->StopButton->hide();
+        m_ui->NextStepButton->hide();
     }
 
     void MainWindow::initializeLayoutSimulation() const
@@ -42,6 +44,7 @@ namespace Window
         m_ui->PatternLineEdit->setReadOnly(true);
         m_ui->StartButton->hide();
         m_ui->StopButton->show();
+        m_ui->NextStepButton->show();
     }
 
     void MainWindow::initializeListView() const
@@ -66,7 +69,7 @@ namespace Window
 
     void MainWindow::on_InfoButton_clicked()
     {
-        auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
+        const auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
         QMessageBox::about(
                     this,
                     QString::fromStdString(controllerPtr->getAlgorithmName()),
@@ -85,13 +88,33 @@ namespace Window
 
         initializeLayoutSimulation();
         const auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
-        controllerPtr->initializeVisualization();
+        controllerPtr->initializeScene();
+        QGraphicsScene* scene = new QGraphicsScene();
+        QGraphicsRectItem* item1 = new QGraphicsRectItem(0,0,100,100);
+        QGraphicsTextItem* tItem1 = new QGraphicsTextItem("cos");
+        QGraphicsRectItem* item2 = new QGraphicsRectItem(0,100,100,100);
+        QGraphicsRectItem* item3 = new QGraphicsRectItem(100,0,100,100);
+        QGraphicsRectItem* item4 = new QGraphicsRectItem(100,100,100,100);
+
+
+        item1->setBrush(QBrush(Qt::red));
+        item2->setBrush(QBrush(Qt::green));
+        item3->setBrush(QBrush(Qt::blue));
+        item4->setBrush(QBrush(Qt::yellow));
+
+        scene->addItem(item1);
+        scene->addItem(tItem1);
+        scene->addItem(item2);
+        scene->addItem(item3);
+        scene->addItem(item4);
+        m_ui->GraphicsView->setScene(scene);
     }
 
 
     void MainWindow::on_StopButton_clicked()
     {
         initializeLayoutNoSimulation();
+        m_ui->GraphicsView->scene()->clear();
     }
 
 } //Window

@@ -19,7 +19,7 @@ namespace Algorithms
         return m_algorithmInfo;
     }
 
-    void CController::initializeVisualization() const
+    void CController::initializeScene() const
     {
 
     }
