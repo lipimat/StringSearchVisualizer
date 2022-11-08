@@ -5,8 +5,9 @@ namespace Window
 namespace ListElements
 {
 
-    CItem::CItem(const std::string& itemName, Algorithms::IController* controller)
-        : QListWidgetItem(QString::fromStdString(itemName), nullptr , ItemType::UserType), m_controller(controller)
+    CItem::CItem(ControllerPtr controllerPtr)
+        : QListWidgetItem(QString::fromStdString(controllerPtr->getAlgorithmName()), nullptr , ItemType::UserType),
+          m_controller(std::move(controllerPtr))
     {
         //create unique style for our items
         this->setHidden(false);
@@ -17,9 +18,19 @@ namespace ListElements
         this->setBackground(QBrush(ItemConstants::NOT_CHOSEN_ITEM_BACKGROUND_COLOR));
     }
 
-    Algorithms::IController* CItem::getController() const
+    QString CItem::getName() const
     {
-        return m_controller;
+        return QString::fromStdString(m_controller->getAlgorithmName());
+    }
+
+    QString CItem::getInfo() const
+    {
+        return QString::fromStdString(m_controller->getAlgorithmInfo());
+    }
+
+    void CItem::initializeVisualization() const
+    {
+        m_controller->initializeScene();
     }
 
 }//ListElements

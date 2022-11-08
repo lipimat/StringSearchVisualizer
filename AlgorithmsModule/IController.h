@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <memory>
 
 namespace Algorithms
 {
@@ -15,5 +16,7 @@ namespace Algorithms
         virtual ~IController() = default;
 
     };
+
+    using ControllerPtr = std::unique_ptr<IController>;
 
 } //Algorithms

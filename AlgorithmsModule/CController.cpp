@@ -3,10 +3,9 @@
 namespace Algorithms
 {
 
-    CController::CController(const IControllerToolsetFactory* const factory) :
-        m_algorithmInfo(factory->createInfo()), m_algorithmName(factory->createName())
+    CController::CController(const ControllerToolsetFactoryPtr& factoryPtr/*, VisualizationPainterPtr painterPtr*/) :
+        m_algorithmInfo(factoryPtr->createInfo()), m_algorithmName(factoryPtr->createName())/*, m_painter(std::move(painterPtr))*/
     {
-
     }
 
     const std::string& CController::getAlgorithmName() const

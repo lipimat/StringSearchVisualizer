@@ -49,12 +49,12 @@ namespace Window
 
     void MainWindow::initializeListView() const
     {
-        for(const auto& factory : Algorithms::toolsetFactories)
+        for(auto&& factoryPtr : Algorithms::SUPPORTED_TOOLSETS)
         {
-            auto controllerPtr = std::make_unique<Algorithms::CController>(factory.get());
-            const auto algorithmName = controllerPtr->getAlgorithmName();
             m_ui->AlgorithmsListWidget->addItem(
-                        std::make_unique<ListElements::CItem>(algorithmName, controllerPtr.release()).release());
+                        std::make_unique<ListElements::CItem>(
+                            std::make_unique<Algorithms::CController>(factoryPtr))
+                        .release());
         }
     }
 
@@ -69,11 +69,11 @@ namespace Window
 
     void MainWindow::on_InfoButton_clicked()
     {
-        const auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
+        const auto itemPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem());
         QMessageBox::about(
                     this,
-                    QString::fromStdString(controllerPtr->getAlgorithmName()),
-                    QString::fromStdString(controllerPtr->getAlgorithmInfo()));
+                    itemPtr->getName(),
+                    itemPtr->getInfo());
     }
 
     void MainWindow::on_StartButton_clicked()
@@ -87,8 +87,8 @@ namespace Window
         }
 
         initializeLayoutSimulation();
-        const auto controllerPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem())->getController();
-        controllerPtr->initializeScene();
+        const auto itemPtr = static_cast<ListElements::CItem*>(m_ui->AlgorithmsListWidget->currentItem());
+        itemPtr->initializeVisualization();
         QGraphicsScene* scene = new QGraphicsScene();
         QGraphicsRectItem* item1 = new QGraphicsRectItem(0,0,100,100);
         QGraphicsTextItem* tItem1 = new QGraphicsTextItem("cos");

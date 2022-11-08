@@ -1,16 +1,10 @@
 #pragma once
 
 #include <string_view>
-
-namespace Window
-{
-class IVisualizationWidget;
-}
+#include <memory>
 
 namespace Algorithms
 {
-
-class AVisualizationPainter;
 
     struct IControllerToolsetFactory
     {
@@ -18,5 +12,7 @@ class AVisualizationPainter;
         virtual std::string_view createInfo() const = 0;
         virtual ~IControllerToolsetFactory() = default;
     };
+
+    using ControllerToolsetFactoryPtr = std::unique_ptr<IControllerToolsetFactory>;
 
 } // Algorithms

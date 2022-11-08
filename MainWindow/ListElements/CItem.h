@@ -9,6 +9,8 @@ namespace Window
 namespace ListElements
 {
 
+    using ControllerPtr = Algorithms::ControllerPtr;
+
     namespace ItemConstants
     {
         static constexpr int ITEM_WIDTH = 300;
@@ -23,13 +25,17 @@ namespace ListElements
     {
     public:
 
-        explicit CItem(const std::string&, Algorithms::IController*);
-        Algorithms::IController* getController() const;
+        explicit CItem(ControllerPtr);
+
+        QString getName() const;
+        QString getInfo() const;
+        void initializeVisualization() const;
+
         virtual ~CItem() = default;
 
     private:
 
-         Algorithms::IController* m_controller;
+         ControllerPtr m_controller;
     };
 
 }//ListElements

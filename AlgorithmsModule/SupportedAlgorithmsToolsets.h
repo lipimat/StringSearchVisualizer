@@ -9,8 +9,8 @@
 namespace Algorithms
 {
 
-    static const std::vector<std::unique_ptr<IControllerToolsetFactory>> toolsetFactories = [] {
-        std::vector<std::unique_ptr<IControllerToolsetFactory>> ret;
+    static const std::vector<ControllerToolsetFactoryPtr> SUPPORTED_TOOLSETS = [] {
+        std::vector<ControllerToolsetFactoryPtr> ret;
         ret.push_back(std::make_unique<BruteForce::CControllerToolsetFactory>());
         return ret;
     }();

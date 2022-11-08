@@ -14,23 +14,18 @@ namespace BruteForce
 
     private:
 
-        std::unique_ptr<CControllerToolsetFactory> m_factory;
+        CControllerToolsetFactory m_factory;
 
     private slots:
 
-        void initTestCase()
-        {
-            m_factory = std::make_unique<CControllerToolsetFactory>();
-        }
-
         void CreateInfoReturnsProperValue()
         {
-            QVERIFY(m_factory->createInfo() == BRUTE_FORCE_INFO);
+            QVERIFY(m_factory.createInfo() == BRUTE_FORCE_INFO);
         };
 
         void CreateNameReturnsProperValue()
         {
-            QVERIFY(m_factory->createName() == BRUTE_FORCE_NAME);
+            QVERIFY(m_factory.createName() == BRUTE_FORCE_NAME);
         }
 
     };
