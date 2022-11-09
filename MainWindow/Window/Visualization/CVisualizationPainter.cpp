@@ -1,7 +1,5 @@
 #include "CVisualizationPainter.h"
 
-#include <QGraphicsItem>
-
 namespace Window
 {
 namespace Visualization

@@ -1,6 +1,7 @@
 #include "qfont.h"
 
 #include "CTextItem.h"
+#include "VisualizationConstants.h"
 
 namespace Window
 {
@@ -10,7 +11,7 @@ namespace Visualization
     CTextItem::CTextItem(const std::string& text) :
         QGraphicsTextItem(QString::fromStdString(text))
     {
-        this->setFont(QFont("Source Code Pro", 25));
+        this->setFont(Constants::TEXT_FONT);
     }
 
 } //Visualization

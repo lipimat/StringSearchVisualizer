@@ -1,6 +1,7 @@
 #include "qbrush.h"
 
 #include "CRectItem.h"
+#include "VisualizationConstants.h"
 
 namespace Window
 {
@@ -10,7 +11,7 @@ namespace Visualization
     CRectItem::CRectItem(const QRectF& rect) :
         QGraphicsRectItem(rect)
     {
-        this->setBrush(QBrush(Qt::white));
+        this->setBrush(QBrush(Constants::RECT_INITIAL_COLOR));
     }
 
     CRectItem::CRectItem(const QRectF& rect, const std::string& text) :
@@ -19,8 +20,8 @@ namespace Visualization
         m_text = std::make_shared<CTextItem>(text);
 
         // center this text with our rect
-        const auto thisRect = this->boundingRect();
-        const auto textRect = m_text->boundingRect();
+        const auto& thisRect = this->boundingRect();
+        const auto& textRect = m_text->boundingRect();
 
         m_text->setPos(thisRect.x() + (thisRect.width() - textRect.width())/2,
                        thisRect.y() + (thisRect.height() - textRect.height())/2);
