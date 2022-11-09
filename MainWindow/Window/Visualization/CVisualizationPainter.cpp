@@ -15,37 +15,39 @@ namespace Visualization
 
     void CVisualizationPainter::drawBasicScene(const TextsPair& userTexts)
     {
-        int start = 0;
-        const auto scene = m_view->scene();
-        for(const auto letter : userTexts.first)
-        {
-            QGraphicsRectItem* item1 = new QGraphicsRectItem(start, 200, 80, 80);
-            scene->addItem(item1);
-            item1->setBrush(QBrush(Qt::white));
-            QGraphicsTextItem* tItem1 = new QGraphicsTextItem(QString::fromStdString(std::string(1, letter)));
-            scene->addItem(tItem1);
+        const auto& sourceText = userTexts.first;
+        const auto& patternText = userTexts.second;
+        drawRectsForText(sourceText, Constants::ERectType::E_SOURCE);
+        drawRectsForText(patternText, Constants::ERectType::E_PATTERN);
+    }
 
-            tItem1->setFont(QFont("Source Code Pro", 25));
-            tItem1->setPos(start + 25, 220);
-            start += 80;
-        }
-        start = 0;
-        for(const auto letter : userTexts.second)
-        {
-            QGraphicsRectItem* item1 = new QGraphicsRectItem(start, 300, 80, 80);
-            scene->addItem(item1);
-            item1->setBrush(QBrush(Qt::white));
-            QGraphicsTextItem* tItem1 = new QGraphicsTextItem(QString::fromStdString(std::string(1, letter)));
-            scene->addItem(tItem1);
+    void CVisualizationPainter::drawRectsForText(const std::string& text, const Constants::ERectType rectType)
+    {
+        using namespace Constants;
+        assert(rectType == ERectType::E_SOURCE || (rectType == ERectType::E_PATTERN));
 
-            tItem1->setFont(QFont("Source Code Pro", 25));
-            tItem1->setPos(start + 25, 320);
-            start += 80;
+        const auto& scene = m_view->scene();
+        const auto& rectYCoord = rectType == ERectType::E_SOURCE ? SOURCE_RECT_Y : PATTERN_RECT_Y;
+
+        auto& destinationVec = rectType == ERectType::E_SOURCE ? m_sourceRectItems : m_patternRectItems;
+        auto start = RECT_START_X;
+
+        for(const auto& letter : text)
+        {
+            const auto& rectItem = std::make_shared<CRectItem>(
+                        QRectF(start, rectYCoord, RECT_WIDTH, RECT_HEIGHT), std::string(1, letter));
+            scene->addItem(rectItem.get());
+            scene->addItem(rectItem->getText().get());
+            destinationVec.push_back(rectItem);
+
+            start += RECT_WIDTH;
         }
     }
 
     void CVisualizationPainter::cleanWholeScene()
     {
+        m_sourceRectItems.clear();
+        m_patternRectItems.clear();
         m_view->scene()->clear();
     }
 

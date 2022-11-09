@@ -3,6 +3,8 @@
 #include <QGraphicsView>
 
 #include "../AlgorithmsModule/IVisualizationPainter.h"
+#include "CRectItem.h"
+#include "VisualizationConstants.h"
 
 namespace Window
 {
@@ -16,12 +18,15 @@ namespace Visualization
         CVisualizationPainter(QGraphicsView*);
         void drawBasicScene(const TextsPair&) override;
         void cleanWholeScene() override;
-        ~CVisualizationPainter() = default;
+        virtual ~CVisualizationPainter() = default;
 
     private:
 
-        QGraphicsView* m_view;
+        void drawRectsForText(const std::string&, const Constants::ERectType);
 
+        QGraphicsView* m_view;
+        std::vector<RectItemPtr> m_sourceRectItems; //sorted from left to right
+        std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right
     };
 
 } // Visualization

@@ -5,7 +5,7 @@ namespace Window
 namespace ListElements
 {
 
-    CItem::CItem(ControllerPtr controllerPtr)
+    CItem::CItem(ControllerPtr&& controllerPtr)
         : QListWidgetItem(QString::fromStdString(controllerPtr->getAlgorithmName()), nullptr , ItemType::UserType),
           m_controller(std::move(controllerPtr))
     {

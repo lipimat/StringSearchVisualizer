@@ -25,7 +25,7 @@ namespace ListElements
     {
     public:
 
-        explicit CItem(ControllerPtr);
+        explicit CItem(ControllerPtr&&);
 
         QString getName() const;
         QString getInfo() const;
