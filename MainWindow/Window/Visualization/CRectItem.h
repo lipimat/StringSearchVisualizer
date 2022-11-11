@@ -19,8 +19,6 @@ namespace Visualization
 
         const TextItemPtr& getText() const;
 
-        virtual ~CRectItem() = default;
-
     private:
 
         TextItemPtr m_text;

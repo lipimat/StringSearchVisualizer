@@ -1,7 +1,7 @@
 #include "qbrush.h"
 
 #include "CRectItem.h"
-#include "VisualizationConstants.h"
+#include "Constants.h"
 
 namespace Window
 {

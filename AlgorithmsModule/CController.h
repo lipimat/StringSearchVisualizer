@@ -4,18 +4,18 @@
 
 #include "IController.h"
 #include "IControllerToolsetFactory.h"
-#include "IVisualizationPainter.h"
+#include "IPainter.h"
 
 namespace Algorithms
 {
 
-    using VisualizationPainterPtr = Window::Visualization::VisualizationPainterPtr;
+    using PainterPtr = Window::Visualization::PainterPtr;
 
     class CController final : public IController
     {
     public:
 
-        CController(const ControllerToolsetFactoryPtr&, const VisualizationPainterPtr&);
+        explicit CController(const ControllerToolsetFactoryPtr&, const PainterPtr&);
         const std::string& getAlgorithmName() const override;
         const std::string& getAlgorithmInfo() const override;
         void initializeScene(const TextsPair&) const override;
@@ -26,7 +26,7 @@ namespace Algorithms
         std::string m_algorithmName;
         std::string m_algorithmInfo;
 
-        VisualizationPainterPtr m_painter;
+        PainterPtr m_painter;
     };
 
 } //Algorithms

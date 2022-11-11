@@ -1,11 +1,14 @@
+#include "assert.h"
+
 #include "CController.h"
 
 namespace Algorithms
 {
 
-    CController::CController(const ControllerToolsetFactoryPtr& factoryPtr, const VisualizationPainterPtr& painterPtr) :
+    CController::CController(const ControllerToolsetFactoryPtr& factoryPtr, const PainterPtr& painterPtr) :
         m_algorithmInfo(factoryPtr->createInfo()), m_algorithmName(factoryPtr->createName()), m_painter(painterPtr)
     {
+       assert(m_painter);
     }
 
     const std::string& CController::getAlgorithmName() const

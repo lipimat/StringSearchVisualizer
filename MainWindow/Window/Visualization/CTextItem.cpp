@@ -1,7 +1,7 @@
 #include "qfont.h"
 
 #include "CTextItem.h"
-#include "VisualizationConstants.h"
+#include "Constants.h"
 
 namespace Window
 {

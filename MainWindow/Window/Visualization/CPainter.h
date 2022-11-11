@@ -2,23 +2,23 @@
 
 #include <QGraphicsView>
 
-#include "../AlgorithmsModule/IVisualizationPainter.h"
+#include "../AlgorithmsModule/IPainter.h"
 #include "CRectItem.h"
-#include "VisualizationConstants.h"
+#include "Constants.h"
 
 namespace Window
 {
 namespace Visualization
 {
 
-    class CVisualizationPainter final : public IVisualizationPainter
+    class CPainter final : public IPainter
     {
     public:
 
-        CVisualizationPainter(QGraphicsView*);
+        explicit CPainter(QGraphicsView*);
         void drawBasicScene(const TextsPair&) override;
         void cleanWholeScene() override;
-        virtual ~CVisualizationPainter() = default;
+        ~CPainter();
 
     private:
 

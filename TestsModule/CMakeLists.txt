@@ -18,7 +18,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(DIRECTORIES
         .
-        BruteForce)
+        BruteForce
+        Mocks)
 
 foreach(DIRECTORY ${DIRECTORIES})
         file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)

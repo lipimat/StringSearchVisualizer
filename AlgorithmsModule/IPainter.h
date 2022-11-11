@@ -9,15 +9,15 @@ namespace Visualization
 
     using TextsPair = std::pair<const std::string, const std::string>;
 
-    class IVisualizationPainter
+    class IPainter
     {
     public:
         virtual void drawBasicScene(const TextsPair&) = 0;
         virtual void cleanWholeScene() = 0;
-        virtual ~IVisualizationPainter() = default;
+        virtual ~IPainter() = default;
     };
 
-    using VisualizationPainterPtr = std::shared_ptr<IVisualizationPainter>;
+    using PainterPtr = std::shared_ptr<IPainter>;
 
 } // Visualization
 } //Window

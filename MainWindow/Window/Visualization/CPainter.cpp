@@ -1,17 +1,17 @@
-#include "CVisualizationPainter.h"
+#include "CPainter.h"
 
 namespace Window
 {
 namespace Visualization
 {
 
-    CVisualizationPainter::CVisualizationPainter(QGraphicsView* view) :
+    CPainter::CPainter(QGraphicsView* view) :
         m_view(view)
     {
         m_view->setScene(std::make_unique<QGraphicsScene>().release());
     }
 
-    void CVisualizationPainter::drawBasicScene(const TextsPair& userTexts)
+    void CPainter::drawBasicScene(const TextsPair& userTexts)
     {
         const auto& sourceText = userTexts.first;
         const auto& patternText = userTexts.second;
@@ -19,7 +19,7 @@ namespace Visualization
         drawRectsForText(patternText, Constants::ERectType::E_PATTERN);
     }
 
-    void CVisualizationPainter::drawRectsForText(const std::string& text, const Constants::ERectType rectType)
+    void CPainter::drawRectsForText(const std::string& text, const Constants::ERectType rectType)
     {
         using namespace Constants;
         assert(rectType == ERectType::E_SOURCE || (rectType == ERectType::E_PATTERN));
@@ -42,11 +42,17 @@ namespace Visualization
         }
     }
 
-    void CVisualizationPainter::cleanWholeScene()
+    void CPainter::cleanWholeScene()
     {
         m_sourceRectItems.clear();
         m_patternRectItems.clear();
         m_view->scene()->clear();
+    }
+
+    CPainter::~CPainter()
+    {
+        m_sourceRectItems.clear();
+        m_patternRectItems.clear();
     }
 
 } // Visualization

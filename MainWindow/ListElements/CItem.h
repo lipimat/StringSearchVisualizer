@@ -32,8 +32,6 @@ namespace ListElements
         void initializeVisualization(const Algorithms::TextsPair&) const;
         void clearVisualization() const;
 
-        virtual ~CItem() = default;
-
     private:
 
          ControllerPtr m_controller;

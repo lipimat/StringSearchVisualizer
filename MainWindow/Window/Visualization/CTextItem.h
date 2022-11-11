@@ -11,8 +11,6 @@ namespace Visualization
     {
     public:
         explicit CTextItem(const std::string&);
-
-        virtual ~CTextItem() = default;
     };
 
     using TextItemPtr = std::shared_ptr<CTextItem>;

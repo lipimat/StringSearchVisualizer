@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
-#include "IVisualizationPainter.h"
+#include "IPainter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -12,7 +12,7 @@ class QListWidgetItem;
 namespace Window
 {
 
-    using VisualizationPainterPtr = Visualization::VisualizationPainterPtr;
+    using PainterPtr = Visualization::PainterPtr;
 
     class MainWindow : public QMainWindow
     {
@@ -43,7 +43,7 @@ namespace Window
 
         Ui::MainWindow* m_ui;
 
-        VisualizationPainterPtr m_painter;
+        PainterPtr m_painter;
     };
 
 }//Window

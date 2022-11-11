@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 #include "Resources/ui_mainwindow.h"
 #include "ListElements/CItem.h"
-#include "Visualization/CVisualizationPainter.h"
+#include "Visualization/CPainter.h"
 
 // AlgorithmsModule includes
 #include "../AlgorithmsModule/SupportedAlgorithmsToolsets.h"
@@ -29,7 +29,7 @@ namespace Window
           m_ui(std::make_unique<Ui::MainWindow>().release())
     {
         m_ui->setupUi(this);
-        m_painter = std::make_shared<Visualization::CVisualizationPainter>(m_ui->GraphicsView);
+        m_painter = std::make_shared<Visualization::CPainter>(m_ui->GraphicsView);
         initializeLayoutNoSimulation();
         initializeListView();
     }
