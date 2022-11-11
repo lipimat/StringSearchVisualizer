@@ -40,6 +40,7 @@ namespace BruteForce
     {
         std::string_view createName() const override;
         std::string_view createInfo() const override;
+        std::unique_ptr<IStepsExecutor> createStepsExecutor() const override;
     };
 
 } //BruteForce

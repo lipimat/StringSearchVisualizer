@@ -2,6 +2,7 @@
 #include "TestCollector.h"
 
 #include "../AlgorithmsModule/BruteForce/CControllerToolsetFactory.h"
+#include "../AlgorithmsModule/BruteForce/CStepsExecutor.h"
 
 namespace Algorithms
 {
@@ -26,6 +27,12 @@ namespace BruteForce
         void CreateNameReturnsProperValue()
         {
             QVERIFY(m_factory.createName() == BRUTE_FORCE_NAME);
+        }
+
+        void CreateStepsExecutorCreatesProperObject()
+        {
+            const auto& stepsExecutor = m_factory.createStepsExecutor();
+            QVERIFY(dynamic_cast<CStepsExecutor*>(stepsExecutor.get()) != nullptr);
         }
 
     };

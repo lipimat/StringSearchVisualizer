@@ -2,7 +2,7 @@
 #include "TestCollector.h"
 
 #include "Mocks/CControllerToolsetFactoryMock.h"
-
+#include "Mocks/CPainterMock.h"
 #include "../AlgorithmsModule/CController.h"
 
 namespace Algorithms
@@ -35,8 +35,8 @@ namespace Algorithms
             factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
             factoryPrep->m_createName = createStringViewMock(expectedName);
 
-            PainterPtr mockPainter;
             ControllerToolsetFactoryPtr mockFactory(factoryPrep);
+            PainterPtr mockPainter = std::make_unique<CPainterMock>();
 
             ControllerPtr controller = std::make_unique<CController>(mockFactory, mockPainter);
             QCOMPARE(controller->getAlgorithmName(), expectedName);
