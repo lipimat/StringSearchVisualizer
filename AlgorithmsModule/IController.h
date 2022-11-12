@@ -16,6 +16,7 @@ namespace Algorithms
         virtual const std::string& getAlgorithmInfo() const = 0;
         virtual void initializeScene(const TextsPair&) const = 0;
         virtual void cleanScene() const = 0;
+        virtual bool nextStep() const = 0;
         virtual ~IController() = default;
 
     };

@@ -79,7 +79,7 @@ namespace Window
 
     void MainWindow::on_InfoButton_clicked()
     {
-        const auto itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
+        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
         QMessageBox::about(
                     this,
                     itemPtr->getName(),
@@ -88,8 +88,8 @@ namespace Window
 
     void MainWindow::on_StartButton_clicked()
     {
-        const auto sourceText = m_ui->SourceLineEdit->text().toStdString();
-        const auto patternText = m_ui->PatternLineEdit->text().toStdString();
+        const auto& sourceText = m_ui->SourceLineEdit->text().toStdString();
+        const auto& patternText = m_ui->PatternLineEdit->text().toStdString();
         if(sourceText.empty() || patternText.empty())
         {
             QMessageBox::critical(this, "Error", "Fill both forms to start simulation!");
@@ -97,7 +97,7 @@ namespace Window
         }
 
         initializeLayoutSimulation();
-        const auto itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
+        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
         itemPtr->initializeVisualization({sourceText, patternText});
     }
 
@@ -105,8 +105,23 @@ namespace Window
     void MainWindow::on_StopButton_clicked()
     {
         initializeLayoutNoSimulation();
-        const auto itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
+        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
         itemPtr->clearVisualization();
+    }
+
+
+    void MainWindow::on_NextStepButton_clicked()
+    {
+        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
+        const auto cannotPerformNextStep = !itemPtr->nextStep();
+        if(cannotPerformNextStep)
+        {
+            QMessageBox::about(
+                        this,
+                        itemPtr->getName(),
+                        "Finished!");
+            m_ui->NextStepButton->hide();
+        }
     }
 
 } //Window

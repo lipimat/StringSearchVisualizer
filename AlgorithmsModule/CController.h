@@ -5,6 +5,7 @@
 #include "IController.h"
 #include "IControllerToolsetFactory.h"
 #include "IPainter.h"
+#include "IStepsExecutor.h"
 
 namespace Algorithms
 {
@@ -20,13 +21,15 @@ namespace Algorithms
         const std::string& getAlgorithmInfo() const override;
         void initializeScene(const TextsPair&) const override;
         void cleanScene() const override;
+        bool nextStep() const override;
 
     private:
 
-        std::string m_algorithmName;
-        std::string m_algorithmInfo;
+        const std::string m_algorithmName;
+        const std::string m_algorithmInfo;
 
-        PainterPtr m_painter;
+        const PainterPtr m_painter;
+        const StepsExecutorPtr m_executor;
     };
 
 } //Algorithms

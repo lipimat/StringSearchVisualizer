@@ -17,7 +17,7 @@ namespace BruteForce
         return BRUTE_FORCE_INFO;
     }
 
-    std::unique_ptr<IStepsExecutor> CControllerToolsetFactory::createStepsExecutor() const
+    StepsExecutorPtr CControllerToolsetFactory::createStepsExecutor() const
     {
         return std::make_unique<CStepsExecutor>();
     }

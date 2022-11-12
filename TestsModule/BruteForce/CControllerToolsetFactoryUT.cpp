@@ -21,12 +21,12 @@ namespace BruteForce
 
         void CreateInfoReturnsProperValue()
         {
-            QVERIFY(m_factory.createInfo() == BRUTE_FORCE_INFO);
+            QCOMPARE(m_factory.createInfo(), BRUTE_FORCE_INFO);
         };
 
         void CreateNameReturnsProperValue()
         {
-            QVERIFY(m_factory.createName() == BRUTE_FORCE_NAME);
+            QCOMPARE(m_factory.createName(), BRUTE_FORCE_NAME);
         }
 
         void CreateStepsExecutorCreatesProperObject()

@@ -15,19 +15,19 @@ namespace Visualization
     {
         const auto& sourceText = userTexts.first;
         const auto& patternText = userTexts.second;
-        drawRectsForText(sourceText, Constants::ERectType::E_SOURCE);
-        drawRectsForText(patternText, Constants::ERectType::E_PATTERN);
+        drawRectsForText(sourceText, Constants::ERectType::SOURCE);
+        drawRectsForText(patternText, Constants::ERectType::PATTERN);
     }
 
     void CPainter::drawRectsForText(const std::string& text, const Constants::ERectType rectType)
     {
         using namespace Constants;
-        assert(rectType == ERectType::E_SOURCE || (rectType == ERectType::E_PATTERN));
+        assert(rectType == ERectType::SOURCE || (rectType == ERectType::PATTERN));
 
         const auto& scene = m_view->scene();
-        const auto& rectYCoord = rectType == ERectType::E_SOURCE ? SOURCE_RECT_Y : PATTERN_RECT_Y;
+        const auto& rectYCoord = rectType == ERectType::SOURCE ? SOURCE_RECT_Y : PATTERN_RECT_Y;
 
-        auto& destinationVec = rectType == ERectType::E_SOURCE ? m_sourceRectItems : m_patternRectItems;
+        auto& destinationVec = rectType == ERectType::SOURCE ? m_sourceRectItems : m_patternRectItems;
         auto start = RECT_START_X;
 
         for(const auto& letter : text)

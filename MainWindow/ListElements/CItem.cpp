@@ -38,5 +38,10 @@ namespace ListElements
         m_controller->cleanScene();
     }
 
+    bool CItem::nextStep() const
+    {
+        return m_controller->nextStep();
+    }
+
 }//ListElements
 }//Window

@@ -33,6 +33,8 @@ namespace Window
 
         void on_StopButton_clicked();
 
+        void on_NextStepButton_clicked();
+
     private:
 
         void initializeLayoutNoSimulation() const;

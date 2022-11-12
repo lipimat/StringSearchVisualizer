@@ -12,7 +12,7 @@ namespace Algorithms
     {
         virtual std::string_view createName() const = 0;
         virtual std::string_view createInfo() const = 0;
-        virtual std::unique_ptr<IStepsExecutor> createStepsExecutor() const = 0;
+        virtual StepsExecutorPtr createStepsExecutor() const = 0;
         virtual ~IControllerToolsetFactory() = default;
     };
 

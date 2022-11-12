@@ -31,10 +31,11 @@ namespace ListElements
         QString getInfo() const;
         void initializeVisualization(const Algorithms::TextsPair&) const;
         void clearVisualization() const;
+        bool nextStep() const;
 
     private:
 
-         ControllerPtr m_controller;
+         const ControllerPtr m_controller;
     };
 
 }//ListElements

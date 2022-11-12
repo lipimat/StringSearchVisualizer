@@ -13,8 +13,8 @@ namespace Constants
     // rects
     enum class ERectType
     {
-        E_SOURCE,
-        E_PATTERN
+        SOURCE,
+        PATTERN
     };
 
     static constexpr auto RECT_START_X = 0;
