@@ -81,14 +81,16 @@ namespace Algorithms
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
             executorPrep->m_initialize = createCallableVoidWithTextsPairMock(executorCalled);
 
+            const std::string expectedInfo = "INFO";
+            const std::string expectedName = "NAME";
             std::unique_ptr<CControllerToolsetFactoryMock> factoryPrep = std::make_unique<CControllerToolsetFactoryMock>();
-            factoryPrep->m_createInfo = createStringViewMock("");
-            factoryPrep->m_createName = createStringViewMock("");
+            factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
+            factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
             std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
-            painterPrep->m_drawBasicScene = createCallableVoidWithTextsPairMock(painterCalled);
+            painterPrep->m_drawBasicScene = createCallableVoidWithTextsPairMock(painterCalled);  
             PainterPtr mockPainter(painterPrep.release());
 
             CController controller(mockFactory, mockPainter);
@@ -104,9 +106,11 @@ namespace Algorithms
 
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
 
+            const std::string expectedInfo = "INFO";
+            const std::string expectedName = "NAME";
             std::unique_ptr<CControllerToolsetFactoryMock> factoryPrep = std::make_unique<CControllerToolsetFactoryMock>();
-            factoryPrep->m_createInfo = createStringViewMock("");
-            factoryPrep->m_createName = createStringViewMock("");
+            factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
+            factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
@@ -126,9 +130,11 @@ namespace Algorithms
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
             executorPrep->m_calculateNextStep = createCalculateNextStepMock(executorCalled, Steps::EState::FINISHED);
 
+            const std::string expectedInfo = "INFO";
+            const std::string expectedName = "NAME";
             std::unique_ptr<CControllerToolsetFactoryMock> factoryPrep = std::make_unique<CControllerToolsetFactoryMock>();
-            factoryPrep->m_createInfo = createStringViewMock("");
-            factoryPrep->m_createName = createStringViewMock("");
+            factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
+            factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
