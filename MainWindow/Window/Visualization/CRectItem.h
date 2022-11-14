@@ -19,6 +19,8 @@ namespace Visualization
 
         const TextItemPtr& getText() const;
 
+        void move(const int dx, const int dy);
+
     private:
 
         TextItemPtr m_text;

@@ -17,6 +17,8 @@ namespace Visualization
 
         explicit CPainter(QGraphicsView*);
         void drawBasicScene(const TextsPair&) override;
+        void highlightRects(const Indices&, const Indices&, const Qt::GlobalColor) override;
+        void movePattern() override;
         void cleanWholeScene() override;
         ~CPainter();
 

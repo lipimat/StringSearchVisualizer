@@ -22,7 +22,7 @@ namespace BruteForce
         void CreateInfoReturnsProperValue()
         {
             QCOMPARE(m_factory.createInfo(), BRUTE_FORCE_INFO);
-        };
+        }
 
         void CreateNameReturnsProperValue()
         {

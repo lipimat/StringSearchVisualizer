@@ -7,12 +7,13 @@
 namespace Algorithms
 {
 
-    struct CStepsExecutorMock final : IStepsExecutor
+    class CStepsExecutorMock final : public IStepsExecutor
     {
+    public:
         //stubs
         std::function<void(const TextsPair&)> m_initialize;
         std::function<Steps::EState()> m_calculateNextStep;
-        std::function<const Steps::StepPtr()> m_getCurrentStep;
+        std::function<Steps::StepPtr()> m_getCurrentStep;
 
         //interface functions
         void initialize(const TextsPair& texts) override { return m_initialize(texts); };

@@ -22,9 +22,10 @@ namespace BruteForce
         std::string m_sourceText;
         std::string m_patternText;
 
+        bool m_shouldMovePattern;
         int m_currentPatternIndex;
         int m_currentSourceIndex;
-        Steps::StepPtr m_currentStep;
+        std::vector<Steps::StepPtr> m_steps;
     };
 
 } //BruteForce

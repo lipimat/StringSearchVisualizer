@@ -38,10 +38,13 @@ namespace Algorithms
 
     bool CController::nextStep() const
     {
-        auto returnValue = true;
-        if(m_executor->calculateNextStep() == Steps::EState::FINISHED)
-            returnValue = false;
-        return returnValue;
+        const auto isAlgorithmInProgress = m_executor->calculateNextStep() == Steps::EState::CONTINUE;
+        if(isAlgorithmInProgress)
+        {
+            const auto& currentStep = m_executor->getCurrentStep();
+            currentStep->accept(m_painter);
+        }
+        return isAlgorithmInProgress;
     }
 
 } //Algorithms

@@ -32,5 +32,11 @@ namespace Visualization
         return m_text;
     }
 
+    void CRectItem::move(const int dx, const int dy)
+    {
+        this->moveBy(dx, dy);
+        m_text->moveBy(dx, dy);
+    }
+
 } //Visualization
 } //Window

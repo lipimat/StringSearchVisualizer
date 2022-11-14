@@ -80,10 +80,7 @@ namespace Window
     void MainWindow::on_InfoButton_clicked()
     {
         const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
-        QMessageBox::about(
-                    this,
-                    itemPtr->getName(),
-                    itemPtr->getInfo());
+        QMessageBox::about(this,itemPtr->getName(),itemPtr->getInfo());
     }
 
     void MainWindow::on_StartButton_clicked()
@@ -115,13 +112,7 @@ namespace Window
         const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
         const auto cannotPerformNextStep = !itemPtr->nextStep();
         if(cannotPerformNextStep)
-        {
-            QMessageBox::about(
-                        this,
-                        itemPtr->getName(),
-                        "Finished!");
-            m_ui->NextStepButton->hide();
-        }
+            QMessageBox::about(this,itemPtr->getName(),"Finished!");
     }
 
 } //Window

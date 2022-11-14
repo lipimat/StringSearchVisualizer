@@ -42,6 +42,25 @@ namespace Visualization
         }
     }
 
+    void CPainter::highlightRects(const Indices& sourceIndices, const Indices& patternIndices, const Qt::GlobalColor color)
+    {
+        for(const auto& index : sourceIndices)
+            m_sourceRectItems[index]->setBrush(QBrush(color));
+        for(const auto& index : patternIndices)
+            m_patternRectItems[index]->setBrush(QBrush(color));
+    }
+
+    void CPainter::movePattern()
+    {
+        for(const auto& rect : m_patternRectItems)
+        {
+            rect->setBrush(QBrush(Constants::RECT_INITIAL_COLOR));
+            rect->move(Constants::RECT_WIDTH, 0);
+        }
+        for(const auto& rect : m_sourceRectItems)
+            rect->setBrush(QBrush(Constants::RECT_INITIAL_COLOR));
+    }
+
     void CPainter::cleanWholeScene()
     {
         m_sourceRectItems.clear();
@@ -51,8 +70,7 @@ namespace Visualization
 
     CPainter::~CPainter()
     {
-        m_sourceRectItems.clear();
-        m_patternRectItems.clear();
+        cleanWholeScene();
     }
 
 } // Visualization
