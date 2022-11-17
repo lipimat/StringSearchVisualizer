@@ -1,16 +1,13 @@
 #pragma once
 
-#include <QGraphicsView>
-
-#include "../AlgorithmsModule/IPainter.h"
+#include "../../AlgorithmsModule/IPainter.h"
+#include "../Constants.h"
 #include "CRectItem.h"
-#include "Constants.h"
 
-namespace Window
-{
 namespace Visualization
 {
-
+namespace BruteForce
+{
     class CPainter final : public IPainter
     {
     public:
@@ -31,5 +28,5 @@ namespace Visualization
         std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right
     };
 
-} // Visualization
-} // Window
+} //BruteForce
+} //Visualization

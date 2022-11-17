@@ -10,7 +10,7 @@ namespace Steps
     class CMovePattern final : public IStep
     {
     public:
-        void accept(const Window::Visualization::PainterPtr&) const override;
+        void accept(const Visualization::PainterPtr&) const override;
     };
 
 } //Steps

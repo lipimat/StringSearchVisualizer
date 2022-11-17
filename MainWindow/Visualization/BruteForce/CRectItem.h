@@ -1,11 +1,7 @@
 #pragma once
 
-#include <QGraphicsRectItem>
-
 #include "CTextItem.h"
 
-namespace Window
-{
 namespace Visualization
 {
 
@@ -29,4 +25,3 @@ namespace Visualization
     using RectItemPtr = std::shared_ptr<CRectItem>;
 
 } //Visualization
-} //Window

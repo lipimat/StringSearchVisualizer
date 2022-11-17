@@ -3,8 +3,6 @@
 #include "qfont.h"
 #include "qnamespace.h"
 
-namespace Window
-{
 namespace Visualization
 {
 namespace Constants
@@ -29,4 +27,3 @@ namespace Constants
 
 } //Constants
 } //Visualization
-} //Window

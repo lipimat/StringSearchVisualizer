@@ -1,11 +1,10 @@
-#include <QTest>
 #include "TestCollector.h"
 
-#include "../AlgorithmsModule/BruteForce/CStepsExecutor.h"
+#include "../../AlgorithmsModule/BruteForce/CStepsExecutor.h"
 
-#include "../AlgorithmsModule/Steps/CTrueComparison.h"
-#include "../AlgorithmsModule/Steps/CFalseComparison.h"
-#include "../AlgorithmsModule/Steps/CMovePattern.h"
+#include "../../AlgorithmsModule/Steps/CTrueComparison.h"
+#include "../../AlgorithmsModule/Steps/CFalseComparison.h"
+#include "../../AlgorithmsModule/Steps/CMovePattern.h"
 
 namespace Algorithms
 {

@@ -1,11 +1,7 @@
 #pragma once
 
-#include <functional>
+#include "../../AlgorithmsModule/IPainter.h"
 
-#include "../AlgorithmsModule/IPainter.h"
-
-namespace Window
-{
 namespace Visualization
 {
 
@@ -27,4 +23,3 @@ namespace Visualization
     };
 
 } //Visualization
-} //Window

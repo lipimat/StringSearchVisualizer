@@ -1,7 +1,6 @@
 #pragma once
 
-#include <QMainWindow>
-#include "IPainter.h"
+#include "../../AlgorithmsModule/IPainterFactory.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -45,7 +44,7 @@ namespace Window
 
         Ui::MainWindow* m_ui;
 
-        PainterPtr m_painter;
+        Visualization::PainterFactoryPtr m_painterFactory;
     };
 
 }//Window

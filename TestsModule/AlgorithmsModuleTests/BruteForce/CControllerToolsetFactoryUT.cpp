@@ -1,8 +1,7 @@
-#include <QTest>
 #include "TestCollector.h"
 
-#include "../AlgorithmsModule/BruteForce/CControllerToolsetFactory.h"
-#include "../AlgorithmsModule/BruteForce/CStepsExecutor.h"
+#include "../../AlgorithmsModule/BruteForce/CControllerToolsetFactory.h"
+#include "../../AlgorithmsModule/BruteForce/CStepsExecutor.h"
 
 namespace Algorithms
 {

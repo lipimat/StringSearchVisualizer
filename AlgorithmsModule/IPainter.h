@@ -1,12 +1,7 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
 #include "qnamespace.h"
 
-namespace Window
-{
 namespace Visualization
 {
 
@@ -23,7 +18,6 @@ namespace Visualization
         virtual ~IPainter() = default;
     };
 
-    using PainterPtr = std::shared_ptr<IPainter>;
+    using PainterPtr = std::unique_ptr<IPainter>;
 
 } // Visualization
-} //Window

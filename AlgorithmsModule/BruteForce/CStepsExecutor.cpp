@@ -1,9 +1,9 @@
 #include "assert.h"
 #include "CStepsExecutor.h"
 
-#include "../Steps/CTrueComparison.h"
-#include "../Steps/CFalseComparison.h"
-#include "../Steps/CMovePattern.h"
+#include "Steps/CTrueComparison.h"
+#include "Steps/CFalseComparison.h"
+#include "Steps/CMovePattern.h"
 
 namespace Algorithms
 {

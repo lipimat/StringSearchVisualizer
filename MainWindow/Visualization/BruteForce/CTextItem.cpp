@@ -1,10 +1,8 @@
 #include "qfont.h"
 
 #include "CTextItem.h"
-#include "Constants.h"
+#include "../Constants.h"
 
-namespace Window
-{
 namespace Visualization
 {
 
@@ -15,4 +13,3 @@ namespace Visualization
     }
 
 } //Visualization
-} //Window

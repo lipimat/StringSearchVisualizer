@@ -1,17 +1,16 @@
-#include <QTest>
 #include "TestCollector.h"
 
-#include "../AlgorithmsModule/Steps/Constants.h"
+#include "../../AlgorithmsModule/Steps/Constants.h"
+#include "../../AlgorithmsModule/CController.h"
 #include "Mocks/CControllerToolsetFactoryMock.h"
 #include "Mocks/CPainterMock.h"
 #include "Mocks/CStepsExecutorMock.h"
-#include "Mocks/CStepMock.h"
-#include "../AlgorithmsModule/CController.h"
+#include "Mocks/CPainterFactoryMock.h"
 
 namespace Algorithms
 {
 
-    using namespace Window::Visualization;
+    using namespace Visualization;
 
     namespace
     {
@@ -45,6 +44,13 @@ namespace Algorithms
             return ret;
         };
 
+        const auto createPainterMock = [](std::unique_ptr<CPainterMock>& mock)
+        {
+            std::function<PainterPtr(const PainterFactoryPtr&)> ret =
+                    [&mock](const PainterFactoryPtr&) { return std::make_unique<CPainterMock>(*mock.release()); };
+            return ret;
+        };
+
     } //anonymous
 
     class CControllerUT: public QObject
@@ -58,6 +64,8 @@ namespace Algorithms
         void ControllerCorrectlyConstrucedWithFactory()
         {
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
+            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
+            PainterFactoryPtr mockPainterFactory;
 
             const std::string expectedInfo = "INFO";
             const std::string expectedName = "NAME";
@@ -65,11 +73,10 @@ namespace Algorithms
             factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
             factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
+            factoryPrep->m_createPainter = createPainterMock(painterPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
-            PainterPtr mockPainter = std::make_unique<CPainterMock>();
-
-            CController controller(mockFactory, mockPainter);
+            CController controller(mockFactory, mockPainterFactory);
             QCOMPARE(controller.getAlgorithmName(), expectedName);
             QCOMPARE(controller.getAlgorithmInfo(), expectedInfo);
         }
@@ -80,6 +87,9 @@ namespace Algorithms
 
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
             executorPrep->m_initialize = createCallableVoidWithTextsPairMock(executorCalled);
+            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
+            painterPrep->m_drawBasicScene = createCallableVoidWithTextsPairMock(painterCalled);
+            PainterFactoryPtr mockPainterFactory;
 
             const std::string expectedInfo = "INFO";
             const std::string expectedName = "NAME";
@@ -87,13 +97,10 @@ namespace Algorithms
             factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
             factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
+            factoryPrep->m_createPainter = createPainterMock(painterPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
-            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
-            painterPrep->m_drawBasicScene = createCallableVoidWithTextsPairMock(painterCalled);  
-            PainterPtr mockPainter(painterPrep.release());
-
-            CController controller(mockFactory, mockPainter);
+            CController controller(mockFactory, mockPainterFactory);
             controller.initializeScene({"",""});
 
             QCOMPARE(executorCalled, 1);
@@ -105,6 +112,9 @@ namespace Algorithms
             int painterCalled = 0;
 
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
+            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
+            painterPrep->m_cleanWholeScene = createCleanWholeSceneMock(painterCalled);
+            PainterFactoryPtr mockPainterFactory;
 
             const std::string expectedInfo = "INFO";
             const std::string expectedName = "NAME";
@@ -112,13 +122,10 @@ namespace Algorithms
             factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
             factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
+            factoryPrep->m_createPainter = createPainterMock(painterPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
-            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
-            painterPrep->m_cleanWholeScene = createCleanWholeSceneMock(painterCalled);
-            PainterPtr mockPainter(painterPrep.release());
-
-            CController controller(mockFactory, mockPainter);
+            CController controller(mockFactory, mockPainterFactory);
             controller.cleanScene();
 
             QCOMPARE(painterCalled, 1);
@@ -129,6 +136,8 @@ namespace Algorithms
             int executorCalled = 0;
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
             executorPrep->m_calculateNextStep = createCalculateNextStepMock(executorCalled, Steps::EState::FINISHED);
+            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
+            PainterFactoryPtr mockPainterFactory;
 
             const std::string expectedInfo = "INFO";
             const std::string expectedName = "NAME";
@@ -136,11 +145,10 @@ namespace Algorithms
             factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
             factoryPrep->m_createName = createStringViewMock(expectedName);
             factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
+            factoryPrep->m_createPainter = createPainterMock(painterPrep);
             ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
-            PainterPtr mockPainter = std::make_unique<CPainterMock>();
-
-            CController controller(mockFactory, mockPainter);
+            CController controller(mockFactory, mockPainterFactory);
 
             QCOMPARE(controller.nextStep(), false);
             QCOMPARE(executorCalled, 1);
@@ -148,25 +156,25 @@ namespace Algorithms
 
         void ControllerNextStepReturnsTrueWhenAlgorithmContinues()
         {
-//            int executorCalled1 = 0, executorCalled2, painterCalled = 0;
+//            int executorCalled = 0;
 //            std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
-//            executorPrep->m_calculateNextStep = createCalculateNextStepMock(executorCalled1, Steps::EState::CONTINUE);
-//            executorPrep->m_currentStep = std::make_unique<Steps::CStepMock>();
+//            executorPrep->m_calculateNextStep = createCalculateNextStepMock(executorCalled, Steps::EState::CONTINUE);
+//            std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
+//            PainterFactoryPtr mockPainterFactory;
 
+//            const std::string expectedInfo = "INFO";
+//            const std::string expectedName = "NAME";
 //            std::unique_ptr<CControllerToolsetFactoryMock> factoryPrep = std::make_unique<CControllerToolsetFactoryMock>();
-//            factoryPrep->m_createInfo = createStringViewMock("");
-//            factoryPrep->m_createName = createStringViewMock("");
+//            factoryPrep->m_createInfo = createStringViewMock(expectedInfo);
+//            factoryPrep->m_createName = createStringViewMock(expectedName);
 //            factoryPrep->m_createStepsExecutor = createStepsExecutorMock(executorPrep);
+//            factoryPrep->m_createPainter = createPainterMock(painterPrep);
 //            ControllerToolsetFactoryPtr mockFactory(factoryPrep.release());
 
-//            PainterPtr mockPainter = std::make_unique<CPainterMock>();
+//            CController controller(mockFactory, mockPainterFactory);
 
-//            CController controller(mockFactory, mockPainter);
-
-//            QCOMPARE(controller.nextStep(), true);
-//            QCOMPARE(executorCalled1, 1);
-//            QCOMPARE(executorCalled2, 1);
-//            QCOMPARE(painterCalled, 1);
+//            QCOMPARE(controller.nextStep(), false);
+//            QCOMPARE(executorCalled, 1);
         }
     };
 

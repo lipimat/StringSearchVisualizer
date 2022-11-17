@@ -1,10 +1,5 @@
 #pragma once
 
-#include <QtTest>
-#include <memory>
-#include <map>
-#include <string>
-
 namespace TestCollector{
 typedef std::map<std::string, std::shared_ptr<QObject> > TestList;
 inline TestList& GetTestList()

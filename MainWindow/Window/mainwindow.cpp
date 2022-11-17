@@ -1,14 +1,12 @@
-#include <QMessageBox>
-
 // MainWindow includes
 #include "mainwindow.h"
 #include "Resources/ui_mainwindow.h"
 #include "ListElements/CItem.h"
-#include "Visualization/CPainter.h"
+#include "../Visualization/CPainterFactory.h"
 
 // AlgorithmsModule includes
-#include "../AlgorithmsModule/SupportedAlgorithmsToolsets.h"
-#include "../AlgorithmsModule/CController.h"
+#include "../../AlgorithmsModule/SupportedAlgorithmsToolsets.h"
+#include "../../AlgorithmsModule/CController.h"
 
 namespace Window
 {
@@ -29,7 +27,7 @@ namespace Window
           m_ui(std::make_unique<Ui::MainWindow>().release())
     {
         m_ui->setupUi(this);
-        m_painter = std::make_shared<Visualization::CPainter>(m_ui->GraphicsView);
+        m_painterFactory = std::make_unique<Visualization::CPainterFactory>(m_ui->GraphicsView);
         initializeLayoutNoSimulation();
         initializeListView();
     }
@@ -63,7 +61,7 @@ namespace Window
         {
             m_ui->AlgorithmsListWidget->addItem(
                         std::make_unique<ListElements::CItem>(
-                            std::make_unique<Algorithms::CController>(factoryPtr, m_painter))
+                            std::make_unique<Algorithms::CController>(factoryPtr, m_painterFactory))
                         .release());
         }
     }

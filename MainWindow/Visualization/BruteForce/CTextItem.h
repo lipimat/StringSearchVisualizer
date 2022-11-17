@@ -1,9 +1,5 @@
 #pragma once
 
-#include <QGraphicsTextItem>
-
-namespace Window
-{
 namespace Visualization
 {
 
@@ -16,4 +12,3 @@ namespace Visualization
     using TextItemPtr = std::shared_ptr<CTextItem>;
 
 } //Visualization
-} //Window

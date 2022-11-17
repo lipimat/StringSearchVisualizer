@@ -1,8 +1,6 @@
 #pragma once
 
-#include <functional>
-
-#include "../AlgorithmsModule/IStepsExecutor.h"
+#include "../../AlgorithmsModule/IStepsExecutor.h"
 
 namespace Algorithms
 {

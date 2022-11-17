@@ -1,5 +1,4 @@
 #include "TestCollector.h"
-#include <iostream>
 
 int main(int argc, char *argv[]) {
     auto nFailedTests = TestCollector::RunAllTests(argc, argv);

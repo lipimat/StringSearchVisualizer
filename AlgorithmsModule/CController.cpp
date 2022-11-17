@@ -7,9 +7,10 @@
 namespace Algorithms
 {
 
-    CController::CController(const ControllerToolsetFactoryPtr& factoryPtr, const PainterPtr& painterPtr) :
+    CController::CController(const ControllerToolsetFactoryPtr& factoryPtr,
+                             const Visualization::PainterFactoryPtr& painterFactoryPtr) :
         m_algorithmInfo(factoryPtr->createInfo()), m_algorithmName(factoryPtr->createName()),
-        m_painter(painterPtr), m_executor(factoryPtr->createStepsExecutor())
+        m_painter(factoryPtr->createPainter(painterFactoryPtr)), m_executor(factoryPtr->createStepsExecutor())
     {
        assert(m_painter);
        assert(m_executor);

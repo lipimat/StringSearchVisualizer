@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 project(AlgorithmsModule LANGUAGES CXX)
 
@@ -12,19 +12,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
-set(DIRECTORIES
-        .)
+file(GLOB_RECURSE PROJECT_SOURCES . *.cpp)
+file(GLOB_RECURSE PROJECT_HEADERS . *.h)
 
-foreach(DIRECTORY ${DIRECTORIES})
-        file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)
-        file(GLOB_RECURSE PROJECT_HEADERS ${DIRECTORY} *.h)
-endforeach()
-
-add_library(AlgorithmsModule STATIC
-  ${PROJECT_SOURCES}
-  ${PROJECT_HEADERS}
-)
+add_library(AlgorithmsModule STATIC ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 target_link_libraries(AlgorithmsModule PRIVATE Qt${QT_VERSION_MAJOR}::Core)
-
 target_compile_definitions(AlgorithmsModule PRIVATE ALGORITHMSMODULE_LIBRARY)
+target_precompile_headers(AlgorithmsModule PRIVATE pch.h)

@@ -1,29 +1,21 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
 project(MainWindow VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-set(DIRECTORIES
-        .
-        Window
-        ListElements)
 
-foreach(DIRECTORY ${DIRECTORIES})
-        file(GLOB_RECURSE PROJECT_SOURCES ${DIRECTORY} *.cpp)
-        file(GLOB_RECURSE PROJECT_HEADERS ${DIRECTORY} *.h)
-        file(GLOB_RECURSE PROJECT_RESOURCES ${DIRECTORY}/Resources *.ui *.qrc)
-endforeach()
+file(GLOB_RECURSE PROJECT_SOURCES . *.cpp)
+file(GLOB_RECURSE PROJECT_HEADERS . *.h)
+file(GLOB_RECURSE PROJECT_RESOURCES ./Resources *.ui *.qrc)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MainWindow
@@ -32,41 +24,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_HEADERS}
         ${PROJECT_RESOURCES}
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET MainWindow APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
-    if(ANDROID)
-        add_library(MainWindow SHARED
-            ${PROJECT_SOURCES}
-            ${PROJECT_HEADERS}
-            ${PROJECT_RESOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(MainWindow
-            ${PROJECT_SOURCES}
-            ${PROJECT_HEADERS}
-            ${PROJECT_RESOURCES}
-        )
-    endif()
+    add_executable(MainWindow
+        ${PROJECT_SOURCES}
+        ${PROJECT_HEADERS}
+        ${PROJECT_RESOURCES}
+    )
 endif()
 
 # our dependencies
 include_directories(${CMAKE_SOURCE_DIR}/../AlgorithmsModule)
 find_library(ALGORITHMS_MODULE AlgorithmsModule "${CMAKE_SOURCE_DIR}/../out/libs")
-
 target_link_libraries(MainWindow PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ALGORITHMS_MODULE})
-
-set_target_properties(MainWindow PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+target_precompile_headers(MainWindow PRIVATE pch.h)
 
 install(TARGETS MainWindow
     BUNDLE DESTINATION .

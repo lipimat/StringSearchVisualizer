@@ -1,10 +1,8 @@
 #include "qbrush.h"
 
 #include "CRectItem.h"
-#include "Constants.h"
+#include "../Constants.h"
 
-namespace Window
-{
 namespace Visualization
 {
 
@@ -39,4 +37,3 @@ namespace Visualization
     }
 
 } //Visualization
-} //Window

@@ -1,9 +1,7 @@
 #pragma once
 
-#include <vector>
-
-#include "../IStepsExecutor.h"
-#include "../Steps/Constants.h"
+#include "IStepsExecutor.h"
+#include "Steps/Constants.h"
 
 namespace Algorithms
 {

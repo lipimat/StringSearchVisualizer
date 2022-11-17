@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Steps/IStep.h"
 
 namespace Algorithms

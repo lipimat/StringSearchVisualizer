@@ -22,5 +22,12 @@ namespace BruteForce
         return std::make_unique<CStepsExecutor>();
     }
 
+     Visualization::PainterPtr CControllerToolsetFactory::createPainter(
+            const Visualization::PainterFactoryPtr& painterFactory) const
+    {
+        assert(painterFactory);
+        return painterFactory->createBruteForcePainter();
+    }
+
 } //BruteForce
 } //Algorithms

@@ -12,7 +12,7 @@ namespace Steps
     {
     }
 
-    void CFalseComparison::accept(const Window::Visualization::PainterPtr& painter) const
+    void CFalseComparison::accept(const Visualization::PainterPtr& painter) const
     {
         painter->highlightRects(m_sourceIndices, m_patternIndices, FALSE_COMPARISON_COLOR);
     }

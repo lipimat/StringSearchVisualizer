@@ -5,7 +5,7 @@ namespace Algorithms
 namespace Steps
 {
 
-    void CMovePattern::accept(const Window::Visualization::PainterPtr& painter) const
+    void CMovePattern::accept(const Visualization::PainterPtr& painter) const
     {
         painter->movePattern();
     }

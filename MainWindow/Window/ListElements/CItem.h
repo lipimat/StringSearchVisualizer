@@ -1,8 +1,6 @@
 #pragma once
 
-#include <QListWidgetItem>
-
-#include "../AlgorithmsModule/IController.h"
+#include "../../AlgorithmsModule/IController.h"
 
 namespace Window
 {

@@ -1,10 +1,9 @@
 #include "CPainter.h"
 
-namespace Window
-{
 namespace Visualization
 {
-
+namespace BruteForce
+{
     CPainter::CPainter(QGraphicsView* view) :
         m_view(view)
     {
@@ -73,5 +72,5 @@ namespace Visualization
         cleanWholeScene();
     }
 
-} // Visualization
-} // Window
+} //BruteForce
+} //Visualization
