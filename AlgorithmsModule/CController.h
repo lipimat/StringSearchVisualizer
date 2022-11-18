@@ -20,14 +20,11 @@ namespace Algorithms
         void initializeScene(const TextsPair&) const override;
         void cleanScene() const override;
         bool nextStep() const override;
+        ~CController();
 
     private:
-
-        const std::string m_algorithmName;
-        const std::string m_algorithmInfo;
-
-        const PainterPtr m_painter;
-        const StepsExecutorPtr m_executor;
+        class Impl;
+        std::unique_ptr<Impl> m_impl;
     };
 
 } //Algorithms

@@ -1,6 +1,13 @@
 #pragma once
 
-#include "qnamespace.h"
+namespace Algorithms
+{
+namespace Steps
+{
+class CComparison;
+class CMovePattern;
+} //Steps
+} //Algorithms
 
 namespace Visualization
 {
@@ -12,8 +19,8 @@ namespace Visualization
     {
     public:
         virtual void drawBasicScene(const TextsPair&) = 0;
-        virtual void highlightRects(const Indices&, const Indices&, const Qt::GlobalColor) = 0;
-        virtual void movePattern() = 0;
+        virtual void paint(const Algorithms::Steps::CComparison*) = 0;
+        virtual void paint(const Algorithms::Steps::CMovePattern*) = 0;
         virtual void cleanWholeScene() = 0;
         virtual ~IPainter() = default;
     };

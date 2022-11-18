@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../AlgorithmsModule/IPainter.h"
+#include "../../AlgorithmsModule/Steps/CComparison.h"
+#include "../../AlgorithmsModule/Steps/CMovePattern.h"
 #include "../Constants.h"
 #include "CRectItem.h"
 
@@ -14,8 +16,8 @@ namespace BruteForce
 
         explicit CPainter(QGraphicsView*);
         void drawBasicScene(const TextsPair&) override;
-        void highlightRects(const Indices&, const Indices&, const Qt::GlobalColor) override;
-        void movePattern() override;
+        void paint(const Algorithms::Steps::CComparison*) override;
+        void paint(const Algorithms::Steps::CMovePattern*) override;
         void cleanWholeScene() override;
         ~CPainter();
 

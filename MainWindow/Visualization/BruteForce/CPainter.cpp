@@ -41,15 +41,20 @@ namespace BruteForce
         }
     }
 
-    void CPainter::highlightRects(const Indices& sourceIndices, const Indices& patternIndices, const Qt::GlobalColor color)
+    void CPainter::paint(const Algorithms::Steps::CComparison* comparisonStep)
     {
-        for(const auto& index : sourceIndices)
+        assert(comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH ||
+               comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MISMATCH);
+
+        const auto color = comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH
+                ? Qt::green : Qt::red;
+        for(const auto& index : comparisonStep->m_sourceIndices)
             m_sourceRectItems[index]->setBrush(QBrush(color));
-        for(const auto& index : patternIndices)
+        for(const auto& index : comparisonStep->m_patternIndices)
             m_patternRectItems[index]->setBrush(QBrush(color));
     }
 
-    void CPainter::movePattern()
+    void CPainter::paint(const Algorithms::Steps::CMovePattern* movePatternStep)
     {
         for(const auto& rect : m_patternRectItems)
         {

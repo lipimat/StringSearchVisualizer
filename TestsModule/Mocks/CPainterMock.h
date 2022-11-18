@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../AlgorithmsModule/IPainter.h"
+#include "../../AlgorithmsModule/Steps/CComparison.h"
+#include "../../AlgorithmsModule/Steps/CMovePattern.h"
 
 namespace Visualization
 {
@@ -10,15 +12,15 @@ namespace Visualization
     public:
         //stubs
         std::function<void(const TextsPair&)> m_drawBasicScene;
-        std::function<void(const Indices&, const Indices&, const Qt::GlobalColor)> m_highlightRects;
-        std::function<void()> m_movePattern;
         std::function<void()> m_cleanWholeScene;
+        std::function<void(const Algorithms::Steps::CComparison*)> m_paintComparison;
+        std::function<void(const Algorithms::Steps::CMovePattern*)> m_paintMovePattern;
+
 
         //interface functions
         void drawBasicScene(const TextsPair& texts) override { return m_drawBasicScene(texts); };
-        void highlightRects(const Indices& sourceIndices, const Indices& patternIndices, const Qt::GlobalColor color) override
-            { return m_highlightRects(sourceIndices, patternIndices, color); };
-        void movePattern() override { return m_movePattern(); };
+        void paint(const Algorithms::Steps::CComparison* step) override { return m_paintComparison(step);};
+        void paint(const Algorithms::Steps::CMovePattern* step) override { return m_paintMovePattern(step); };
         void cleanWholeScene() override { return m_cleanWholeScene(); };
     };
 

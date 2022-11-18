@@ -7,7 +7,7 @@ namespace Steps
 
     void CMovePattern::accept(const Visualization::PainterPtr& painter) const
     {
-        painter->movePattern();
+        painter->paint(this);
     }
 
 } //Steps

@@ -13,7 +13,7 @@ namespace BruteForce
     public:
 
         void initialize(const TextsPair&) override;
-        Steps::EState calculateNextStep() override;
+        Steps::EAlgorithmState calculateNextStep() override;
         const Steps::StepPtr& getCurrentStep() const override;
 
     private:

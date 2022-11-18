@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IStep.h"
+#include "Constants.h"
 
 namespace Algorithms
 {
@@ -9,15 +10,16 @@ namespace Steps
 
     using Indices = Visualization::Indices;
 
-    class CTrueComparison final : public IStep
+    class CComparison final : public IStep
     {
     public:
-        explicit CTrueComparison(const Indices&, const Indices&);
+
+        explicit CComparison(const Indices&, const Indices&, const EComparisonType);
         void accept(const Visualization::PainterPtr&) const override;
 
-    private:
         const Indices m_sourceIndices;
         const Indices m_patternIndices;
+        const EComparisonType m_comparisonType;
     };
 
 } //Steps

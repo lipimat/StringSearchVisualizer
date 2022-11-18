@@ -1,8 +1,7 @@
 #include "assert.h"
 #include "CStepsExecutor.h"
 
-#include "Steps/CTrueComparison.h"
-#include "Steps/CFalseComparison.h"
+#include "Steps/CComparison.h"
 #include "Steps/CMovePattern.h"
 
 namespace Algorithms
@@ -19,20 +18,20 @@ namespace BruteForce
         m_shouldMovePattern = false;
     }
 
-    Steps::EState CStepsExecutor::calculateNextStep()
+    Steps::EAlgorithmState CStepsExecutor::calculateNextStep()
     {
         const auto patternSize = m_patternText.size();
         const auto sourceSize = m_sourceText.size();
 
         const auto patternCannotFitIntoRemainingSource = patternSize > (sourceSize - m_currentSourceIndex);
         if(patternCannotFitIntoRemainingSource)
-            return Steps::EState::FINISHED;
+            return Steps::EAlgorithmState::FINISHED;
 
         if(m_shouldMovePattern) //out of bounds or fail we loop
         {
             m_shouldMovePattern = false;
             m_steps.push_back(std::make_unique<Steps::CMovePattern>());
-            return Steps::EState::CONTINUE;
+            return Steps::EAlgorithmState::CONTINUE;
         }
 
         const auto isCurrentPatternIndexInBound = m_currentPatternIndex <= (patternSize - 1);
@@ -45,7 +44,8 @@ namespace BruteForce
 
         if(m_patternText[m_currentPatternIndex] == m_sourceText[m_currentSourceIndex + m_currentPatternIndex])
         {
-            m_steps.push_back(std::make_unique<Steps::CTrueComparison>(sourceComparisonIndices, patternComparisonIndices));
+            m_steps.push_back(std::make_unique<Steps::CComparison>
+                              (sourceComparisonIndices, patternComparisonIndices, Steps::EComparisonType::MATCH));
             m_currentPatternIndex++;
             if(m_currentPatternIndex == m_patternText.size()) //out of bounds, we loop
             {
@@ -59,10 +59,11 @@ namespace BruteForce
             m_currentPatternIndex = 0;
             m_currentSourceIndex++;
             m_shouldMovePattern = true;
-            m_steps.push_back(std::make_unique<Steps::CFalseComparison>(sourceComparisonIndices, patternComparisonIndices));
+            m_steps.push_back(std::make_unique<Steps::CComparison>
+                              (sourceComparisonIndices, patternComparisonIndices, Steps::EComparisonType::MISMATCH));
         }
 
-        return Steps::EState::CONTINUE;
+        return Steps::EAlgorithmState::CONTINUE;
     }
 
     const Steps::StepPtr& CStepsExecutor::getCurrentStep() const

@@ -38,9 +38,9 @@ namespace Algorithms
             return ret;
         };
 
-        const auto createCalculateNextStepMock = [](int& called, const Steps::EState state)
+        const auto createCalculateNextStepMock = [](int& called, const Steps::EAlgorithmState state)
         {
-            std::function<Steps::EState()> ret = [&called, &state]() { called = 1; return state;};
+            std::function<Steps::EAlgorithmState()> ret = [&called, &state]() { called = 1; return state;};
             return ret;
         };
 
@@ -135,7 +135,7 @@ namespace Algorithms
         {
             int executorCalled = 0;
             std::unique_ptr<CStepsExecutorMock> executorPrep = std::make_unique<CStepsExecutorMock>();
-            executorPrep->m_calculateNextStep = createCalculateNextStepMock(executorCalled, Steps::EState::FINISHED);
+            executorPrep->m_calculateNextStep = createCalculateNextStepMock(executorCalled, Steps::EAlgorithmState::FINISHED);
             std::unique_ptr<CPainterMock> painterPrep = std::make_unique<CPainterMock>();
             PainterFactoryPtr mockPainterFactory;
 
