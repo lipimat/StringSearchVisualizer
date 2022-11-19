@@ -25,7 +25,7 @@ namespace BruteForce
      Visualization::PainterPtr CControllerToolsetFactory::createPainter(
             const Visualization::PainterFactoryPtr& painterFactory) const
     {
-        assert(painterFactory);
+        assert(painterFactory != nullptr);
         return painterFactory->createBruteForcePainter();
     }
 

@@ -33,14 +33,15 @@ namespace Algorithms
         m_painter(toolsetFactoryPtr->createPainter(painterFactoryPtr)),
         m_executor(toolsetFactoryPtr->createStepsExecutor())
     {
-        assert(m_painter);
-        assert(m_executor);
+        assert(m_painter != nullptr);
+        assert(m_executor != nullptr);
     }
 
     CController::CController(const ControllerToolsetFactoryPtr& toolsetFactoryPtr,
                              const Visualization::PainterFactoryPtr& painterFactoryPtr) :
         m_impl(std::make_unique<CController::Impl>(toolsetFactoryPtr, painterFactoryPtr))
     {
+        assert(m_impl != nullptr);
     }
 
     const std::string& CController::getAlgorithmName() const
@@ -74,6 +75,7 @@ namespace Algorithms
         if(isAlgorithmInProgress)
         {
             const auto& currentStep = stepsExecutor->getCurrentStep();
+            assert(currentStep != nullptr);
             const auto& painter = m_impl->getPainter();
             currentStep->accept(painter);
         }

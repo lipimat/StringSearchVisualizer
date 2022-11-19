@@ -7,6 +7,7 @@ namespace Steps
 
     void CMovePattern::accept(const Visualization::PainterPtr& painter) const
     {
+        assert(painter != nullptr);
         painter->paint(this);
     }
 

@@ -15,6 +15,7 @@ namespace Steps
 
     void CComparison::accept(const Visualization::PainterPtr& painter) const
     {
+        assert(painter != nullptr);
         painter->paint(this);
     }
 
