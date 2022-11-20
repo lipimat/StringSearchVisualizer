@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../AlgorithmsModule/IPainterFactory.h"
+#include "Window/ListElements/CItem.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,6 +44,8 @@ namespace Window
         void initializeListView() const;
 
         Ui::MainWindow* m_ui;
+
+        ListElements::CItem* m_currentSimulationItem;
 
         Visualization::PainterFactoryPtr m_painterFactory;
     };

@@ -24,7 +24,8 @@ namespace Window
 
     MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
-          m_ui(std::make_unique<Ui::MainWindow>().release())
+          m_ui(std::make_unique<Ui::MainWindow>().release()),
+          m_currentSimulationItem(nullptr)
     {
         m_ui->setupUi(this);
         m_painterFactory = std::make_unique<Visualization::CPainterFactory>(m_ui->GraphicsView);
@@ -39,6 +40,7 @@ namespace Window
 
     void MainWindow::initializeLayoutNoSimulation() const
     {
+        m_ui->AlgorithmsListWidget->blockSignals(false);
         m_ui->SourceLineEdit->setReadOnly(false);
         m_ui->PatternLineEdit->setReadOnly(false);
         m_ui->StartButton->show();
@@ -48,6 +50,7 @@ namespace Window
 
     void MainWindow::initializeLayoutSimulation() const
     {
+        m_ui->AlgorithmsListWidget->blockSignals(true);
         m_ui->SourceLineEdit->setReadOnly(true);
         m_ui->PatternLineEdit->setReadOnly(true);
         m_ui->StartButton->hide();
@@ -71,14 +74,16 @@ namespace Window
           if(previous != nullptr)
               previous->setBackground(QBrush(ListElements::ItemConstants::NOT_CHOSEN_ITEM_BACKGROUND_COLOR));
           if(current != nullptr)
+          {
               current->setBackground(QBrush(ListElements::ItemConstants::CHOSEN_ITEM_BACKGROUND_COLOR));
+              m_currentSimulationItem = castItem(current);
+          }
     }
 
 
     void MainWindow::on_InfoButton_clicked()
     {
-        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
-        QMessageBox::about(this,itemPtr->getName(),itemPtr->getInfo());
+        QMessageBox::about(this,m_currentSimulationItem->getName(),m_currentSimulationItem->getInfo());
     }
 
     void MainWindow::on_StartButton_clicked()
@@ -92,23 +97,22 @@ namespace Window
         }
 
         initializeLayoutSimulation();
-        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
-        itemPtr->initializeVisualization({sourceText, patternText});
+        assert(m_currentSimulationItem != nullptr);
+        m_currentSimulationItem->initializeVisualization({sourceText, patternText});
     }
 
 
     void MainWindow::on_StopButton_clicked()
     {
         initializeLayoutNoSimulation();
-        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
-        itemPtr->clearVisualization();
+        m_currentSimulationItem->clearVisualization();
     }
 
 
     void MainWindow::on_NextStepButton_clicked()
     {
-        const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
-        const auto cannotPerformNextStep = !itemPtr->nextStep();
+        assert(m_currentSimulationItem != nullptr);
+        const auto cannotPerformNextStep = !m_currentSimulationItem->nextStep();
         if(cannotPerformNextStep)
             m_ui->NextStepButton->hide();
     }

@@ -33,8 +33,8 @@ namespace Algorithms
         m_painter(toolsetFactoryPtr->createPainter(painterFactoryPtr)),
         m_executor(toolsetFactoryPtr->createStepsExecutor())
     {
-        assert(m_painter != nullptr);
-        assert(m_executor != nullptr);
+        //assert(m_painter != nullptr);
+        //assert(m_executor != nullptr);
     }
 
     CController::CController(const ControllerToolsetFactoryPtr& toolsetFactoryPtr,

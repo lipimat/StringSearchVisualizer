@@ -8,7 +8,7 @@ namespace Algorithms
 namespace BruteForce
 {
 
-    class CControllerToolsetFactoryUT: public QObject
+    class BruteForceCControllerToolsetFactoryUT: public QObject
     {
         Q_OBJECT
 
@@ -39,5 +39,5 @@ namespace BruteForce
 } //BruteForce
 } //Algorithms
 
-ADD_TEST(Algorithms::BruteForce::CControllerToolsetFactoryUT)
-#include "CControllerToolsetFactoryUT.moc"
+ADD_TEST(Algorithms::BruteForce::BruteForceCControllerToolsetFactoryUT)
+#include "BruteForceCControllerToolsetFactoryUT.moc"
