@@ -1,6 +1,7 @@
 #include "TestCollector.h"
 
 #include "../../AlgorithmsModule/BoyerMoore/CControllerToolsetFactory.h"
+#include "../../AlgorithmsModule/BoyerMoore/CStepsExecutor.h"
 
 namespace Algorithms
 {
@@ -25,6 +26,12 @@ namespace BoyerMoore
         void CreateNameReturnsProperValue()
         {
             QCOMPARE(m_factory.createName(), BOYER_MOORE_NAME);
+        }
+
+        void CreateStepsExecutorCreatesProperObject()
+        {
+            const auto& stepsExecutor = m_factory.createStepsExecutor();
+            QVERIFY(dynamic_cast<CStepsExecutor*>(stepsExecutor.get()) != nullptr);
         }
     };
 
