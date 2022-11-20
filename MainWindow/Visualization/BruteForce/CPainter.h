@@ -26,6 +26,7 @@ namespace BruteForce
 
         void drawRectsForText(const std::string&, const Constants::ERectType);
         void colorRects(const std::vector<RectItemPtr>&, const Indices&, const Qt::GlobalColor);
+        void clearAllHighlight();
 
         QGraphicsView* m_view;
         std::vector<RectItemPtr> m_sourceRectItems; //sorted from left to right on screen
