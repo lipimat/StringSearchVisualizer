@@ -22,51 +22,56 @@ namespace BruteForce
 
     Steps::EAlgorithmState CStepsExecutor::calculateNextStep()
     {
-        const auto patternSize = m_patternText.size();
-        const auto sourceSize = m_sourceText.size();
+        auto returnState = Steps::EAlgorithmState::CONTINUE;
 
-        const auto patternCannotFitIntoRemainingSource = patternSize > (sourceSize - m_currentSourceIndex);
-        if(patternCannotFitIntoRemainingSource)
-            return Steps::EAlgorithmState::FINISHED;
-
-        if(m_shouldMovePattern) //out of bounds or fail we loop
+        if(patternWontFitToRemainingSource())
+            returnState = Steps::EAlgorithmState::FINISHED;
+        else if(m_shouldMovePattern)
         {
             m_shouldMovePattern = false;
             m_steps.push_back(std::make_unique<Steps::CMovePattern>());
-            return Steps::EAlgorithmState::CONTINUE;
-        }
-
-        const auto isCurrentPatternIndexInBound = m_currentPatternIndex <= (patternSize - 1);
-        const auto isCurrentSourceIndexInBound = (m_currentSourceIndex + m_currentPatternIndex) <= (sourceSize - 1);
-        assert(isCurrentPatternIndexInBound);
-        assert(isCurrentSourceIndexInBound);
-
-        const auto& sourceComparisonIndices = Steps::Indices{m_currentSourceIndex + m_currentPatternIndex};
-        const auto& patternComparisonIndices = Steps::Indices{m_currentPatternIndex};
-
-        if(m_patternText[m_currentPatternIndex] == m_sourceText[m_currentSourceIndex + m_currentPatternIndex])
-        {
-            m_steps.push_back(std::make_unique<Steps::CComparison>
-                              (sourceComparisonIndices, patternComparisonIndices, Steps::EComparisonType::MATCH));
-            m_currentPatternIndex++;
-            if(m_currentPatternIndex == m_patternText.size()) //out of bounds, we loop
-            {
-                fillFoundPatternIndices(m_currentSourceIndex);
-                m_currentPatternIndex = 0;
-                m_currentSourceIndex++;
-                m_shouldMovePattern = true;
-            }
         }
         else
-        { 
-            m_currentPatternIndex = 0;
-            m_currentSourceIndex++;
-            m_shouldMovePattern = true;
+        {
+            const auto patternSize = m_patternText.size();
+            const auto sourceSize = m_sourceText.size();
+
+            const auto comparisonSourceIndex = m_currentSourceIndex + m_currentPatternIndex;
+            const auto comparisonPatternIndex = m_currentPatternIndex;
+
+            const auto isCurrentSourceIndexInBound = comparisonSourceIndex <= (sourceSize - 1);
+            const auto isCurrentPatternIndexInBound = comparisonPatternIndex <= (patternSize - 1);
+            assert(isCurrentSourceIndexInBound);
+            assert(isCurrentPatternIndexInBound);
+
+            Steps::EComparisonType comparisonType;
+            if(m_patternText[comparisonPatternIndex] == m_sourceText[comparisonSourceIndex])
+            {
+                comparisonType = Steps::EComparisonType::MATCH;
+                m_currentPatternIndex++;
+                if(m_currentPatternIndex == m_patternText.size()) //out of bounds, we loop
+                {
+                    fillFoundPatternIndices(m_currentSourceIndex);
+                    updateMembersForPatternMove();
+                }
+            }
+            else
+            {
+                updateMembersForPatternMove();
+                comparisonType = Steps::EComparisonType::MISMATCH;
+            }
             m_steps.push_back(std::make_unique<Steps::CComparison>
-                              (sourceComparisonIndices, patternComparisonIndices, Steps::EComparisonType::MISMATCH));
+                              (Steps::Indices{comparisonSourceIndex}, Steps::Indices{comparisonPatternIndex}, comparisonType));
         }
 
-        return Steps::EAlgorithmState::CONTINUE;
+        return returnState;
+    }
+
+    void CStepsExecutor::updateMembersForPatternMove()
+    {
+        m_currentPatternIndex = 0;
+        m_currentSourceIndex++;
+        m_shouldMovePattern = true;
     }
 
     void CStepsExecutor::fillFoundPatternIndices(const int start)
@@ -74,6 +79,11 @@ namespace BruteForce
         const auto stop = start + m_patternText.size();
         for(auto i = start; i < stop; ++i)
             m_patternFound.push_back(i);
+    }
+
+    bool CStepsExecutor::patternWontFitToRemainingSource()
+    {
+        return m_patternText.size() > (m_sourceText.size() - m_currentSourceIndex);
     }
 
     const Steps::StepPtr& CStepsExecutor::getCurrentStep() const
