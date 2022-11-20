@@ -16,6 +16,8 @@ namespace BruteForce
         m_currentPatternIndex = 0;
         m_currentSourceIndex = 0;
         m_shouldMovePattern = false;
+        m_steps.clear();
+        m_patternFound.clear();
     }
 
     Steps::EAlgorithmState CStepsExecutor::calculateNextStep()
@@ -49,6 +51,7 @@ namespace BruteForce
             m_currentPatternIndex++;
             if(m_currentPatternIndex == m_patternText.size()) //out of bounds, we loop
             {
+                fillFoundPatternIndices(m_currentSourceIndex);
                 m_currentPatternIndex = 0;
                 m_currentSourceIndex++;
                 m_shouldMovePattern = true;
@@ -66,9 +69,21 @@ namespace BruteForce
         return Steps::EAlgorithmState::CONTINUE;
     }
 
+    void CStepsExecutor::fillFoundPatternIndices(const int start)
+    {
+        const auto stop = start + m_patternText.size();
+        for(auto i = start; i < stop; ++i)
+            m_patternFound.push_back(i);
+    }
+
     const Steps::StepPtr& CStepsExecutor::getCurrentStep() const
     {
         return m_steps.back();
+    }
+
+    const Visualization::Indices& CStepsExecutor::getFoundPatternIndices() const
+    {
+        return m_patternFound;
     }
 
 } //BruteForce

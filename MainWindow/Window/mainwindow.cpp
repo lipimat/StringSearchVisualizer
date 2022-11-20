@@ -110,7 +110,7 @@ namespace Window
         const auto& itemPtr = castItem(m_ui->AlgorithmsListWidget->currentItem());
         const auto cannotPerformNextStep = !itemPtr->nextStep();
         if(cannotPerformNextStep)
-            QMessageBox::about(this,itemPtr->getName(),"Finished!");
+            m_ui->NextStepButton->hide();
     }
 
 } //Window

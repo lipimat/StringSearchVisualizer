@@ -71,13 +71,21 @@ namespace Algorithms
     bool CController::nextStep() const
     {
         const auto& stepsExecutor = m_impl->getExecutor();
-        const auto isAlgorithmInProgress = stepsExecutor->calculateNextStep() == Steps::EAlgorithmState::CONTINUE;
+        const auto algorithmProgress = stepsExecutor->calculateNextStep();
+
+        const auto isAlgorithmInProgress = algorithmProgress == Steps::EAlgorithmState::CONTINUE;
+        const auto isAlgorithmFinished = !isAlgorithmInProgress;
         if(isAlgorithmInProgress)
         {
             const auto& currentStep = stepsExecutor->getCurrentStep();
             assert(currentStep != nullptr);
             const auto& painter = m_impl->getPainter();
             currentStep->accept(painter);
+        }
+        else if(isAlgorithmFinished)
+        {
+            const auto& painter = m_impl->getPainter();
+            painter->finishScene(stepsExecutor->getFoundPatternIndices());
         }
         return isAlgorithmInProgress;
     }

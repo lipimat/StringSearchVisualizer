@@ -16,6 +16,7 @@ namespace Steps
 
         explicit CComparison(const Indices&, const Indices&, const EComparisonType);
         void accept(const Visualization::PainterPtr&) const override;
+        bool operator==(const CComparison&);
 
         const Indices m_sourceIndices;
         const Indices m_patternIndices;

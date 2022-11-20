@@ -15,14 +15,19 @@ namespace BruteForce
         void initialize(const TextsPair&) override;
         Steps::EAlgorithmState calculateNextStep() override;
         const Steps::StepPtr& getCurrentStep() const override;
+        const Visualization::Indices& getFoundPatternIndices() const override;
 
     private:
+
+        void fillFoundPatternIndices(const int start);
+
         std::string m_sourceText;
         std::string m_patternText;
 
         bool m_shouldMovePattern;
         int m_currentPatternIndex;
         int m_currentSourceIndex;
+        Visualization::Indices m_patternFound;
         std::vector<Steps::StepPtr> m_steps;
     };
 

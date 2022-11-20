@@ -11,5 +11,10 @@ namespace Steps
         painter->paint(this);
     }
 
+    bool CMovePattern::operator==(const CMovePattern&)
+    {
+        return true;
+    }
+
 } //Steps
 } //Algorithms

@@ -41,6 +41,12 @@ namespace BruteForce
         }
     }
 
+    void CPainter::colorRects(const std::vector<RectItemPtr>& collection, const Indices& indices, const Qt::GlobalColor color)
+    {
+        for(const auto& idx : indices)
+            collection[idx]->setBrush(QBrush(color));
+    }
+
     void CPainter::paint(const Algorithms::Steps::CComparison* comparisonStep)
     {
         assert(comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH ||
@@ -48,10 +54,8 @@ namespace BruteForce
 
         const auto color = comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH
                 ? Qt::green : Qt::red;
-        for(const auto& index : comparisonStep->m_sourceIndices)
-            m_sourceRectItems[index]->setBrush(QBrush(color));
-        for(const auto& index : comparisonStep->m_patternIndices)
-            m_patternRectItems[index]->setBrush(QBrush(color));
+        colorRects(m_sourceRectItems, comparisonStep->m_sourceIndices, color);
+        colorRects(m_patternRectItems, comparisonStep->m_patternIndices, color);
     }
 
     void CPainter::paint(const Algorithms::Steps::CMovePattern* movePatternStep)
@@ -63,6 +67,23 @@ namespace BruteForce
         }
         for(const auto& rect : m_sourceRectItems)
             rect->setBrush(QBrush(Constants::RECT_INITIAL_COLOR));
+    }
+
+    void CPainter::finishScene(const Indices& sourceIndices)
+    {
+        for(const auto& rect : m_patternRectItems)
+            rect->hide();
+        Indices finalIndices = sourceIndices;
+        auto color = Qt::green;
+        if(sourceIndices.empty())
+        {
+            finalIndices.clear();
+            color = Qt::red;
+            for(auto i = 0; i < m_sourceRectItems.size(); ++i)
+                finalIndices.push_back(i);
+        }
+        colorRects(m_sourceRectItems, finalIndices, color);
+
     }
 
     void CPainter::cleanWholeScene()

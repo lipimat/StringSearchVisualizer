@@ -19,6 +19,7 @@ enum class EAlgorithmState;
         virtual void initialize(const TextsPair&) = 0;
         virtual Steps::EAlgorithmState calculateNextStep() = 0;
         virtual const Steps::StepPtr& getCurrentStep() const = 0;
+        virtual const Visualization::Indices& getFoundPatternIndices() const = 0;
         virtual ~IStepsExecutor() = default;
     };
 

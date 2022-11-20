@@ -11,6 +11,7 @@ namespace Steps
     {
     public:
         void accept(const Visualization::PainterPtr&) const override;
+        bool operator==(const CMovePattern&);
     };
 
 } //Steps

@@ -19,5 +19,13 @@ namespace Steps
         painter->paint(this);
     }
 
+    bool CComparison::operator==(const CComparison& rhs)
+    {
+        return
+            this->m_comparisonType == rhs.m_comparisonType &&
+            this->m_patternIndices == rhs.m_patternIndices &&
+            this->m_sourceIndices == rhs.m_sourceIndices;
+    }
+
 } //Steps
 } //Algorithms

@@ -13,11 +13,14 @@ namespace Algorithms
         std::function<void(const TextsPair&)> m_initialize;
         std::function<Steps::EAlgorithmState()> m_calculateNextStep;
         Steps::StepPtr m_getCurrentStep;
+        Visualization::Indices m_foundPatternIndices;
+
 
         //interface functions
         void initialize(const TextsPair& texts) override { return m_initialize(texts); };
         Steps::EAlgorithmState calculateNextStep() override { return m_calculateNextStep(); };
         const Steps::StepPtr& getCurrentStep() const override { return m_getCurrentStep; };
+        const Visualization::Indices& getFoundPatternIndices() const override { return m_foundPatternIndices; };
 
         // trick so that mock has a copy constructor and we can mock getCurrentStep
         CStepsExecutorMock() : m_getCurrentStep()
@@ -25,7 +28,8 @@ namespace Algorithms
         }
         CStepsExecutorMock(const CStepsExecutorMock& rhs) :
             m_initialize(rhs.m_initialize),
-            m_calculateNextStep(rhs.m_calculateNextStep)
+            m_calculateNextStep(rhs.m_calculateNextStep),
+            m_foundPatternIndices(rhs.m_foundPatternIndices)
         {
             if(rhs.m_getCurrentStep != nullptr)
             {

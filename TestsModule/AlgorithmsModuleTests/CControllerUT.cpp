@@ -80,9 +80,10 @@ namespace Algorithms
 
         void ControllerNextStepReturnsFalseWhenAlgorithmFinished()
         {
-            int executorCalculateNextStepCalled = 0;
+            int executorCalculateNextStepCalled = 0, painterFinishSceneCalled = 0;;
 
             m_stepsExecutorMock->m_calculateNextStep = [&]() { executorCalculateNextStepCalled = 1; return Steps::EAlgorithmState::FINISHED; };
+            m_painterMock->m_finishScene = [&](const Indices&) { painterFinishSceneCalled = 1; return; };
             const auto& controller = createController();
 
             QCOMPARE(controller.nextStep(), false);

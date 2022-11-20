@@ -18,16 +18,18 @@ namespace BruteForce
         void drawBasicScene(const TextsPair&) override;
         void paint(const Algorithms::Steps::CComparison*) override;
         void paint(const Algorithms::Steps::CMovePattern*) override;
+        void finishScene(const Indices&) override;
         void cleanWholeScene() override;
         ~CPainter();
 
     private:
 
         void drawRectsForText(const std::string&, const Constants::ERectType);
+        void colorRects(const std::vector<RectItemPtr>&, const Indices&, const Qt::GlobalColor);
 
         QGraphicsView* m_view;
-        std::vector<RectItemPtr> m_sourceRectItems; //sorted from left to right
-        std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right
+        std::vector<RectItemPtr> m_sourceRectItems; //sorted from left to right on screen
+        std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right on screen
     };
 
 } //BruteForce
