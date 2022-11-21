@@ -13,7 +13,7 @@ namespace BruteForce
 
     using namespace Steps;
 
-    class CStepsExecutorUT: public QObject
+    class BruteForceCStepsExecutorUT: public QObject
     {
         Q_OBJECT
 
@@ -135,5 +135,5 @@ namespace BruteForce
 } //BruteForce
 } //Algorithms
 
-ADD_TEST(Algorithms::BruteForce::CStepsExecutorUT)
-#include "CStepsExecutorUT.moc"
+ADD_TEST(Algorithms::BruteForce::BruteForceCStepsExecutorUT)
+#include "BruteForceCStepsExecutorUT.moc"
