@@ -459,6 +459,28 @@ QPushButton:hover {
      <string>Next Step</string>
     </property>
    </widget>
+   <widget class="QLabel" name="AlphabetLabel">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>-1</y>
+      <width>341</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Source Code Pro</family>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

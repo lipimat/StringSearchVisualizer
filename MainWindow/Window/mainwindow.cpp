@@ -28,6 +28,11 @@ namespace Window
           m_currentSimulationItem(nullptr)
     {
         m_ui->setupUi(this);
+
+        const auto supportedAlphabetLabel =
+                "Supported alphabet: " + std::string(Algorithms::SUPPORTED_ALPHABET);
+        m_ui->AlphabetLabel->setText(QString::fromStdString(supportedAlphabetLabel));
+
         m_painterFactory = std::make_unique<Visualization::CPainterFactory>(m_ui->GraphicsView);
         initializeLayoutNoSimulation();
         initializeListView();
@@ -92,7 +97,16 @@ namespace Window
         const auto& patternText = m_ui->PatternLineEdit->text().toStdString();
         if(sourceText.empty() || patternText.empty())
         {
-            QMessageBox::critical(this, "Error", "Fill both forms to start simulation!");
+            QMessageBox::critical(this, "Input!", "Fill both forms to start simulation!");
+            return;
+        }
+        //check if our texts fit into supported alphabet
+        const auto alphabetRegex = "^[" + std::string(Algorithms::SUPPORTED_ALPHABET) + "]+$";
+        QRegExp checker(QString::fromStdString(alphabetRegex));
+        if(checker.indexIn(QString::fromStdString(sourceText)) ||
+                checker.indexIn(QString::fromStdString(patternText)))
+        {
+            QMessageBox::critical(this, "Input!", "Input texts need to contain only supported alphabet letters!");
             return;
         }
 

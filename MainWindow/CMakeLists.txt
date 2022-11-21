@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core5Compat)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core5Compat)
 
 
 file(GLOB_RECURSE PROJECT_SOURCES . *.cpp)
@@ -35,7 +35,7 @@ endif()
 # our dependencies
 include_directories(${CMAKE_SOURCE_DIR}/../AlgorithmsModule)
 find_library(ALGORITHMS_MODULE AlgorithmsModule "${CMAKE_SOURCE_DIR}/../out/libs")
-target_link_libraries(MainWindow PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ALGORITHMS_MODULE})
+target_link_libraries(MainWindow PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core5Compat ${ALGORITHMS_MODULE})
 target_precompile_headers(MainWindow PRIVATE pch.h)
 
 install(TARGETS MainWindow

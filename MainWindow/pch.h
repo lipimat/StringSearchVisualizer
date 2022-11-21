@@ -1,6 +1,7 @@
 #pragma once
 
 // QT headers
+#include <QRegExp>
 
 // visualization
 #include <QGraphicsView>

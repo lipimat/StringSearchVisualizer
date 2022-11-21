@@ -14,4 +14,6 @@ namespace Algorithms
         return ret;
     }();
 
+    static constexpr std::string_view SUPPORTED_ALPHABET = "CAGT";
+
 } //Algorithms
