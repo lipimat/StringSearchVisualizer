@@ -14,7 +14,8 @@ namespace Steps
     enum class EComparisonType
     {
         MATCH,
-        MISMATCH
+        MISMATCH,
+        IDLE
     };
 
 } //Steps

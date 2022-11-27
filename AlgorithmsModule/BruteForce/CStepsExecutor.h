@@ -21,7 +21,7 @@ namespace BruteForce
 
         bool patternWontFitToRemainingSource();
         void updateMembersForPatternMove();
-        void fillFoundPatternIndices(const int start);
+        void fillFoundPatternIndices(const int /*start*/);
 
         std::string m_sourceText;
         std::string m_patternText;

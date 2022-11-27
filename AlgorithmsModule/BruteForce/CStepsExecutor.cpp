@@ -29,7 +29,7 @@ namespace BruteForce
         else if(m_shouldMovePattern)
         {
             m_shouldMovePattern = false;
-            m_steps.push_back(std::make_unique<Steps::CMovePattern>());
+            m_steps.push_back(std::make_unique<Steps::CMovePattern>(1));
         }
         else
         {
@@ -83,7 +83,8 @@ namespace BruteForce
 
     bool CStepsExecutor::patternWontFitToRemainingSource()
     {
-        return m_patternText.size() > (m_sourceText.size() - m_currentSourceIndex);
+        const int spaceLeft = m_sourceText.size() - m_currentSourceIndex; //to avoid overlflow and cast to ull
+        return m_patternText.size() > spaceLeft;
     }
 
     const Steps::StepPtr& CStepsExecutor::getCurrentStep() const

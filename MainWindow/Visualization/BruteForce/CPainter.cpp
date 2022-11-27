@@ -21,11 +21,15 @@ namespace BruteForce
 
     void CPainter::paint(const Algorithms::Steps::CComparison* comparisonStep)
     {
-        assert(comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH ||
-               comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MISMATCH);
 
-        const auto color = comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH
+        auto color = comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::MATCH
                 ? Qt::green : Qt::red;
+        if(comparisonStep->m_comparisonType == Algorithms::Steps::EComparisonType::IDLE)
+        {
+            clearAllHighlight();
+            color = Qt::yellow;
+        }
+
         colorRects(m_sourceRectItems, comparisonStep->m_sourceIndices, color);
         colorRects(m_patternRectItems, comparisonStep->m_patternIndices, color);
     }
@@ -34,7 +38,7 @@ namespace BruteForce
     {
         clearAllHighlight();
         for(const auto& rect : m_patternRectItems)
-            rect->move(Constants::RECT_WIDTH, 0);
+            rect->move(movePatternStep->m_moveBy * Constants::RECT_WIDTH, 0);
     }
 
     void CPainter::finishScene(const Indices& sourceIndices)
@@ -96,11 +100,6 @@ namespace BruteForce
         m_sourceRectItems.clear();
         m_patternRectItems.clear();
         m_view->scene()->clear();
-    }
-
-    CPainter::~CPainter()
-    {
-        cleanWholeScene();
     }
 
 } //BruteForce

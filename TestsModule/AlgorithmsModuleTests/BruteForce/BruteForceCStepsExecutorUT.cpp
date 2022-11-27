@@ -40,7 +40,7 @@ namespace BruteForce
 
         void CalculateNextStepPatternLongerThanSourceShouldFinish()
         {
-            initializeExecutor("A", "AB");
+            initializeExecutor("A", "AT");
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::FINISHED);
             QCOMPARE(m_executor.getFoundPatternIndices(), Indices{});
         }
@@ -59,7 +59,7 @@ namespace BruteForce
 
         void CalculateNextStepMismatchedLetters()
         {
-            initializeExecutor("A", "B");
+            initializeExecutor("A", "T");
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& currentStep = m_executor.getCurrentStep();
@@ -68,7 +68,7 @@ namespace BruteForce
 
         void CalculateNextStepMatchedMissmatchedLetters()
         {
-            initializeExecutor("AB", "AA");
+            initializeExecutor("AT", "AA");
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
@@ -81,7 +81,7 @@ namespace BruteForce
 
         void CalculateNextStepPatternMismatchBufferShouldMove()
         {
-            initializeExecutor("BA", "A");
+            initializeExecutor("TA", "A");
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
@@ -89,7 +89,7 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CMovePattern>(secondStep, CMovePattern()));
+            QVERIFY(expectStep<CMovePattern>(secondStep, CMovePattern(1)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& thirdStep = m_executor.getCurrentStep();
@@ -98,7 +98,7 @@ namespace BruteForce
 
         void CalculateNextStepPatternFoundBufferShouldMove()
         {
-            initializeExecutor("AB", "A");
+            initializeExecutor("AT", "A");
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
@@ -106,7 +106,7 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();//nizej ruch
-            QVERIFY(expectStep<CMovePattern>(secondStep, CMovePattern()));
+            QVERIFY(expectStep<CMovePattern>(secondStep, CMovePattern(1)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& thirdStep = m_executor.getCurrentStep();
@@ -117,7 +117,7 @@ namespace BruteForce
 
         void CalculateNextStepCannotMoveBufferShouldFinish()
         {
-            initializeExecutor("AAB", "ABC");
+            initializeExecutor("AAT", "ATC");
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();

@@ -20,7 +20,6 @@ namespace BruteForce
         void paint(const Algorithms::Steps::CMovePattern*) override;
         void finishScene(const Indices&) override;
         void cleanWholeScene() override;
-        ~CPainter();
 
     private:
 
