@@ -47,7 +47,7 @@ namespace BoyerMoore
                     m_patternText.size() + 1 + m_currentPatternIndex;
             int shouldMoveBy = 0;
             std::pair<Steps::Indices, Steps::Indices> indices;
-            if(goodShiftMove > badShiftMove)
+            if(goodShiftMove >= badShiftMove)
             {
                 shouldMoveBy = goodShiftMove;
                 indices = calculateGoodShiftPreMoveIndices(shouldMoveBy);
@@ -140,21 +140,28 @@ namespace BoyerMoore
     {
         Visualization::Indices sourceIndices, patternIndices;
         const int comparedBeforeMiss = m_patternText.size() - m_currentPatternIndex - 1;
-
         int sourceIdx = m_currentSourceIndex + m_patternText.size() - 1;
-        int patternIdx = sourceIdx - moveBy;
-        for(int i = 0; i < comparedBeforeMiss; ++i)
+        int patternIdx = m_patternText.size() - moveBy - 1;
+        if(comparedBeforeMiss == 0) //special case, we failed comparison immediatly
         {
-            if(patternIdx < 0) // we are before start of pattern
-                break;
             sourceIndices.push_back(sourceIdx);
             patternIndices.push_back(patternIdx);
-            --sourceIdx;
-            --patternIdx;
         }
+        else
+        {
+            for(int i = 0; i < comparedBeforeMiss; ++i)
+            {
+                if(patternIdx < 0) // we are before start of pattern
+                    break;
+                sourceIndices.push_back(sourceIdx);
+                patternIndices.push_back(patternIdx);
+                --sourceIdx;
+                --patternIdx;
+            }
 
-        std::reverse(sourceIndices.begin(), sourceIndices.end());
-        std::reverse(patternIndices.begin(), patternIndices.end());
+            std::reverse(sourceIndices.begin(), sourceIndices.end());
+            std::reverse(patternIndices.begin(), patternIndices.end());
+        }
         return {sourceIndices, patternIndices};
     }
 

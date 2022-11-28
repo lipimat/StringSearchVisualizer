@@ -79,6 +79,9 @@
     <property name="selectionMode">
      <enum>QAbstractItemView::NoSelection</enum>
     </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="PatternLabel">
     <property name="geometry">

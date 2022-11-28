@@ -4,7 +4,6 @@
 
 #include "../../AlgorithmsModule/Steps/CComparison.h"
 #include "../../AlgorithmsModule/Steps/CMovePattern.h"
-#include "qtestcase.h"
 
 namespace Algorithms
 {
