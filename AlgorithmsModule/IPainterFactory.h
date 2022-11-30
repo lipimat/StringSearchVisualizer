@@ -8,6 +8,7 @@ namespace Visualization
     struct IPainterFactory
     {
         virtual PainterPtr createBruteForcePainter() const = 0;
+        virtual PainterPtr createAutomatonPainter() const = 0;
         virtual ~IPainterFactory() = default;
     };
 

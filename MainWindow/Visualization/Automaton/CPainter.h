@@ -3,12 +3,13 @@
 #include "../../AlgorithmsModule/IPainter.h"
 #include "../../AlgorithmsModule/Steps/CComparison.h"
 #include "../../AlgorithmsModule/Steps/CMovePattern.h"
+#include "../../AlgorithmsModule/Steps/CDrawAutomatonNode.h"
 #include "../Constants.h"
-#include "CRectItem.h"
+#include "../BruteForce/CRectItem.h"
 
 namespace Visualization
 {
-namespace BruteForce
+namespace Automaton
 {
     class CPainter final : public IPainter
     {
@@ -16,10 +17,12 @@ namespace BruteForce
 
         explicit CPainter(QGraphicsView*);
         void drawBasicScene(const TextsPair&) override;
-        void paint(const Algorithms::Steps::CComparison*) override;
-        void paint(const Algorithms::Steps::CMovePattern*) override;
         //find a way to split painter interfaces so we dont have this garbage here
-        void paint(const Algorithms::Steps::CDrawAutomatonNode*) override { assert("I don't know how to draw"); };
+        void paint(const Algorithms::Steps::CComparison*) override
+            {assert("I don't know how to draw");};
+        void paint(const Algorithms::Steps::CMovePattern*) override
+            {assert("I don't know how to draw");};
+        void paint(const Algorithms::Steps::CDrawAutomatonNode*) override;
         void finishScene(const Indices&) override;
         void cleanWholeScene() override;
 

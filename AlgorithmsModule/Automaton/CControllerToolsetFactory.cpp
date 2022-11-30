@@ -25,7 +25,7 @@ namespace Automaton
             const Visualization::PainterFactoryPtr& painterFactory) const
     {
         assert(painterFactory != nullptr);
-        return painterFactory->createBruteForcePainter(); //TODO change to automaton painter
+        return painterFactory->createAutomatonPainter();
     }
 
 } //BoyerMoore

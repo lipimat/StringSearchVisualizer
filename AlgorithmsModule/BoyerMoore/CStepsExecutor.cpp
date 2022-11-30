@@ -144,8 +144,11 @@ namespace BoyerMoore
         int patternIdx = m_patternText.size() - moveBy - 1;
         if(comparedBeforeMiss == 0) //special case, we failed comparison immediatly
         {
-            sourceIndices.push_back(sourceIdx);
-            patternIndices.push_back(patternIdx);
+            if(patternIdx >= 0) // in case we have 1 letter pattern, we won't highlight anything
+            {
+                sourceIndices.push_back(sourceIdx);
+                patternIndices.push_back(patternIdx);
+            }
         }
         else
         {

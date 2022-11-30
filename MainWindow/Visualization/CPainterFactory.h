@@ -9,6 +9,7 @@ namespace Visualization
     {
         CPainterFactory(QGraphicsView*);
         PainterPtr createBruteForcePainter() const override;
+        PainterPtr createAutomatonPainter() const override;
 
     private:
 
