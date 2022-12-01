@@ -18,19 +18,59 @@ namespace Automaton
         drawRectsForText(sourceText, Constants::ERectType::SOURCE);
         drawRectsForText(patternText, Constants::ERectType::PATTERN);
         m_view->setSceneRect(m_view->scene()->itemsBoundingRect()); //fix to center rects to middle
+        for(const auto& sourceRect : m_sourceRectItems)
+            sourceRect->hide(); //we only need pattern to build automat
+        for(const auto& patternRect : m_patternRectItems)
+            patternRect->move(0, -250);
     }
 
     void CPainter::paint(const Algorithms::Steps::CDrawAutomatonNode* drawNodeStep)
     {
         using namespace Constants;
         const auto& scene = m_view->scene();
+        const auto& currentSourceRect = m_sourceRectItems[drawNodeStep->m_stateNumber];
+        const auto& currentPatternRect = m_patternRectItems[drawNodeStep->m_stateNumber];
+
         QGraphicsEllipseItem* circle = new QGraphicsEllipseItem(
-                    m_patternRectItems[0]->rect().x(), m_patternRectItems[0]->rect().y() + 50, 50 ,50);
-        circle->setBrush(QBrush(Qt::yellow));
+                    currentSourceRect->rect().x() + currentSourceRect->rect().width()/2 - 30,
+                    currentPatternRect->rect().y(), 60 , 60);
+
+        circle->setBrush(QBrush(Qt::white));
         scene->addItem(circle);
+        const auto& text = new CTextItem(std::to_string(drawNodeStep->m_stateNumber));
+        const auto& thisRect = circle->boundingRect();
+        const auto& textRect = text->boundingRect();
+
+        text->setPos(thisRect.x() + (thisRect.width() - textRect.width())/2,
+                       thisRect.y() + (thisRect.height() - textRect.height())/2);
+        scene->addItem(text);
         QPainterPath path;
-        path.moveTo(circle->boundingRect().x(), circle->boundingRect().y());
-        path.lineTo(RECT_START_X + 50, PATTERN_RECT_Y + 100);
+        //strzalka w prawo
+//        path.moveTo(circle->boundingRect().x() + circle->boundingRect().width(),
+//                    circle->boundingRect().y() + circle->boundingRect().height()/2);
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width() + 20,
+//                     circle->boundingRect().y() + circle->boundingRect().height()/2);
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width() + 10,
+//                     circle->boundingRect().y() + circle->boundingRect().height()/2 - 10);
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width() + 20,
+//                     circle->boundingRect().y() + circle->boundingRect().height()/2);
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width() + 10,
+//                     circle->boundingRect().y() + circle->boundingRect().height()/2 + 10);
+        // krzywa szczala
+//        path.moveTo(circle->boundingRect().x() + circle->boundingRect().width()/2,
+//                    circle->boundingRect().y());
+//        path.cubicTo(QPointF(circle->boundingRect().x() + circle->boundingRect().width()/2,
+//                             circle->boundingRect().y()),
+//                     QPointF(circle->boundingRect().x() + circle->boundingRect().width()/2 - 30,
+//                             circle->boundingRect().y() -50),
+//                     QPointF(circle->boundingRect().x() + circle->boundingRect().width()/2 - 60,
+//                             circle->boundingRect().y()));
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width()/2 - 60,
+//                    circle->boundingRect().y() - 10);
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width()/2 - 60,
+//                    circle->boundingRect().y());
+//        path.lineTo(circle->boundingRect().x() + circle->boundingRect().width()/2 - 50,
+//                    circle->boundingRect().y());
         scene->addPath(path);
     }
 
