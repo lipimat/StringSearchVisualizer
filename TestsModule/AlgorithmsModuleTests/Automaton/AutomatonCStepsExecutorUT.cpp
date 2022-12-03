@@ -11,6 +11,8 @@ namespace Automaton
 
     using namespace Steps;
 
+    // I'm only testing creating the automaton
+    // I don't see any need to test iteration over created automaton, important thing is that it should be created correctly
     class AutomatonCStepsExecutorUT: public QObject
     {
         Q_OBJECT

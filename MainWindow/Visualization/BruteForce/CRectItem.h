@@ -17,6 +17,8 @@ namespace Visualization
 
         void hide();
 
+        void show();
+
         void move(const int dx, const int dy);
 
     private:

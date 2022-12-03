@@ -7,6 +7,8 @@ namespace Steps
 class CComparison;
 class CMovePattern;
 class CDrawAutomatonNode;
+class CStartAutomaton;
+class CStateChangedAutomaton;
 } //Steps
 } //Algorithms
 
@@ -23,6 +25,8 @@ namespace Visualization
         virtual void paint(const Algorithms::Steps::CComparison*) = 0;
         virtual void paint(const Algorithms::Steps::CMovePattern*) = 0;
         virtual void paint(const Algorithms::Steps::CDrawAutomatonNode*) = 0;
+        virtual void paint(const Algorithms::Steps::CStartAutomaton*) = 0;
+        virtual void paint(const Algorithms::Steps::CStateChangedAutomaton*) = 0;
         virtual void finishScene(const Indices&) = 0;
         virtual void cleanWholeScene() = 0;
         virtual ~IPainter() = default;

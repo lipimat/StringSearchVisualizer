@@ -29,6 +29,7 @@ namespace Automaton
         int m_currentStateNr;
 
         bool m_comparisonStage;
+        int m_currentSourceIndex;
         std::string m_sourceText;
         std::string m_patternText;
         Visualization::Indices m_patternFound;

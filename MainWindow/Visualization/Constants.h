@@ -24,6 +24,14 @@ namespace Constants
 
     // texts
     static const auto TEXT_FONT = QFont("Source Code Pro", 25);
+    static const auto SMALLER_TEXT_FONT = QFont("Source Code Pro", 15);
+
+    //ellipses
+    static constexpr auto ELLIPSE_RADIUS = 60;
+    static constexpr auto ELLIPSE_INITIAL_COLOR = Qt::yellow;
+    static constexpr auto ELLIPSE_HIGHLIGHT_COLOR = Qt::green;
+    static constexpr auto ELLIPSE_START_X = RECT_START_X - ELLIPSE_RADIUS/2;
+    static constexpr auto ELLIPSE_Y = PATTERN_RECT_Y;
 
 } //Constants
 } //Visualization

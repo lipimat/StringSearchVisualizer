@@ -20,6 +20,8 @@ namespace BruteForce
         void paint(const Algorithms::Steps::CMovePattern*) override;
         //find a way to split painter interfaces so we dont have this garbage here
         void paint(const Algorithms::Steps::CDrawAutomatonNode*) override { assert("I don't know how to draw"); };
+        void paint(const Algorithms::Steps::CStartAutomaton*) override { assert("I don't know how to draw"); };
+        void paint(const Algorithms::Steps::CStateChangedAutomaton*) override { assert("I don't know how to draw"); };
         void finishScene(const Indices&) override;
         void cleanWholeScene() override;
 

@@ -2,6 +2,8 @@
 
 #include "../SupportedAlgorithmsToolsets.h"
 #include "../Steps/CDrawAutomatonNode.h"
+#include "../Steps/CStartAutomaton.h"
+#include "../Steps/CStateChangedAutomaton.h"
 
 namespace Algorithms
 {
@@ -15,6 +17,7 @@ namespace Automaton
         m_generatingAutomatonStage = true;
         m_comparisonStage = false;
         m_currentStateNr = 0;
+        m_currentSourceIndex = 0;
         m_automaton.clear();
         m_automaton.reserve(m_patternText.size() + 1);
         m_steps.clear();
@@ -27,6 +30,24 @@ namespace Automaton
 
         if(m_generatingAutomatonStage)
             computeAutomaton();
+        else if(m_comparisonStage)
+        {
+            const auto& sourceSize = m_sourceText.size();
+            if(m_currentSourceIndex >= sourceSize)
+                returnState = Steps::EAlgorithmState::FINISHED;
+            else
+            {
+                assert(m_currentStateNr >= 0 && m_currentStateNr <= m_automaton.size());
+                auto& mapForState = m_automaton[m_currentStateNr];
+                m_currentStateNr = mapForState[m_sourceText[m_currentSourceIndex]];
+
+                if(m_currentStateNr == m_patternText.size())
+                    fillFoundPatternIndices(m_currentSourceIndex - m_patternText.size() + 1);
+
+                m_steps.push_back(std::make_unique<Steps::CStateChangedAutomaton>(Visualization::Indices{m_currentSourceIndex}, m_currentStateNr));
+                m_currentSourceIndex++;
+            }
+        }
 
         return returnState;
     }
@@ -55,6 +76,9 @@ namespace Automaton
         {
             m_generatingAutomatonStage = false;
             m_comparisonStage = true;
+            m_currentStateNr = 0;
+            // we will reuse m_currentStateNr
+            m_steps.push_back(std::make_unique<Steps::CStartAutomaton>());
         }
         else
         {

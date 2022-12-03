@@ -1,19 +1,17 @@
-#include "qbrush.h"
+#include "CEllipseItem.h"
 
-#include "CRectItem.h"
 #include "../Constants.h"
 
 namespace Visualization
 {
-
-    CRectItem::CRectItem(const QRectF& rect) :
-        QGraphicsRectItem(rect)
+    CEllipseItem::CEllipseItem(const QRectF& rect) :
+        QGraphicsEllipseItem(rect)
     {
-        this->setBrush(QBrush(Constants::RECT_INITIAL_COLOR));
+        this->setBrush(QBrush(Constants::ELLIPSE_INITIAL_COLOR));
     }
 
-    CRectItem::CRectItem(const QRectF& rect, const std::string& text) :
-        CRectItem(rect)
+    CEllipseItem::CEllipseItem(const QRectF& rect, const std::string& text) :
+        CEllipseItem(rect)
     {
         m_text = std::make_shared<CTextItem>(text);
 
@@ -25,27 +23,21 @@ namespace Visualization
                        thisRect.y() + (thisRect.height() - textRect.height())/2);
     }
 
-    const TextItemPtr& CRectItem::getText() const
+    const TextItemPtr& CEllipseItem::getText() const
     {
         return m_text;
     }
 
-    void CRectItem::hide()
+    void CEllipseItem::hide()
     {
-        QGraphicsRectItem::hide();
+        QGraphicsEllipseItem::hide();
         this->m_text->hide();
     }
 
-    void CRectItem::show()
-    {
-        QGraphicsRectItem::show();
-        this->m_text->show();
-    }
-
-    void CRectItem::move(const int dx, const int dy)
+    void CEllipseItem::move(const int dx, const int dy)
     {
         this->moveBy(dx, dy);
         m_text->moveBy(dx, dy);
     }
 
-} //Visualization
+}

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "../../AlgorithmsModule/IPainter.h"
-#include "../../AlgorithmsModule/Steps/CComparison.h"
-#include "../../AlgorithmsModule/Steps/CMovePattern.h"
 #include "../../AlgorithmsModule/Steps/CDrawAutomatonNode.h"
+#include "../../AlgorithmsModule/Steps/CStartAutomaton.h"
+#include "../../AlgorithmsModule/Steps/CStateChangedAutomaton.h"
 #include "../Constants.h"
 #include "../BruteForce/CRectItem.h"
+#include "../Automaton/CEllipseItem.h"
 
 namespace Visualization
 {
@@ -23,11 +24,20 @@ namespace Automaton
         void paint(const Algorithms::Steps::CMovePattern*) override
             {assert("I don't know how to draw");};
         void paint(const Algorithms::Steps::CDrawAutomatonNode*) override;
+        void paint(const Algorithms::Steps::CStartAutomaton*) override;
+        void paint(const Algorithms::Steps::CStateChangedAutomaton*) override;
         void finishScene(const Indices&) override;
         void cleanWholeScene() override;
 
     private:
 
+        // strategy possibility when refactoring
+        QPainterPath createRightArrow(const int /*fromState*/, const int /*toState*/, const char /*label*/);
+        QPainterPath createSelfArrow(const int /*state*/, const char /*label*/);
+        QPainterPath createBackwardsArrow(const int /*fromState*/, const int /*toState*/, const char /*label*/);
+        bool m_drawBackwardsArrowUp; // will be refactored, I'm lacking time
+
+        QRectF calculateRectForNode(const int /*stateNr*/);
         void drawRectsForText(const std::string&, const Constants::ERectType);
         void colorRects(const std::vector<RectItemPtr>&, const Indices&, const Qt::GlobalColor);
         void clearAllHighlight();
@@ -35,6 +45,7 @@ namespace Automaton
         QGraphicsView* m_view;
         std::vector<RectItemPtr> m_sourceRectItems; //sorted from left to right on screen
         std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right on screen
+        std::vector<EllipseItemPtr> m_automaton; //sorted from left to right on the screen
     };
 
 } //BruteForce
