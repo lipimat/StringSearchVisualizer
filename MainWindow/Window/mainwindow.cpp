@@ -94,24 +94,13 @@ namespace Window
         //move this into controller and throw exceptions
         const auto& sourceText = m_ui->SourceLineEdit->text().toStdString();
         const auto& patternText = m_ui->PatternLineEdit->text().toStdString();
-        if(sourceText.empty() || patternText.empty())
-        {
-            QMessageBox::critical(this, "Input!", "Fill both forms to start simulation!");
-            return;
+        try {
+            assert(m_currentSimulationItem != nullptr);
+            m_currentSimulationItem->initializeVisualization({sourceText, patternText});
+            initializeLayoutSimulation();
+        } catch (std::runtime_error e) {
+            QMessageBox::critical(this, "Input!", e.what());
         }
-        //check if our texts fit into supported alphabet
-        const auto alphabetRegex = "^[" + std::string(Algorithms::SUPPORTED_ALPHABET) + "]+$";
-        QRegExp checker(QString::fromStdString(alphabetRegex));
-        if(checker.indexIn(QString::fromStdString(sourceText)) ||
-                checker.indexIn(QString::fromStdString(patternText)))
-        {
-            QMessageBox::critical(this, "Input!", "Input texts need to contain only supported alphabet letters!");
-            return;
-        }
-
-        initializeLayoutSimulation();
-        assert(m_currentSimulationItem != nullptr);
-        m_currentSimulationItem->initializeVisualization({sourceText, patternText});
     }
 
 

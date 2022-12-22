@@ -1,7 +1,6 @@
 #pragma once
 
 // QT headers
-#include <QRegExp>
 #include <QPainterPath>
 
 // visualization

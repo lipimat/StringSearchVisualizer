@@ -1,4 +1,5 @@
 #include "CController.h"
+#include "SupportedAlgorithmsAlphabet.h"
 #include "Automaton/IPainter.h"
 #include "BoyerMoore/IPainter.h"
 #include "BruteForce/IPainter.h"
@@ -63,6 +64,15 @@ namespace Algorithms
     template<class Painter>
     void CController<Painter>::initializeScene(const TextsPair& userTexts) const
     {
+        if(userTexts.first.empty() || userTexts.second.empty())
+            throw std::runtime_error("Some texts are empty! Please fill in both texts!");
+        else
+        {
+            std::regex baseRegex("^[" + std::string(Algorithms::SUPPORTED_ALPHABET) + "]+$");
+            std::smatch baseMatch;
+            if(!std::regex_match(userTexts.first, baseMatch, baseRegex) || !std::regex_match(userTexts.second, baseMatch, baseRegex))
+                throw std::runtime_error("Some texts are not valid with supported alphabet! Please correct them!");
+        }
         const auto& painter = m_impl->getPainter();
         const auto& stepsExecutor = m_impl->getExecutor();
         painter->drawBasicScene(userTexts);
