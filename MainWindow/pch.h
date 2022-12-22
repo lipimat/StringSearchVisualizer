@@ -2,6 +2,7 @@
 
 // QT headers
 #include <QRegExp>
+#include <QPainterPath>
 
 // visualization
 #include <QGraphicsView>

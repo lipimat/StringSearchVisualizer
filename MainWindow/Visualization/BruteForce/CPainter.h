@@ -3,14 +3,13 @@
 #include "../../AlgorithmsModule/BruteForce/IPainter.h"
 #include "../../AlgorithmsModule/Steps/CComparison.h"
 #include "../../AlgorithmsModule/Steps/CMovePattern.h"
-#include "../Constants.h"
-#include "CRectItem.h"
+#include "../ABasePainter.h"
 
 namespace Visualization
 {
 namespace BruteForce
 {
-    class CPainter final : public IPainter
+    class CPainter final : public IPainter, public ABasePainter
     {
     public:
 
@@ -21,16 +20,7 @@ namespace BruteForce
         void finishScene(const Indices&) override;
         void cleanWholeScene() override;
 
-    private:
-
-        void drawRectsForText(const std::string&, const Constants::ERectType);
-        void colorRects(const std::vector<RectItemPtr>&, const Indices&, const Qt::GlobalColor);
-        void clearAllHighlight();
-
-        QGraphicsView* m_view;
-        std::vector<RectItemPtr> m_sourceRectItems; //sorted from left to right on screen
-        std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right on screen
     };
 
-} //BruteForce
-} //Visualization
+} // BruteForce
+} // Visualization

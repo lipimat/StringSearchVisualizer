@@ -1,7 +1,6 @@
-#include "qbrush.h"
-
 #include "CRectItem.h"
-#include "../Constants.h"
+#include "Constants.h"
+#include "qbrush.h"
 
 namespace Visualization
 {
@@ -48,4 +47,4 @@ namespace Visualization
         m_text->moveBy(dx, dy);
     }
 
-} //Visualization
+} // Visualization

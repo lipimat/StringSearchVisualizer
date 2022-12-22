@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../BruteForce/CTextItem.h"
+#include "CTextItem.h"
 
 namespace Visualization
 {
@@ -17,7 +17,7 @@ namespace Visualization
 
         void hide();
 
-        void move(const int dx, const int dy);
+        void move(const int /*dx*/, const int /*dy*/);
 
     private:
 
@@ -26,4 +26,4 @@ namespace Visualization
 
     using EllipseItemPtr = std::shared_ptr<CEllipseItem>;
 
-} //Visualization
+} // Visualization

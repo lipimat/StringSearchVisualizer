@@ -1,5 +1,6 @@
 #include "CPainterFactory.h"
 #include "BruteForce/CPainter.h"
+#include "BoyerMoore/CPainter.h"
 #include "Automaton/CPainter.h"
 
 namespace Visualization
@@ -25,4 +26,4 @@ namespace Visualization
         return std::make_unique<Automaton::CPainter>(m_view);
     }
 
-} //Visualization
+} // Visualization

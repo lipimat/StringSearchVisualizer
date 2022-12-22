@@ -43,5 +43,5 @@ namespace ListElements
         return m_controller->nextStep();
     }
 
-}//ListElements
-}//Window
+} // ListElements
+} // Window

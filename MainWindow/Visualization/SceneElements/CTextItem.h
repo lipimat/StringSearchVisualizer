@@ -11,4 +11,4 @@ namespace Visualization
 
     using TextItemPtr = std::shared_ptr<CTextItem>;
 
-} //Visualization
+} // Visualization

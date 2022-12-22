@@ -1,7 +1,6 @@
-#include "qfont.h"
-
 #include "CTextItem.h"
-#include "../Constants.h"
+#include "Constants.h"
+#include "qfont.h"
 
 namespace Visualization
 {
@@ -12,4 +11,4 @@ namespace Visualization
         this->setFont(Constants::TEXT_FONT);
     }
 
-} //Visualization
+} // Visualization

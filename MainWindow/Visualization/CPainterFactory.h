@@ -1,9 +1,6 @@
 #pragma once
 
-#include "../AlgorithmsModule/IPainterFactory.h"
-#include "Visualization/BruteForce/CPainter.h"
-#include "Visualization/BoyerMoore/CPainter.h"
-#include "Visualization/Automaton/CPainter.h"
+#include "../../AlgorithmsModule/IPainterFactory.h"
 
 namespace Visualization
 {
@@ -21,4 +18,4 @@ namespace Visualization
 
     };
 
-} //Visualization
+} // Visualization

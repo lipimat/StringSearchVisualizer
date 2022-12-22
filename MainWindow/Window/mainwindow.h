@@ -48,4 +48,4 @@ namespace Window
         Visualization::PainterFactoryPtr m_painterFactory;
     };
 
-}//Window
+} // Window

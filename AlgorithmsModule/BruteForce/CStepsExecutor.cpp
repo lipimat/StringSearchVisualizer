@@ -11,13 +11,10 @@ namespace BruteForce
     template<class Painter>
     void CStepsExecutor<Painter>::initialize(const TextsPair& texts)
     {
-        m_sourceText = texts.first;
-        m_patternText = texts.second;
+        ABaseStepsExecutor<Painter>::initialize(texts);
         m_currentPatternIndex = 0;
         m_currentSourceIndex = 0;
         m_shouldMovePattern = false;
-        m_steps.clear();
-        m_patternFound.clear();
     }
 
     template<class Painter>
@@ -30,12 +27,12 @@ namespace BruteForce
         else if(m_shouldMovePattern)
         {
             m_shouldMovePattern = false;
-            m_steps.push_back(std::make_unique<Steps::CMovePattern<Painter>>(1));
+            this->m_steps.push_back(std::make_unique<Steps::CMovePattern<Painter>>(1));
         }
         else
         {
-            const auto patternSize = m_patternText.size();
-            const auto sourceSize = m_sourceText.size();
+            const auto patternSize = this->m_patternText.size();
+            const auto sourceSize = this->m_sourceText.size();
 
             const auto comparisonSourceIndex = m_currentSourceIndex + m_currentPatternIndex;
             const auto comparisonPatternIndex = m_currentPatternIndex;
@@ -46,13 +43,13 @@ namespace BruteForce
             assert(isCurrentPatternIndexInBound);
 
             Steps::EComparisonType comparisonType;
-            if(m_patternText[comparisonPatternIndex] == m_sourceText[comparisonSourceIndex])
+            if(this->m_patternText[comparisonPatternIndex] == this->m_sourceText[comparisonSourceIndex])
             {
                 comparisonType = Steps::EComparisonType::MATCH;
                 m_currentPatternIndex++;
-                if(m_currentPatternIndex == m_patternText.size()) //out of bounds, we loop
+                if(m_currentPatternIndex == this->m_patternText.size()) //out of bounds, we loop
                 {
-                    fillFoundPatternIndices(m_currentSourceIndex);
+                    this->fillFoundPatternIndices(m_currentSourceIndex);
                     updateMembersForPatternMove();
                 }
             }
@@ -61,7 +58,7 @@ namespace BruteForce
                 updateMembersForPatternMove();
                 comparisonType = Steps::EComparisonType::MISMATCH;
             }
-            m_steps.push_back(std::make_unique<Steps::CComparison<Painter>>
+            this->m_steps.push_back(std::make_unique<Steps::CComparison<Painter>>
                               (Steps::Indices{comparisonSourceIndex}, Steps::Indices{comparisonPatternIndex}, comparisonType));
         }
 
@@ -77,30 +74,10 @@ namespace BruteForce
     }
 
     template<class Painter>
-    void CStepsExecutor<Painter>::fillFoundPatternIndices(const int start)
-    {
-        const auto stop = start + m_patternText.size();
-        for(auto i = start; i < stop; ++i)
-            m_patternFound.push_back(i);
-    }
-
-    template<class Painter>
     bool CStepsExecutor<Painter>::patternWontFitToRemainingSource()
     {
-        const int spaceLeft = m_sourceText.size() - m_currentSourceIndex; //to avoid overlflow and cast to ull
-        return m_patternText.size() > spaceLeft;
-    }
-
-    template<class Painter>
-    const Steps::StepPtr<Painter>& CStepsExecutor<Painter>::getCurrentStep() const
-    {
-        return m_steps.back();
-    }
-
-    template<class Painter>
-    const Steps::Indices& CStepsExecutor<Painter>::getFoundPatternIndices() const
-    {
-        return m_patternFound;
+        const int spaceLeft = this->m_sourceText.size() - m_currentSourceIndex; //to avoid overlflow and cast to ull
+        return this->m_patternText.size() > spaceLeft;
     }
 
     template class CStepsExecutor<Visualization::BruteForce::PainterPtr>;

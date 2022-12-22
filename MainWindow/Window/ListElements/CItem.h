@@ -36,5 +36,5 @@ namespace ListElements
          const ControllerPtr m_controller;
     };
 
-}//ListElements
-}//Window
+} // ListElements
+} // Window

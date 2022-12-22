@@ -1,6 +1,5 @@
 #include "CEllipseItem.h"
-
-#include "../Constants.h"
+#include "Constants.h"
 
 namespace Visualization
 {
@@ -40,4 +39,4 @@ namespace Visualization
         m_text->moveBy(dx, dy);
     }
 
-}
+} // Visualization

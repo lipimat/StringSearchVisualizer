@@ -19,7 +19,7 @@ namespace Visualization
 
         void show();
 
-        void move(const int dx, const int dy);
+        void move(const int /*dx*/, const int /*dy*/);
 
     private:
 
@@ -28,4 +28,4 @@ namespace Visualization
 
     using RectItemPtr = std::shared_ptr<CRectItem>;
 
-} //Visualization
+} // Visualization

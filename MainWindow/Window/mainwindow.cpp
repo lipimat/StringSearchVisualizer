@@ -7,7 +7,6 @@
 // AlgorithmsModule includes
 #include "../../AlgorithmsModule/SupportedAlgorithmsAlphabet.h"
 #include "../../AlgorithmsModule/SupportedAlgorithmsControllers.h"
-#include "../../AlgorithmsModule/CController.h"
 
 namespace Window
 {
@@ -87,11 +86,12 @@ namespace Window
 
     void MainWindow::on_InfoButton_clicked()
     {
-        QMessageBox::about(this,m_currentSimulationItem->getName(),m_currentSimulationItem->getInfo());
+        QMessageBox::about(this, m_currentSimulationItem->getName(), m_currentSimulationItem->getInfo());
     }
 
     void MainWindow::on_StartButton_clicked()
     {
+        //move this into controller and throw exceptions
         const auto& sourceText = m_ui->SourceLineEdit->text().toStdString();
         const auto& patternText = m_ui->PatternLineEdit->text().toStdString();
         if(sourceText.empty() || patternText.empty())
@@ -130,5 +130,5 @@ namespace Window
             m_ui->NextStepButton->hide();
     }
 
-} //Window
+} // Window
 
