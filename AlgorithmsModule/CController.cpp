@@ -1,60 +1,67 @@
-#include "assert.h"
-
 #include "CController.h"
-
+#include "Automaton/IPainter.h"
+#include "BoyerMoore/IPainter.h"
+#include "BruteForce/IPainter.h"
+#include "Steps/IStep.h"
 #include "Steps/Constants.h"
 
 namespace Algorithms
 {
-    class CController::Impl
+    template<class Painter>
+    template<class PainterImpl>
+    class CController<Painter>::Impl
     {
     public:
 
-        explicit Impl(const ControllerToolsetFactoryPtr&, const Visualization::PainterFactoryPtr&);
+        Impl(const ControllerToolsetFactoryPtr<Painter>&, PainterImpl&&);
         inline const std::string& getAlgorithmName() const { return m_algorithmName; };
         inline const std::string& getAlgorithmInfo() const { return m_algorithmInfo; };
-        inline const Visualization::PainterPtr& getPainter() const { return m_painter; };
-        inline const StepsExecutorPtr& getExecutor() const { return m_executor; };
+        inline const PainterImpl& getPainter() const { return m_painter; };
+        inline const StepsExecutorPtr<Painter>& getExecutor() const { return m_executor; };
+
         ~Impl() = default;
 
     private:
         const std::string m_algorithmName;
         const std::string m_algorithmInfo;
 
-        const PainterPtr m_painter;
-        const StepsExecutorPtr m_executor;
+        PainterImpl m_painter;
+        StepsExecutorPtr<Painter> m_executor;
     };
 
-    CController::Impl::Impl(
-            const ControllerToolsetFactoryPtr& toolsetFactoryPtr,
-            const Visualization::PainterFactoryPtr& painterFactoryPtr) :
-        m_algorithmInfo(toolsetFactoryPtr->createInfo()),
-        m_algorithmName(toolsetFactoryPtr->createName()),
-        m_painter(toolsetFactoryPtr->createPainter(painterFactoryPtr)),
-        m_executor(toolsetFactoryPtr->createStepsExecutor())
+    template<class Painter>
+    template<class PainterImpl>
+    CController<Painter>::Impl<PainterImpl>::Impl(const ControllerToolsetFactoryPtr<Painter>& toolsetFactory, PainterImpl&& painter) :
+        m_algorithmName(toolsetFactory->createName()),
+        m_algorithmInfo(toolsetFactory->createInfo()),
+        m_executor(toolsetFactory->createStepsExecutor()),
+        m_painter(std::move(painter))
     {
-        //assert(m_painter != nullptr);
-        //assert(m_executor != nullptr);
+        assert(m_painter != nullptr);
+        assert(m_executor != nullptr);
     }
 
-    CController::CController(const ControllerToolsetFactoryPtr& toolsetFactoryPtr,
-                             const Visualization::PainterFactoryPtr& painterFactoryPtr) :
-        m_impl(std::make_unique<CController::Impl>(toolsetFactoryPtr, painterFactoryPtr))
+    template<class Painter>
+    CController<Painter>::CController(const ControllerToolsetFactoryPtr<Painter>& toolsetFactory, Painter&& painter) :
+        m_impl(std::make_unique<CController<Painter>::Impl<Painter>>(toolsetFactory, std::move(painter)))
     {
         assert(m_impl != nullptr);
     }
 
-    const std::string& CController::getAlgorithmName() const
+    template<class Painter>
+    const std::string& CController<Painter>::getAlgorithmName() const
     {
         return m_impl->getAlgorithmName();
     }
 
-    const std::string& CController::getAlgorithmInfo() const
+    template<class Painter>
+    const std::string& CController<Painter>::getAlgorithmInfo() const
     {
         return m_impl->getAlgorithmInfo();
     }
 
-    void CController::initializeScene(const TextsPair& userTexts) const
+    template<class Painter>
+    void CController<Painter>::initializeScene(const TextsPair& userTexts) const
     {
         const auto& painter = m_impl->getPainter();
         const auto& stepsExecutor = m_impl->getExecutor();
@@ -62,13 +69,15 @@ namespace Algorithms
         stepsExecutor->initialize(userTexts);
     }
 
-    void CController::cleanScene() const
+    template<class Painter>
+    void CController<Painter>::cleanScene() const
     {
         const auto& painter = m_impl->getPainter();
         painter->cleanWholeScene();
     }
 
-    bool CController::nextStep() const
+    template<class Painter>
+    bool CController<Painter>::nextStep() const
     {
         const auto& stepsExecutor = m_impl->getExecutor();
         const auto algorithmProgress = stepsExecutor->calculateNextStep();
@@ -90,6 +99,11 @@ namespace Algorithms
         return isAlgorithmInProgress;
     }
 
-    CController::~CController() = default;
+    template<class Painter>
+    CController<Painter>::~CController() = default;
 
-} //Algorithms
+    template class CController<Visualization::BruteForce::PainterPtr>;
+    template class CController<Visualization::BoyerMoore::PainterPtr>;
+    template class CController<Visualization::Automaton::PainterPtr>;
+
+} // Algorithms

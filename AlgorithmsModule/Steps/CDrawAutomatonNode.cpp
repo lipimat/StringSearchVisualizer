@@ -1,25 +1,32 @@
 #include "CDrawAutomatonNode.h"
+#include "../Automaton/IPainter.h"
 
 namespace Algorithms
 {
 namespace Steps
 {
 
-    CDrawAutomatonNode::CDrawAutomatonNode(const int stateNumber, const NodeRelations& relations)
+    template<class Painter>
+    CDrawAutomatonNode<Painter>::CDrawAutomatonNode(const int stateNumber, const NodeRelations& relations)
         : m_stateNumber(stateNumber), m_nodeRelations(relations)
     {
     }
 
-    void CDrawAutomatonNode::accept(const Visualization::PainterPtr& painter) const
+    template<class Painter>
+    void  CDrawAutomatonNode<Painter>::accept(const Painter& painter) const
     {
         assert(painter != nullptr);
         painter->paint(this);
     }
-    bool CDrawAutomatonNode::operator==(const CDrawAutomatonNode& rhs)
+
+    template<class Painter>
+    bool  CDrawAutomatonNode<Painter>::operator==(const  CDrawAutomatonNode<Painter>& rhs)
     {
         return this->m_stateNumber == rhs.m_stateNumber &&
                this->m_nodeRelations == rhs.m_nodeRelations;
     }
 
-} //Steps
-} //Algorithms
+    template class CDrawAutomatonNode<Visualization::Automaton::PainterPtr>;
+
+} // Steps
+} // Algorithms

@@ -1,32 +1,31 @@
 #include "CControllerToolsetFactory.h"
 #include "CStepsExecutor.h"
+#include "IPainter.h"
 
 namespace Algorithms
 {
 namespace Automaton
 {
 
-    std::string_view CControllerToolsetFactory::createName() const
+    template<class Painter>
+    std::string_view CControllerToolsetFactory<Painter>::createName() const
     {
         return AUTOMATON_NAME;
     }
 
-    std::string_view CControllerToolsetFactory::createInfo() const
+    template<class Painter>
+    std::string_view CControllerToolsetFactory<Painter>::createInfo() const
     {
         return AUTOMATON_INFO;
     }
 
-    StepsExecutorPtr CControllerToolsetFactory::createStepsExecutor() const
+    template<class Painter>
+    StepsExecutorPtr<Painter> CControllerToolsetFactory<Painter>::createStepsExecutor() const
     {
-        return std::make_unique<CStepsExecutor>();
+        return std::make_unique<CStepsExecutor<Painter>>();
     }
 
-     Visualization::PainterPtr CControllerToolsetFactory::createPainter(
-            const Visualization::PainterFactoryPtr& painterFactory) const
-    {
-        assert(painterFactory != nullptr);
-        return painterFactory->createAutomatonPainter();
-    }
+    template class CControllerToolsetFactory<Visualization::Automaton::PainterPtr>;
 
-} //BoyerMoore
-} //Algorithms
+} // Automaton
+} // Algorithms

@@ -26,7 +26,7 @@ namespace Automaton
         m_drawBackwardsArrowUp = true;
     }
 
-    void CPainter::paint(const Algorithms::Steps::CDrawAutomatonNode* drawNodeStep)
+    void CPainter::paint(const Algorithms::Steps::CDrawAutomatonNode<PainterPtr>* drawNodeStep)
     {
         using namespace Constants;
         const auto& scene = m_view->scene();
@@ -57,7 +57,7 @@ namespace Automaton
         }
     }
 
-    void CPainter::paint(const Algorithms::Steps::CStartAutomaton* startAutomatonStep)
+    void CPainter::paint(const Algorithms::Steps::CStartAutomaton<PainterPtr>* startAutomatonStep)
     {
         for(const auto& sourceRect : m_sourceRectItems)
         {
@@ -70,7 +70,7 @@ namespace Automaton
         m_automaton[0]->setBrush(QBrush(Constants::ELLIPSE_HIGHLIGHT_COLOR));
     }
 
-    void CPainter::paint(const Algorithms::Steps::CStateChangedAutomaton* stateChangedAutomatonStep)
+    void CPainter::paint(const Algorithms::Steps::CStateChangedAutomaton<PainterPtr>* stateChangedAutomatonStep)
     {
         clearAllHighlight();
         m_automaton[stateChangedAutomatonStep->m_stateNr]->setBrush(QBrush(Constants::ELLIPSE_HIGHLIGHT_COLOR));

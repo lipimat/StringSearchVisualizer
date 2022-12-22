@@ -1,15 +1,19 @@
 #include "CStartAutomaton.h"
+#include "../Automaton/IPainter.h"
 
 namespace Algorithms
 {
 namespace Steps
 {
 
-    void CStartAutomaton::accept(const Visualization::PainterPtr& painter) const
+    template<class Painter>
+    void CStartAutomaton<Painter>::accept(const Painter& painter) const
     {
         assert(painter != nullptr);
         painter->paint(this);
     }
 
-} //Steps
-} //Algorithms
+    template class CStartAutomaton<Visualization::Automaton::PainterPtr>;
+
+} // Steps
+} // Algorithms

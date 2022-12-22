@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../../AlgorithmsModule/BruteForce/IPainter.h"
+#include "../../AlgorithmsModule/BoyerMoore/IPainter.h"
 #include "../../AlgorithmsModule/Steps/CComparison.h"
 #include "../../AlgorithmsModule/Steps/CMovePattern.h"
 #include "../Constants.h"
-#include "CRectItem.h"
+#include "../BruteForce/CRectItem.h"
 
 namespace Visualization
 {
-namespace BruteForce
+namespace BoyerMoore
 {
     class CPainter final : public IPainter
     {
@@ -32,5 +32,5 @@ namespace BruteForce
         std::vector<RectItemPtr> m_patternRectItems; //sorted from left to right on screen
     };
 
-} //BruteForce
+} //BoyerMoore
 } //Visualization

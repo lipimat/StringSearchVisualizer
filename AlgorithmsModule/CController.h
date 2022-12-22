@@ -1,30 +1,28 @@
 #pragma once
 
 #include "IController.h"
-#include "IControllerToolsetFactory.h"
-#include "IPainterFactory.h"
 #include "IStepsExecutor.h"
+#include "IControllerToolsetFactory.h"
 
 namespace Algorithms
 {
 
-    using PainterPtr = Visualization::PainterPtr;
-
+    template<class Painter>
     class CController final : public IController
     {
     public:
-
-        explicit CController(const ControllerToolsetFactoryPtr&, const Visualization::PainterFactoryPtr&);
+        explicit CController(const ControllerToolsetFactoryPtr<Painter>&, Painter&&);
         const std::string& getAlgorithmName() const override;
         const std::string& getAlgorithmInfo() const override;
         void initializeScene(const TextsPair&) const override;
         void cleanScene() const override;
         bool nextStep() const override;
-        ~CController();
+        ~CController() override;
 
     private:
+        template<class PainterImpl>
         class Impl;
-        std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl<Painter>> m_impl;
     };
 
-} //Algorithms
+} // Algorithms

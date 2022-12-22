@@ -1,6 +1,6 @@
 #include "CStepsExecutor.h"
-
-#include "../SupportedAlgorithmsToolsets.h"
+#include "IPainterFactory.h"
+#include "../SupportedAlgorithmsAlphabet.h"
 #include "../Steps/CComparison.h"
 #include "../Steps/CMovePattern.h"
 
@@ -9,7 +9,8 @@ namespace Algorithms
 namespace BoyerMoore
 {
 
-    void CStepsExecutor::initialize(const TextsPair& texts)
+    template<class Painter>
+    void CStepsExecutor<Painter>::initialize(const TextsPair& texts)
     {
         m_sourceText = texts.first;
         m_patternText = texts.second;
@@ -27,7 +28,8 @@ namespace BoyerMoore
         initializeGoodShiftTable();
     }
 
-    Steps::EAlgorithmState CStepsExecutor::calculateNextStep()
+    template<class Painter>
+    Steps::EAlgorithmState CStepsExecutor<Painter>::calculateNextStep()
     {
         auto returnState = Steps::EAlgorithmState::CONTINUE;
 
@@ -36,7 +38,7 @@ namespace BoyerMoore
         else if(m_shouldMovePattern)
         {
             m_shouldMovePattern = false;
-            m_steps.push_back(std::make_unique<Steps::CMovePattern>(m_patternLastMovedBy));
+            m_steps.push_back(std::make_unique<Steps::CMovePattern<Painter>>(m_patternLastMovedBy));
             m_patternLastMovedBy = 0;
         }
         else if(m_analyzeNextShift)
@@ -67,7 +69,7 @@ namespace BoyerMoore
                 for(int i = 0; i < m_patternText.size(); ++i)
                     indices.second.push_back(i);
             }
-            m_steps.push_back(std::make_unique<Steps::CComparison>
+            m_steps.push_back(std::make_unique<Steps::CComparison<Painter>>
                               (indices.first, indices.second, Steps::EComparisonType::IDLE));
             updateMembersForPatternMove(shouldMoveBy);
         }
@@ -97,24 +99,27 @@ namespace BoyerMoore
                 m_analyzeNextShift = true;
                 comparisonType = Steps::EComparisonType::MISMATCH;
             }
-            m_steps.push_back(std::make_unique<Steps::CComparison>
+            m_steps.push_back(std::make_unique<Steps::CComparison<Painter>>
                               (Steps::Indices{comparisonSourceIndex}, Steps::Indices{comparisonPatternIndex}, comparisonType));
         }
 
         return returnState;
     }
 
-    const Steps::StepPtr& CStepsExecutor::getCurrentStep() const
+    template<class Painter>
+    const Steps::StepPtr<Painter>& CStepsExecutor<Painter>::getCurrentStep() const
     {
         return m_steps.back();
     }
 
-    const Visualization::Indices& CStepsExecutor::getFoundPatternIndices() const
+    template<class Painter>
+    const Steps::Indices& CStepsExecutor<Painter>::getFoundPatternIndices() const
     {
         return m_patternFound;
     }
 
-    void CStepsExecutor::updateMembersForPatternMove(const int moveBy)
+    template<class Painter>
+    void CStepsExecutor<Painter>::updateMembersForPatternMove(const int moveBy)
     {
         m_currentPatternIndex = m_patternText.size() - 1;
         m_currentSourceIndex += moveBy;
@@ -122,23 +127,26 @@ namespace BoyerMoore
         m_shouldMovePattern = true;
     }
 
-    void CStepsExecutor::fillFoundPatternIndices(const int start)
+    template<class Painter>
+    void CStepsExecutor<Painter>::fillFoundPatternIndices(const int start)
     {
         const int stop = start + m_patternText.size();
         for(int i = start; i < stop; ++i)
             m_patternFound.push_back(i);
     }
 
-    bool CStepsExecutor::patternWontFitIntoRemainingSource() const
+    template<class Painter>
+    bool CStepsExecutor<Painter>::patternWontFitIntoRemainingSource() const
     {
         const int spaceLeft = m_sourceText.size() - m_patternText.size(); //to avoid overflow and cast to ull
         return m_currentSourceIndex > spaceLeft;
     }
 
-    std::pair<Visualization::Indices, Visualization::Indices> CStepsExecutor::calculateGoodShiftPreMoveIndices
+    template<class Painter>
+    std::pair<Steps::Indices, Steps::Indices> CStepsExecutor<Painter>::calculateGoodShiftPreMoveIndices
         (const int moveBy) const
     {
-        Visualization::Indices sourceIndices, patternIndices;
+        Steps::Indices sourceIndices, patternIndices;
         const int comparedBeforeMiss = m_patternText.size() - m_currentPatternIndex - 1;
         int sourceIdx = m_currentSourceIndex + m_patternText.size() - 1;
         int patternIdx = m_patternText.size() - moveBy - 1;
@@ -168,7 +176,8 @@ namespace BoyerMoore
         return {sourceIndices, patternIndices};
     }
 
-    void CStepsExecutor::initializeBadShiftTable()
+    template<class Painter>
+    void CStepsExecutor<Painter>::initializeBadShiftTable()
     {
         const int patternSize = m_patternText.size();
         m_badShiftTable.reserve(SUPPORTED_ALPHABET.size());
@@ -179,7 +188,8 @@ namespace BoyerMoore
             m_badShiftTable[m_patternText[i]] = patternSize - i - 1;
     }
 
-    void CStepsExecutor::initializeGoodShiftTable()
+    template<class Painter>
+    void CStepsExecutor<Painter>::initializeGoodShiftTable()
     {
         const int patternSize = m_patternText.size();
         m_goodShiftTable.reserve(patternSize);
@@ -201,7 +211,8 @@ namespace BoyerMoore
             m_goodShiftTable[patternSize - 1 - suffixes[i]] = patternSize - 1 - i;
     }
 
-    std::vector<int> CStepsExecutor::calculateSuffixesForGoodShiftTable() const
+    template<class Painter>
+    std::vector<int> CStepsExecutor<Painter>::calculateSuffixesForGoodShiftTable() const
     {
         const int patternSize = m_patternText.size();
         std::vector<int> suffixes(patternSize);
@@ -226,5 +237,7 @@ namespace BoyerMoore
         return suffixes;
     }
 
-} //BoyerMoore
-} //Algorithms
+    template class CStepsExecutor<Visualization::BoyerMoore::PainterPtr>;
+
+} // BoyerMoore
+} // Algorithms

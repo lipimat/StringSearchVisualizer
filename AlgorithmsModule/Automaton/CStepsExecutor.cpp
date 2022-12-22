@@ -1,6 +1,6 @@
 #include "CStepsExecutor.h"
-
-#include "../SupportedAlgorithmsToolsets.h"
+#include "IPainter.h"
+#include "../SupportedAlgorithmsAlphabet.h"
 #include "../Steps/CDrawAutomatonNode.h"
 #include "../Steps/CStartAutomaton.h"
 #include "../Steps/CStateChangedAutomaton.h"
@@ -10,7 +10,8 @@ namespace Algorithms
 namespace Automaton
 {
 
-    void CStepsExecutor::initialize(const TextsPair& texts)
+    template<class Painter>
+    void CStepsExecutor<Painter>::initialize(const TextsPair& texts)
     {
         m_sourceText = texts.first;
         m_patternText = texts.second;
@@ -24,7 +25,8 @@ namespace Automaton
         m_patternFound.clear();
     }
 
-    Steps::EAlgorithmState CStepsExecutor::calculateNextStep()
+    template<class Painter>
+    Steps::EAlgorithmState CStepsExecutor<Painter>::calculateNextStep()
     {
         auto returnState = Steps::EAlgorithmState::CONTINUE;
 
@@ -44,7 +46,8 @@ namespace Automaton
                 if(m_currentStateNr == m_patternText.size())
                     fillFoundPatternIndices(m_currentSourceIndex - m_patternText.size() + 1);
 
-                m_steps.push_back(std::make_unique<Steps::CStateChangedAutomaton>(Visualization::Indices{m_currentSourceIndex}, m_currentStateNr));
+                m_steps.push_back(std::make_unique<Steps::CStateChangedAutomaton<Painter>>
+                                  (Steps::Indices{m_currentSourceIndex}, m_currentStateNr));
                 m_currentSourceIndex++;
             }
         }
@@ -52,24 +55,28 @@ namespace Automaton
         return returnState;
     }
 
-    const Steps::StepPtr& CStepsExecutor::getCurrentStep() const
+    template<class Painter>
+    const Steps::StepPtr<Painter>& CStepsExecutor<Painter>::getCurrentStep() const
     {
         return m_steps.back();
     }
 
-    const Visualization::Indices& CStepsExecutor::getFoundPatternIndices() const
+    template<class Painter>
+    const Steps::Indices& CStepsExecutor<Painter>::getFoundPatternIndices() const
     {
         return m_patternFound;
     }
 
-    void CStepsExecutor::fillFoundPatternIndices(const int start)
+    template<class Painter>
+    void CStepsExecutor<Painter>::fillFoundPatternIndices(const int start)
     {
         const int stop = start + m_patternText.size();
         for(int i = start; i < stop; ++i)
             m_patternFound.push_back(i);
     }
 
-    void CStepsExecutor::computeAutomaton()
+    template<class Painter>
+    void CStepsExecutor<Painter>::computeAutomaton()
     {
         const int patternSize = m_patternText.size();
         if(m_currentStateNr > patternSize)
@@ -78,7 +85,7 @@ namespace Automaton
             m_comparisonStage = true;
             m_currentStateNr = 0;
             // we will reuse m_currentStateNr
-            m_steps.push_back(std::make_unique<Steps::CStartAutomaton>());
+            m_steps.push_back(std::make_unique<Steps::CStartAutomaton<Painter>>());
         }
         else
         {
@@ -91,12 +98,13 @@ namespace Automaton
                      relations.push_back({tempMap[c],c});
             }
             m_automaton.push_back(tempMap);
-            m_steps.push_back(std::make_unique<Steps::CDrawAutomatonNode>(m_currentStateNr, relations));
+            m_steps.push_back(std::make_unique<Steps::CDrawAutomatonNode<Painter>>(m_currentStateNr, relations));
             m_currentStateNr++;
         }
     }
 
-    int CStepsExecutor::getNextState(const char alphabetLetter) const
+    template<class Painter>
+    int CStepsExecutor<Painter>::getNextState(const char alphabetLetter) const
     {
         // if this letter is the same as next in pattern we just move state up
         if(m_currentStateNr < m_patternText.size() && alphabetLetter == m_patternText[m_currentStateNr])
@@ -117,5 +125,8 @@ namespace Automaton
 
         return 0;
     }
-} //Automaton
-} //Algorithms
+
+    template class CStepsExecutor<Visualization::Automaton::PainterPtr>;
+
+} // Automaton
+} // Algorithms

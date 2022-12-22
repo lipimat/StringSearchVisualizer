@@ -20,4 +20,4 @@ namespace Algorithms
 
     using ControllerPtr = std::unique_ptr<IController>;
 
-} //Algorithms
+} // Algorithms

@@ -1,23 +1,23 @@
 #pragma once
 
 #include "IStep.h"
+#include "Constants.h"
 
 namespace Algorithms
 {
 namespace Steps
 {
 
-    using Indices = Visualization::Indices;
-
-    class CStateChangedAutomaton final : public IStep
+    template<class Painter>
+    class CStateChangedAutomaton final : public IStep<Painter>
     {
     public:
         explicit CStateChangedAutomaton(const Indices&, const int);
-        void accept(const Visualization::PainterPtr&) const override;
+        void accept(const Painter&) const override;
 
         const Indices m_sourceIndices;
         const int m_stateNr;
     };
 
-} //Steps
-} //Algorithms
+} // Steps
+} // Algorithms

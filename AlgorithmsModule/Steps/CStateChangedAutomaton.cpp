@@ -1,20 +1,25 @@
 #include "CStateChangedAutomaton.h"
+#include "../Automaton/IPainter.h"
 
 namespace Algorithms
 {
 namespace Steps
 {
 
-    CStateChangedAutomaton::CStateChangedAutomaton(const Indices& sourceIndices, const int stateNr) :
+    template<class Painter>
+    CStateChangedAutomaton<Painter>::CStateChangedAutomaton(const Indices& sourceIndices, const int stateNr) :
         m_sourceIndices(sourceIndices), m_stateNr(stateNr)
     {
     }
 
-    void CStateChangedAutomaton::accept(const Visualization::PainterPtr& painter) const
+    template<class Painter>
+    void CStateChangedAutomaton<Painter>::accept(const Painter& painter) const
     {
         assert(painter != nullptr);
         painter->paint(this);
     }
 
-} //Steps
-} //Algorithms
+    template class CStateChangedAutomaton<Visualization::Automaton::PainterPtr>;
+
+} // Steps
+} // Algorithms

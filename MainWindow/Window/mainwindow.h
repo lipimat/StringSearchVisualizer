@@ -12,8 +12,6 @@ class QListWidgetItem;
 namespace Window
 {
 
-    using PainterPtr = Visualization::PainterPtr;
-
     class MainWindow : public QMainWindow
     {
         Q_OBJECT

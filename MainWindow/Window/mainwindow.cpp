@@ -5,7 +5,8 @@
 #include "../Visualization/CPainterFactory.h"
 
 // AlgorithmsModule includes
-#include "../../AlgorithmsModule/SupportedAlgorithmsToolsets.h"
+#include "../../AlgorithmsModule/SupportedAlgorithmsAlphabet.h"
+#include "../../AlgorithmsModule/SupportedAlgorithmsControllers.h"
 #include "../../AlgorithmsModule/CController.h"
 
 namespace Window
@@ -65,12 +66,10 @@ namespace Window
 
     void MainWindow::initializeListView() const
     {
-        for(const auto& factoryPtr : Algorithms::SUPPORTED_TOOLSETS)
+        for(const auto& factoryPtr : Algorithms::SUPPORTED_CONTROLLERS)
         {
             m_ui->AlgorithmsListWidget->addItem(
-                        std::make_unique<ListElements::CItem>(
-                            std::make_unique<Algorithms::CController>(factoryPtr, m_painterFactory))
-                        .release());
+                        std::make_unique<ListElements::CItem>(factoryPtr->createController(m_painterFactory)).release());
         }
     }
 

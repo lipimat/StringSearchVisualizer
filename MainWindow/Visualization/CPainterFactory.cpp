@@ -10,12 +10,17 @@ namespace Visualization
     {
     }
 
-    PainterPtr CPainterFactory::createBruteForcePainter() const
+    BruteForce::PainterPtr CPainterFactory::createBruteForcePainter() const
     {
         return std::make_unique<BruteForce::CPainter>(m_view);
     }
 
-    PainterPtr CPainterFactory::createAutomatonPainter() const
+    BoyerMoore::PainterPtr CPainterFactory::createBoyerMoorePainter() const
+    {
+        return std::make_unique<BoyerMoore::CPainter>(m_view);
+    }
+
+    Automaton::PainterPtr CPainterFactory::createAutomatonPainter() const
     {
         return std::make_unique<Automaton::CPainter>(m_view);
     }

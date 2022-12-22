@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../AlgorithmsModule/IPainter.h"
+#include "../../AlgorithmsModule/Automaton/IPainter.h"
 #include "../../AlgorithmsModule/Steps/CDrawAutomatonNode.h"
 #include "../../AlgorithmsModule/Steps/CStartAutomaton.h"
 #include "../../AlgorithmsModule/Steps/CStateChangedAutomaton.h"
@@ -18,14 +18,9 @@ namespace Automaton
 
         explicit CPainter(QGraphicsView*);
         void drawBasicScene(const TextsPair&) override;
-        //find a way to split painter interfaces so we dont have this garbage here
-        void paint(const Algorithms::Steps::CComparison*) override
-            {assert("I don't know how to draw");};
-        void paint(const Algorithms::Steps::CMovePattern*) override
-            {assert("I don't know how to draw");};
-        void paint(const Algorithms::Steps::CDrawAutomatonNode*) override;
-        void paint(const Algorithms::Steps::CStartAutomaton*) override;
-        void paint(const Algorithms::Steps::CStateChangedAutomaton*) override;
+        void paint(const Algorithms::Steps::CDrawAutomatonNode<PainterPtr>*) override;
+        void paint(const Algorithms::Steps::CStartAutomaton<PainterPtr>*) override;
+        void paint(const Algorithms::Steps::CStateChangedAutomaton<PainterPtr>*) override;
         void finishScene(const Indices&) override;
         void cleanWholeScene() override;
 

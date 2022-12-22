@@ -18,5 +18,7 @@ namespace Steps
         IDLE
     };
 
-} //Steps
-} //Algorithms
+    using Indices = std::vector<int>;
+
+} // Steps
+} // Algorithms

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "IControllerToolsetFactory.h"
+#include "../IControllerToolsetFactory.h"
+#include "../IStepsExecutor.h"
 
 namespace Algorithms
 {
@@ -28,13 +29,13 @@ namespace BruteForce
             "<a href=\"http://www-igm.univ-mlv.fr/~lecroq/string/node3.html#SECTION0030\">More information here...</a>"
             "</div>";
 
-    struct CControllerToolsetFactory final : IControllerToolsetFactory
+    template<class Painter>
+    struct CControllerToolsetFactory final : IControllerToolsetFactory<Painter>
     {
         std::string_view createName() const override;
         std::string_view createInfo() const override;
-        StepsExecutorPtr createStepsExecutor() const override;
-        Visualization::PainterPtr createPainter(const Visualization::PainterFactoryPtr&) const override;
+        StepsExecutorPtr<Painter> createStepsExecutor() const override;
     };
 
-} //BruteForce
-} //Algorithms
+} // BruteForce
+} // Algorithms

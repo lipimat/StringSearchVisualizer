@@ -1,15 +1,15 @@
-#include "assert.h"
 #include "CStepsExecutor.h"
-
-#include "Steps/CComparison.h"
-#include "Steps/CMovePattern.h"
+#include "IPainter.h"
+#include "../Steps/CComparison.h"
+#include "../Steps/CMovePattern.h"
 
 namespace Algorithms
 {
 namespace BruteForce
 {
 
-    void CStepsExecutor::initialize(const TextsPair& texts)
+    template<class Painter>
+    void CStepsExecutor<Painter>::initialize(const TextsPair& texts)
     {
         m_sourceText = texts.first;
         m_patternText = texts.second;
@@ -20,7 +20,8 @@ namespace BruteForce
         m_patternFound.clear();
     }
 
-    Steps::EAlgorithmState CStepsExecutor::calculateNextStep()
+    template<class Painter>
+    Steps::EAlgorithmState CStepsExecutor<Painter>::calculateNextStep()
     {
         auto returnState = Steps::EAlgorithmState::CONTINUE;
 
@@ -29,7 +30,7 @@ namespace BruteForce
         else if(m_shouldMovePattern)
         {
             m_shouldMovePattern = false;
-            m_steps.push_back(std::make_unique<Steps::CMovePattern>(1));
+            m_steps.push_back(std::make_unique<Steps::CMovePattern<Painter>>(1));
         }
         else
         {
@@ -60,42 +61,49 @@ namespace BruteForce
                 updateMembersForPatternMove();
                 comparisonType = Steps::EComparisonType::MISMATCH;
             }
-            m_steps.push_back(std::make_unique<Steps::CComparison>
+            m_steps.push_back(std::make_unique<Steps::CComparison<Painter>>
                               (Steps::Indices{comparisonSourceIndex}, Steps::Indices{comparisonPatternIndex}, comparisonType));
         }
 
         return returnState;
     }
 
-    void CStepsExecutor::updateMembersForPatternMove()
+    template<class Painter>
+    void CStepsExecutor<Painter>::updateMembersForPatternMove()
     {
         m_currentPatternIndex = 0;
         m_currentSourceIndex++;
         m_shouldMovePattern = true;
     }
 
-    void CStepsExecutor::fillFoundPatternIndices(const int start)
+    template<class Painter>
+    void CStepsExecutor<Painter>::fillFoundPatternIndices(const int start)
     {
         const auto stop = start + m_patternText.size();
         for(auto i = start; i < stop; ++i)
             m_patternFound.push_back(i);
     }
 
-    bool CStepsExecutor::patternWontFitToRemainingSource()
+    template<class Painter>
+    bool CStepsExecutor<Painter>::patternWontFitToRemainingSource()
     {
         const int spaceLeft = m_sourceText.size() - m_currentSourceIndex; //to avoid overlflow and cast to ull
         return m_patternText.size() > spaceLeft;
     }
 
-    const Steps::StepPtr& CStepsExecutor::getCurrentStep() const
+    template<class Painter>
+    const Steps::StepPtr<Painter>& CStepsExecutor<Painter>::getCurrentStep() const
     {
         return m_steps.back();
     }
 
-    const Visualization::Indices& CStepsExecutor::getFoundPatternIndices() const
+    template<class Painter>
+    const Steps::Indices& CStepsExecutor<Painter>::getFoundPatternIndices() const
     {
         return m_patternFound;
     }
 
-} //BruteForce
-} //Algorithms
+    template class CStepsExecutor<Visualization::BruteForce::PainterPtr>;
+
+} // BruteForce
+} // Algorithms

@@ -1,26 +1,33 @@
 #include "CMovePattern.h"
+#include "../BoyerMoore/IPainter.h"
+#include "../BruteForce/IPainter.h"
 
 namespace Algorithms
 {
 namespace Steps
 {
 
-    CMovePattern::CMovePattern(const int moveBy) :
+    template<class Painter>
+    CMovePattern<Painter>::CMovePattern(const int moveBy) :
         m_moveBy(moveBy)
     {
-
     }
 
-    void CMovePattern::accept(const Visualization::PainterPtr& painter) const
+    template<class Painter>
+    void CMovePattern<Painter>::accept(const Painter& painter) const
     {
         assert(painter != nullptr);
         painter->paint(this);
     }
 
-    bool CMovePattern::operator==(const CMovePattern& rhs)
+    template<class Painter>
+    bool CMovePattern<Painter>::operator==(const CMovePattern<Painter>& rhs)
     {
         return this->m_moveBy == rhs.m_moveBy;
     }
 
-} //Steps
-} //Algorithms
+    template class CMovePattern<Visualization::BruteForce::PainterPtr>;
+    template class CMovePattern<Visualization::BoyerMoore::PainterPtr>;
+
+} // Steps
+} // Algorithms

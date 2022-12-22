@@ -1,33 +1,31 @@
 #include "CControllerToolsetFactory.h"
-
 #include "CStepsExecutor.h"
+#include "IPainter.h"
 
 namespace Algorithms
 {
 namespace BruteForce
 {
 
-    std::string_view CControllerToolsetFactory::createName() const
+    template<class Painter>
+    std::string_view CControllerToolsetFactory<Painter>::createName() const
     {
         return BRUTE_FORCE_NAME;
     }
 
-    std::string_view CControllerToolsetFactory::createInfo() const
+    template<class Painter>
+    std::string_view CControllerToolsetFactory<Painter>::createInfo() const
     {
         return BRUTE_FORCE_INFO;
     }
 
-    StepsExecutorPtr CControllerToolsetFactory::createStepsExecutor() const
+    template<class Painter>
+    StepsExecutorPtr<Painter> CControllerToolsetFactory<Painter>::createStepsExecutor() const
     {
-        return std::make_unique<CStepsExecutor>();
+        return std::make_unique<CStepsExecutor<Painter>>();
     }
 
-     Visualization::PainterPtr CControllerToolsetFactory::createPainter(
-            const Visualization::PainterFactoryPtr& painterFactory) const
-    {
-        assert(painterFactory != nullptr);
-        return painterFactory->createBruteForcePainter();
-    }
+    template class CControllerToolsetFactory<Visualization::BruteForce::PainterPtr>;
 
-} //BruteForce
-} //Algorithms
+} // BruteForce
+} // Algorithms

@@ -8,14 +8,13 @@ namespace Algorithms
 namespace Steps
 {
 
-    using Indices = Visualization::Indices;
-
-    class CComparison final : public IStep
+    template<class Painter>
+    class CComparison final : public IStep<Painter>
     {
     public:
 
         explicit CComparison(const Indices&, const Indices&, const EComparisonType);
-        void accept(const Visualization::PainterPtr&) const override;
+        void accept(const Painter&) const override;
         bool operator==(const CComparison&);
 
         const Indices m_sourceIndices;
@@ -23,5 +22,5 @@ namespace Steps
         const EComparisonType m_comparisonType;
     };
 
-} //Steps
-} //Algorithms
+} // Steps
+} // Algorithms

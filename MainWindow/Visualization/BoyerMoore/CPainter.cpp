@@ -2,7 +2,7 @@
 
 namespace Visualization
 {
-namespace BruteForce
+namespace BoyerMoore
 {
     CPainter::CPainter(QGraphicsView* view) :
         m_view(view)
@@ -102,5 +102,5 @@ namespace BruteForce
         m_view->scene()->clear();
     }
 
-} //BruteForce
+} //BoyerMoore
 } //Visualization

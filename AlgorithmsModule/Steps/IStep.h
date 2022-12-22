@@ -1,20 +1,19 @@
 #pragma once
 
-#include "../IPainter.h"
-
 namespace Algorithms
 {
 namespace Steps
 {
-
+    template<class Painter>
     class IStep
     {
     public:
-        virtual void accept(const Visualization::PainterPtr&) const = 0;
+        virtual void accept(const Painter&) const = 0;
         virtual ~IStep() = default;
     };
 
-    using StepPtr = std::unique_ptr<IStep>;
+    template<class P>
+    using StepPtr = std::unique_ptr<IStep<P>>;
 
-} //Steps
-} //Algorithms
+} // Steps
+} // Algorithms

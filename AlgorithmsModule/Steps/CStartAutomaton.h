@@ -7,11 +7,12 @@ namespace Algorithms
 namespace Steps
 {
 
-    class CStartAutomaton final : public IStep
+    template<class Painter>
+    class CStartAutomaton final : public IStep<Painter>
     {
     public:
-        void accept(const Visualization::PainterPtr&) const override;
+        void accept(const Painter&) const override;
     };
 
-} //Steps
-} //Algorithms
+} // Steps
+} // Algorithms

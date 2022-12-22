@@ -1,32 +1,31 @@
 #include "CControllerToolsetFactory.h"
 #include "CStepsExecutor.h"
+#include "IPainter.h"
 
 namespace Algorithms
 {
 namespace BoyerMoore
 {
 
-    std::string_view CControllerToolsetFactory::createName() const
+    template<class Painter>
+    std::string_view CControllerToolsetFactory<Painter>::createName() const
     {
         return BOYER_MOORE_NAME;
     }
 
-    std::string_view CControllerToolsetFactory::createInfo() const
+    template<class Painter>
+    std::string_view CControllerToolsetFactory<Painter>::createInfo() const
     {
         return BOYER_MOORE_INFO;
     }
 
-    StepsExecutorPtr CControllerToolsetFactory::createStepsExecutor() const
+    template<class Painter>
+    StepsExecutorPtr<Painter> CControllerToolsetFactory<Painter>::createStepsExecutor() const
     {
-        return std::make_unique<CStepsExecutor>();
+        return std::make_unique<CStepsExecutor<Painter>>();
     }
 
-     Visualization::PainterPtr CControllerToolsetFactory::createPainter(
-            const Visualization::PainterFactoryPtr& painterFactory) const
-    {
-        assert(painterFactory != nullptr);
-        return painterFactory->createBruteForcePainter(); //TODO change to boyer moore painter
-    }
+    template class CControllerToolsetFactory<Visualization::BoyerMoore::PainterPtr>;
 
-} //BoyerMoore
-} //Algorithms
+} // BoyerMoore
+} // Algorithms

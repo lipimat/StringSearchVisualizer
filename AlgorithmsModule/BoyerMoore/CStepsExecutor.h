@@ -1,30 +1,29 @@
 #pragma once
 
-#include "IStepsExecutor.h"
-#include "Steps/Constants.h"
+#include "../IStepsExecutor.h"
+#include "../Steps/IStep.h"
 
 namespace Algorithms
 {
 namespace BoyerMoore
 {
 
-    //this class shall be refactored and merged with brute force executor
-    //we should only specialize them at lower level
-    class CStepsExecutor final : public IStepsExecutor
+    template<class Painter>
+    class CStepsExecutor final : public IStepsExecutor<Painter>
     {
     public:
 
         void initialize(const TextsPair&) override;
         Steps::EAlgorithmState calculateNextStep() override;
-        const Steps::StepPtr& getCurrentStep() const override;
-        const Visualization::Indices& getFoundPatternIndices() const override;
+        const Steps::StepPtr<Painter>& getCurrentStep() const override;
+        const Steps::Indices& getFoundPatternIndices() const override;
 
     private:
 
         void updateMembersForPatternMove(const int /*moveBy*/);
         void fillFoundPatternIndices(const int /*start*/);
         bool patternWontFitIntoRemainingSource() const;
-        std::pair<Visualization::Indices, Visualization::Indices> calculateGoodShiftPreMoveIndices(const int) const;
+        std::pair<Steps::Indices, Steps::Indices> calculateGoodShiftPreMoveIndices(const int) const;
 
         void initializeBadShiftTable();
         std::unordered_map<char, int> m_badShiftTable;
@@ -40,9 +39,9 @@ namespace BoyerMoore
         bool m_analyzeNextShift;
         std::string m_sourceText;
         std::string m_patternText;
-        Visualization::Indices m_patternFound;
-        std::vector<Steps::StepPtr> m_steps;
+        Steps::Indices m_patternFound;
+        std::vector<Steps::StepPtr<Painter>> m_steps;
     };
 
-} //BoyerMoore
-} //Algorithms
+} // BoyerMoore
+} // Algorithms
