@@ -1,5 +1,6 @@
 #include "TestCollector.h"
 
+#include "../../AlgorithmsModule/BruteForce/IPainter.h"
 #include "../../AlgorithmsModule/BruteForce/CControllerToolsetFactory.h"
 #include "../../AlgorithmsModule/BruteForce/CStepsExecutor.h"
 
@@ -8,13 +9,17 @@ namespace Algorithms
 namespace BruteForce
 {
 
+    using BruteForcePainter = Visualization::BruteForce::PainterPtr;
+    using BruteForceToolsetFactory = CControllerToolsetFactory<BruteForcePainter>;
+    using BruteForceStepsExecutor = CStepsExecutor<BruteForcePainter>;
+
     class BruteForceCControllerToolsetFactoryUT: public QObject
     {
         Q_OBJECT
 
     private:
 
-        CControllerToolsetFactory m_factory;
+        BruteForceToolsetFactory m_factory;
 
     private slots:
 
@@ -31,7 +36,7 @@ namespace BruteForce
         void CreateStepsExecutorCreatesProperObject()
         {
             const auto& stepsExecutor = m_factory.createStepsExecutor();
-            QVERIFY(dynamic_cast<CStepsExecutor*>(stepsExecutor.get()) != nullptr);
+            QVERIFY(dynamic_cast<BruteForceStepsExecutor*>(stepsExecutor.get()) != nullptr);
         }
 
     };

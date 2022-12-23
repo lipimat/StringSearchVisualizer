@@ -7,14 +7,15 @@ namespace Algorithms
 namespace Steps
 {
 
-    class CStepMock final : public IStep
+    template<class Painter>
+    class CStepMock final : public IStep<Painter>
     {
     public:
         // stubs
-        std::function<void(const Visualization::PainterPtr&)> m_accept;
+        std::function<void(const Painter&)> m_accept;
 
         // interface functions
-        void accept(const Visualization::PainterPtr& painter) const override { return m_accept(painter); };
+        void accept(const Painter& painter) const override { return m_accept(painter); };
     };
 
 } //Steps

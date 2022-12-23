@@ -5,19 +5,17 @@
 namespace Algorithms
 {
 
-    struct CControllerToolsetFactoryMock final : IControllerToolsetFactory
+    template<class Painter>
+    struct CControllerToolsetFactoryMock final : IControllerToolsetFactory<Painter>
     {
         //stubs
         std::function<std::string_view()> m_createName;
         std::function<std::string_view()> m_createInfo;
-        std::function<StepsExecutorPtr()> m_createStepsExecutor;
-        std::function<Visualization::PainterPtr(const Visualization::PainterFactoryPtr&)> m_createPainter;
+        std::function<StepsExecutorPtr<Painter>()> m_createStepsExecutor;
         //interface functions
         std::string_view createName() const override { return m_createName(); };
         std::string_view createInfo() const override { return m_createInfo(); };
-        StepsExecutorPtr createStepsExecutor() const override { return m_createStepsExecutor(); };
-        Visualization::PainterPtr createPainter(const Visualization::PainterFactoryPtr& factory) const override
-            { return m_createPainter(factory); };
+        StepsExecutorPtr<Painter> createStepsExecutor() const override { return m_createStepsExecutor(); };
     };
 
 } //Algorithms

@@ -1,5 +1,6 @@
 #include "TestCollector.h"
 
+#include "../../AlgorithmsModule/BoyerMoore/IPainter.h"
 #include "../../AlgorithmsModule/BoyerMoore/CControllerToolsetFactory.h"
 #include "../../AlgorithmsModule/BoyerMoore/CStepsExecutor.h"
 
@@ -8,13 +9,17 @@ namespace Algorithms
 namespace BoyerMoore
 {
 
+    using BoyerMoorePainter = Visualization::BoyerMoore::PainterPtr;
+    using BoyerMooreToolsetFactory = CControllerToolsetFactory<BoyerMoorePainter>;
+    using BoyerMooreStepsExecutor = CStepsExecutor<BoyerMoorePainter>;
+
     class BoyerMooreCControllerToolsetFactoryUT: public QObject
     {
         Q_OBJECT
 
     private:
 
-        CControllerToolsetFactory m_factory;
+        BoyerMooreToolsetFactory m_factory;
 
     private slots:
 
@@ -31,7 +36,7 @@ namespace BoyerMoore
         void CreateStepsExecutorCreatesProperObject()
         {
             const auto& stepsExecutor = m_factory.createStepsExecutor();
-            QVERIFY(dynamic_cast<CStepsExecutor*>(stepsExecutor.get()) != nullptr);
+            QVERIFY(dynamic_cast<BoyerMooreStepsExecutor*>(stepsExecutor.get()) != nullptr);
         }
     };
 

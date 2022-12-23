@@ -1,7 +1,7 @@
 #include "TestCollector.h"
 
+#include "../../AlgorithmsModule/BruteForce/IPainter.h"
 #include "../../AlgorithmsModule/BruteForce/CStepsExecutor.h"
-
 #include "../../AlgorithmsModule/Steps/CComparison.h"
 #include "../../AlgorithmsModule/Steps/CMovePattern.h"
 
@@ -10,7 +10,12 @@ namespace Algorithms
 namespace BruteForce
 {
 
+    using BruteForcePainter = Visualization::BruteForce::PainterPtr;
+    using BruteForceStepsExecutor = CStepsExecutor<BruteForcePainter>;
     using namespace Steps;
+    using BruteForceStep = StepPtr<BruteForcePainter>;
+    using BruteForceComparisonStep = CComparison<BruteForcePainter>;
+    using BruteForceMovePatternStep = CMovePattern<BruteForcePainter>;
 
     class BruteForceCStepsExecutorUT: public QObject
     {
@@ -18,7 +23,7 @@ namespace BruteForce
 
     private:
 
-        CStepsExecutor m_executor;
+        BruteForceStepsExecutor m_executor;
 
         void initializeExecutor(const std::string& source, const std::string& pattern)
         {
@@ -26,7 +31,7 @@ namespace BruteForce
         }
 
         template<class StepType>
-        bool expectStep(const Steps::StepPtr& currentStep, const StepType& expectedStep)
+        bool expectStep(const BruteForceStep& currentStep, const StepType& expectedStep)
         {
             auto ret = false;
             const auto& castedStep = dynamic_cast<StepType*>(currentStep.get());
@@ -50,7 +55,7 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& currentStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(currentStep, CComparison(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(currentStep, BruteForceComparisonStep(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::FINISHED);
             QCOMPARE(m_executor.getFoundPatternIndices(), Indices{0});
@@ -62,7 +67,7 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& currentStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(currentStep, CComparison(Indices{0}, Indices{0}, Steps::EComparisonType::MISMATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(currentStep, BruteForceComparisonStep(Indices{0}, Indices{0}, Steps::EComparisonType::MISMATCH)));
         }
 
         void CalculateNextStepMatchedMissmatchedLetters()
@@ -71,11 +76,11 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(firstStep, CComparison(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(firstStep, BruteForceComparisonStep(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(secondStep, CComparison(Indices{1}, Indices{1}, Steps::EComparisonType::MISMATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(secondStep, BruteForceComparisonStep(Indices{1}, Indices{1}, Steps::EComparisonType::MISMATCH)));
         }
 
         void CalculateNextStepPatternMismatchBufferShouldMove()
@@ -84,15 +89,15 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(firstStep, CComparison(Indices{0}, Indices{0}, Steps::EComparisonType::MISMATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(firstStep, BruteForceComparisonStep(Indices{0}, Indices{0}, Steps::EComparisonType::MISMATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CMovePattern>(secondStep, CMovePattern(1)));
+            QVERIFY(expectStep<BruteForceMovePatternStep>(secondStep, BruteForceMovePatternStep(1)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& thirdStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(thirdStep, CComparison(Indices{1}, Indices{0}, Steps::EComparisonType::MATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(thirdStep, BruteForceComparisonStep(Indices{1}, Indices{0}, Steps::EComparisonType::MATCH)));
         }
 
         void CalculateNextStepPatternFoundBufferShouldMove()
@@ -101,15 +106,15 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(firstStep, CComparison(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(firstStep, BruteForceComparisonStep(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();//nizej ruch
-            QVERIFY(expectStep<CMovePattern>(secondStep, CMovePattern(1)));
+            QVERIFY(expectStep<BruteForceMovePatternStep>(secondStep, BruteForceMovePatternStep(1)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& thirdStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(thirdStep, CComparison(Indices{1}, Indices{0}, Steps::EComparisonType::MISMATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(thirdStep, BruteForceComparisonStep(Indices{1}, Indices{0}, Steps::EComparisonType::MISMATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::FINISHED);
         }
@@ -120,11 +125,11 @@ namespace BruteForce
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& firstStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(firstStep, CComparison(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(firstStep, BruteForceComparisonStep(Indices{0}, Indices{0}, Steps::EComparisonType::MATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();
-            QVERIFY(expectStep<CComparison>(secondStep, CComparison(Indices{1}, Indices{1}, Steps::EComparisonType::MISMATCH)));
+            QVERIFY(expectStep<BruteForceComparisonStep>(secondStep, BruteForceComparisonStep(Indices{1}, Indices{1}, Steps::EComparisonType::MISMATCH)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::FINISHED);
             QCOMPARE(m_executor.getFoundPatternIndices(), Indices{});

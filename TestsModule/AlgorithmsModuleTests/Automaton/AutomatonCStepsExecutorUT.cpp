@@ -1,15 +1,20 @@
 #include "TestCollector.h"
 
+#include "../../AlgorithmsModule/Automaton/IPainter.h"
 #include "../../AlgorithmsModule/Automaton/CStepsExecutor.h"
 #include "../../AlgorithmsModule/Steps/CDrawAutomatonNode.h"
-#include "Steps/Constants.h"
+#include "../../AlgorithmsModule/Steps/Constants.h"
 
 namespace Algorithms
 {
 namespace Automaton
 {
 
+    using AutomatonPainter = Visualization::Automaton::PainterPtr;
+    using AutomatonStepsExecutor = CStepsExecutor<AutomatonPainter>;
     using namespace Steps;
+    using AutomatonStep = StepPtr<AutomatonPainter>;
+    using AutomatonDrawNodeStep = CDrawAutomatonNode<AutomatonPainter>;
 
     // I'm only testing creating the automaton
     // I don't see any need to test iteration over created automaton, important thing is that it should be created correctly
@@ -19,7 +24,7 @@ namespace Automaton
 
     private:
 
-        CStepsExecutor m_executor;
+        AutomatonStepsExecutor m_executor;
 
         void initializeExecutor(const std::string& source, const std::string& pattern)
         {
@@ -27,7 +32,7 @@ namespace Automaton
         }
 
         template<class StepType>
-        bool expectStep(const Steps::StepPtr& currentStep, const StepType& expectedStep)
+        bool expectStep(const AutomatonStep& currentStep, const StepType& expectedStep)
         {
             auto ret = false;
             const auto& castedStep = dynamic_cast<StepType*>(currentStep.get());
@@ -51,7 +56,7 @@ namespace Automaton
             //that means I expect vertex from created node to 1 with 'A' label
             //  A
             //0 -> 1
-            QVERIFY(expectStep<CDrawAutomatonNode>(firstStep, CDrawAutomatonNode(0, state0relations)));
+            QVERIFY(expectStep<AutomatonDrawNodeStep>(firstStep, AutomatonDrawNodeStep(0, state0relations)));
 
             QCOMPARE(m_executor.calculateNextStep(), EAlgorithmState::CONTINUE);
             const auto& secondStep = m_executor.getCurrentStep();
@@ -59,7 +64,7 @@ namespace Automaton
             //that means I expect vertex from created node to 1 with 'A' label
             //  A
             //1 -> 1
-            QVERIFY(expectStep<CDrawAutomatonNode>(secondStep, CDrawAutomatonNode(1, state0relations)));
+            QVERIFY(expectStep<AutomatonDrawNodeStep>(secondStep, AutomatonDrawNodeStep(1, state0relations)));
         }
 
         void AutomatonProperVerticesFrom3rdStateMultipleVertices2()
@@ -77,7 +82,7 @@ namespace Automaton
                 {1, 'A'},
                 {4, 'C'}
             };
-            QVERIFY(expectStep<CDrawAutomatonNode>(thirdStep, CDrawAutomatonNode(3, state3relations)));
+            QVERIFY(expectStep<AutomatonDrawNodeStep>(thirdStep, AutomatonDrawNodeStep(3, state3relations)));
         }
 
         void AutomatonProperVerticesFrom5thStateMultipleVertices3()
@@ -98,7 +103,7 @@ namespace Automaton
                 {4, 'C'},
                 {6, 'G'}
             };
-            QVERIFY(expectStep<CDrawAutomatonNode>(fithStep, CDrawAutomatonNode(5, state5relations)));
+            QVERIFY(expectStep<AutomatonDrawNodeStep>(fithStep, AutomatonDrawNodeStep(5, state5relations)));
         }
     };
 

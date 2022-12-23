@@ -4,6 +4,7 @@
 #include "../../AlgorithmsModule/CController.h"
 #include "Mocks/CControllerToolsetFactoryMock.h"
 #include "Mocks/CPainterMock.h"
+#include "Mocks/CPainterFactoryMock.h"
 #include "Mocks/CStepsExecutorMock.h"
 #include "Mocks/CStepMock.h"
 
@@ -11,6 +12,11 @@ namespace Algorithms
 {
 
     using namespace Visualization;
+    // we will use only brute force now - we test controller behaviore that's enought
+    // think of a way to test each specialization - I'm lacking time! :(
+    // LACKING - tests of throwing exception in controller
+    using StepsExecutorMock = CStepsExecutorMock<BruteForce::PainterPtr>;
+    using ControllerToolsetFactoryMock = CControllerToolsetFactoryMock<BruteForce::PainterPtr>;
 
     class CControllerUT: public QObject
     {
@@ -21,20 +27,21 @@ namespace Algorithms
         const std::string m_expectedName = "NAME";
         const std::string m_expectedInfo = "INFO";
 
-        std::unique_ptr<CStepsExecutorMock> m_stepsExecutorMock;
+        std::unique_ptr<StepsExecutorMock> m_stepsExecutorMock;
+        std::unique_ptr<ControllerToolsetFactoryMock> m_toolsetFactoryMock;
+        std::unique_ptr<CPainterFactoryMock> m_painterFactoryMock;
         std::unique_ptr<CPainterMock> m_painterMock;
-        std::unique_ptr<CControllerToolsetFactoryMock> m_toolsetFactoryMock;
 
-        const CController createController()
+
+        const CController<BruteForce::PainterPtr> createController()
         {
             m_toolsetFactoryMock->m_createInfo = [&]() { return std::string_view(m_expectedInfo); };
             m_toolsetFactoryMock->m_createName = [&]() { return std::string_view(m_expectedName); };
-            m_toolsetFactoryMock->m_createStepsExecutor = [&]() { return std::make_unique<CStepsExecutorMock>(*m_stepsExecutorMock.release()); };
-            m_toolsetFactoryMock->m_createPainter = [&](const PainterFactoryPtr&) { return std::make_unique<CPainterMock>(*m_painterMock.release()); };
+            m_toolsetFactoryMock->m_createStepsExecutor = [&]() { return std::make_unique<StepsExecutorMock>(*m_stepsExecutorMock.release()); };
+            m_painterFactoryMock->m_createBruteForcePainter = [&]() { return std::make_unique<CPainterMock>(*m_painterMock.release()); };
 
-            ControllerToolsetFactoryPtr m_toolsetFactory(m_toolsetFactoryMock.release());
-            PainterFactoryPtr m_painterFactory;
-            return CController(m_toolsetFactory, m_painterFactory);
+            ControllerToolsetFactoryPtr<BruteForce::PainterPtr> m_toolsetFactory(m_toolsetFactoryMock.release());
+            return CController<BruteForce::PainterPtr>(m_toolsetFactory, m_painterFactoryMock->m_createBruteForcePainter());
         }
 
     private slots:
@@ -42,9 +49,10 @@ namespace Algorithms
         void init()
         {
             // reset mocks after each method
-            m_stepsExecutorMock = std::make_unique<CStepsExecutorMock>();
+            m_stepsExecutorMock = std::make_unique<StepsExecutorMock>();
+            m_painterFactoryMock = std::make_unique<CPainterFactoryMock>();
             m_painterMock = std::make_unique<CPainterMock>();
-            m_toolsetFactoryMock = std::make_unique<CControllerToolsetFactoryMock>();
+            m_toolsetFactoryMock = std::make_unique<ControllerToolsetFactoryMock>();
         }
 
         void ControllerCorrectlyConstrucedWithFactory()
@@ -62,7 +70,7 @@ namespace Algorithms
             m_painterMock->m_drawBasicScene = [&](const TextsPair&) { painterDrawBasicSceneCalled = 1; return; }; //ugly but cannot do template lambda (look for it)
 
             const auto& controller = createController();
-            controller.initializeScene({"",""});
+            controller.initializeScene({"GTA","GTA"});
             QCOMPARE(executorInitializeCalled, 1);
             QCOMPARE(painterDrawBasicSceneCalled, 1);
         }
@@ -94,11 +102,11 @@ namespace Algorithms
         {
             int executorCalculateNextStepCalled = 0, getCurrentStepCalled = 0, stepAcceptPainterCalled = 0;
 
-            auto stepMock = std::make_unique<Steps::CStepMock>();
-            stepMock->m_accept = [&](const Visualization::PainterPtr&)
+            auto stepMock = std::make_unique<Steps::CStepMock<BruteForce::PainterPtr>>();
+            stepMock->m_accept = [&](const BruteForce::PainterPtr&)
                 { getCurrentStepCalled = 1; /*it was called earlier*/ stepAcceptPainterCalled = 1; return; };
             m_stepsExecutorMock->m_calculateNextStep = [&]() { executorCalculateNextStepCalled = 1; return Steps::EAlgorithmState::CONTINUE; };
-            m_stepsExecutorMock->m_getCurrentStep = std::make_unique<Steps::CStepMock>(*stepMock.release());
+            m_stepsExecutorMock->m_getCurrentStep = std::make_unique<Steps::CStepMock<BruteForce::PainterPtr>>(*stepMock.release());
             const auto& controller = createController();
 
             QCOMPARE(controller.nextStep(), true);

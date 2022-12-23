@@ -2,11 +2,16 @@
 
 #include "../../AlgorithmsModule/Automaton/CControllerToolsetFactory.h"
 #include "../../AlgorithmsModule/Automaton/CStepsExecutor.h"
+#include "../../AlgorithmsModule/Automaton/IPainter.h"
 
 namespace Algorithms
 {
 namespace Automaton
 {
+
+    using AutomatonPainter = Visualization::Automaton::PainterPtr;
+    using AutomatonToolsetFactory = CControllerToolsetFactory<AutomatonPainter>;
+    using AutomatonStepsExecutor = CStepsExecutor<AutomatonPainter>;
 
     class AutomatonCControllerToolsetFactoryUT: public QObject
     {
@@ -14,7 +19,7 @@ namespace Automaton
 
     private:
 
-        CControllerToolsetFactory m_factory;
+        AutomatonToolsetFactory m_factory;
 
     private slots:
 
@@ -31,7 +36,7 @@ namespace Automaton
         void CreateStepsExecutorCreatesProperObject()
         {
             const auto& stepsExecutor = m_factory.createStepsExecutor();
-            QVERIFY(dynamic_cast<CStepsExecutor*>(stepsExecutor.get()) != nullptr);
+            QVERIFY(dynamic_cast<AutomatonStepsExecutor*>(stepsExecutor.get()) != nullptr);
         }
 
     };
