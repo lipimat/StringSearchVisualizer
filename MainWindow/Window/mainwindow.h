@@ -27,11 +27,15 @@ namespace Window
 
         void on_InfoButton_clicked();
 
-        void on_StartButton_clicked();
-
         void on_StopButton_clicked();
 
         void on_NextStepButton_clicked();
+
+        void on_AutoSimStartButton_clicked();
+
+        void on_ManualSimStartButton_clicked();
+
+        void on_SimType_stateChanged(int arg1);
 
     private:
 
@@ -42,6 +46,8 @@ namespace Window
         void initializeListView() const;
 
         Ui::MainWindow* m_ui;
+        // i don't know how to stop it so I need member :(
+        std::unique_ptr<QTimer> m_timer;
 
         ListElements::CItem* m_currentSimulationItem;
 

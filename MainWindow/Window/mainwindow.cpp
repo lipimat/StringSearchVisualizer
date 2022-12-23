@@ -25,17 +25,18 @@ namespace Window
     MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
           m_ui(std::make_unique<Ui::MainWindow>().release()),
-          m_currentSimulationItem(nullptr)
+          m_currentSimulationItem(nullptr),
+          m_timer(std::make_unique<QTimer>(this))
     {
         m_ui->setupUi(this);
 
         const auto supportedAlphabetLabel =
                 "Supported alphabet: " + std::string(Algorithms::SUPPORTED_ALPHABET);
         m_ui->AlphabetLabel->setText(QString::fromStdString(supportedAlphabetLabel));
-
         m_painterFactory = std::make_unique<Visualization::CPainterFactory>(m_ui->GraphicsView);
         initializeLayoutNoSimulation();
         initializeListView();
+        connect(m_timer.get(), &QTimer::timeout, this, &MainWindow::on_NextStepButton_clicked);
     }
 
     MainWindow::~MainWindow()
@@ -48,9 +49,28 @@ namespace Window
         m_ui->AlgorithmsListWidget->blockSignals(false);
         m_ui->SourceLineEdit->setReadOnly(false);
         m_ui->PatternLineEdit->setReadOnly(false);
-        m_ui->StartButton->show();
-        m_ui->StopButton->hide();
-        m_ui->NextStepButton->hide();
+        m_ui->SimType->setDisabled(false);
+        m_ui->SimStepTime->setDisabled(false);
+        if(m_ui->SimType->isChecked())
+        {
+            m_ui->AutoSimStartButton->show();
+            m_ui->SimStepTime->show();
+            m_ui->TimerStartVal->show();
+            m_ui->TimerEndVal->show();
+            m_ui->ManualSimStartButton->hide();
+            m_ui->NextStepButton->hide();
+            m_ui->StopButton->hide();
+        }
+        else
+        {
+            m_ui->AutoSimStartButton->hide();
+            m_ui->SimStepTime->hide();
+            m_ui->TimerStartVal->hide();
+            m_ui->TimerEndVal->hide();
+            m_ui->ManualSimStartButton->show();
+            m_ui->NextStepButton->hide();
+            m_ui->StopButton->hide();
+        }
     }
 
     void MainWindow::initializeLayoutSimulation() const
@@ -58,9 +78,13 @@ namespace Window
         m_ui->AlgorithmsListWidget->blockSignals(true);
         m_ui->SourceLineEdit->setReadOnly(true);
         m_ui->PatternLineEdit->setReadOnly(true);
-        m_ui->StartButton->hide();
+        m_ui->SimType->setDisabled(true);
+        m_ui->SimStepTime->setDisabled(true);
+        m_ui->ManualSimStartButton->hide();
+        m_ui->AutoSimStartButton->hide();
         m_ui->StopButton->show();
-        m_ui->NextStepButton->show();
+        if(!m_ui->SimType->isChecked())
+            m_ui->NextStepButton->show();
     }
 
     void MainWindow::initializeListView() const
@@ -89,23 +113,34 @@ namespace Window
         QMessageBox::about(this, m_currentSimulationItem->getName(), m_currentSimulationItem->getInfo());
     }
 
-    void MainWindow::on_StartButton_clicked()
+    void MainWindow::on_ManualSimStartButton_clicked()
     {
-        //move this into controller and throw exceptions
         const auto& sourceText = m_ui->SourceLineEdit->text().toStdString();
         const auto& patternText = m_ui->PatternLineEdit->text().toStdString();
         try {
             assert(m_currentSimulationItem != nullptr);
             m_currentSimulationItem->initializeVisualization({sourceText, patternText});
-            initializeLayoutSimulation();
         } catch (std::runtime_error e) {
             QMessageBox::critical(this, "Input!", e.what());
+            return;
         }
+
+        initializeLayoutSimulation();
+    }
+
+
+    void MainWindow::on_AutoSimStartButton_clicked()
+    {
+        on_ManualSimStartButton_clicked();
+        m_timer->start(m_ui->SimStepTime->value() * 10); //convert to ms
     }
 
 
     void MainWindow::on_StopButton_clicked()
     {
+        //UGLY TOO
+        if(m_timer->isActive())
+            m_timer->stop();
         initializeLayoutNoSimulation();
         m_currentSimulationItem->clearVisualization();
     }
@@ -116,7 +151,33 @@ namespace Window
         assert(m_currentSimulationItem != nullptr);
         const auto cannotPerformNextStep = !m_currentSimulationItem->nextStep();
         if(cannotPerformNextStep)
+        {
             m_ui->NextStepButton->hide();
+            if(m_timer->isActive())
+                m_timer->stop(); //UGLY!
+        }
+    }
+
+
+    void MainWindow::on_SimType_stateChanged(int arg1)
+    {
+        // turned on
+        if(arg1 == 2)
+        {
+            m_ui->ManualSimStartButton->hide();
+            m_ui->AutoSimStartButton->show();
+            m_ui->SimStepTime->show();
+            m_ui->TimerStartVal->show();
+            m_ui->TimerEndVal->show();
+        }
+        else
+        {
+            m_ui->ManualSimStartButton->show();
+            m_ui->AutoSimStartButton->hide();
+            m_ui->SimStepTime->hide();
+            m_ui->TimerStartVal->hide();
+            m_ui->TimerEndVal->hide();
+        }
     }
 
 } // Window

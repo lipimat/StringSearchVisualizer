@@ -2,6 +2,7 @@
 
 // QT headers
 #include <QPainterPath>
+#include <QTimer>
 
 // visualization
 #include <QGraphicsView>
