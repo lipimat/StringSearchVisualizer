@@ -550,7 +550,7 @@ QPushButton:hover {
      <bool>true</bool>
     </property>
     <property name="text">
-     <string>Automatic simulation enabled</string>
+     <string>Automatic visualization enabled</string>
     </property>
    </widget>
    <widget class="QSlider" name="SimStepTime">
